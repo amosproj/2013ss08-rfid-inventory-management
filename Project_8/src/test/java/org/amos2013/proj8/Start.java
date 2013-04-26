@@ -5,6 +5,7 @@
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
+ *  Kerstin Stern
  * 
  * SDs:
  *  Andreas Singer
