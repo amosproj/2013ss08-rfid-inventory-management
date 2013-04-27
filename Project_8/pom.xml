@@ -24,15 +24,14 @@
 	<artifactId>Project_8</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-		<!-- TODO project name  -->
-	<name>quickstart</name>
-	<description></description>
-	<!--
-		<organization>
-			<name>company name</name>
-			<url>company url</url>
-		</organization>
-	-->
+	<name>RFID Inventory Management</name>
+	<description>TODO</description>
+
+	<organization>
+		<name>University of Erlangen-Nürnberg - Open Source Research Group - AMOS 2013: Team 8</name>
+		<url>http://osr.cs.fau.de</url>
+	</organization>
+	
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -178,4 +177,29 @@
 			</snapshots>
 		</repository>
 	</repositories>
-	</project>
+	
+	<profiles>
+		<profile>
+			<id>lib</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/lib</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
+</project>
