@@ -19,5 +19,8 @@
 	<classpathentry kind="lib" path="lib/wicket-core-6.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/wicket-request-6.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/wicket-util-6.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/ormlite-core-4.45.jar"/>
+	<classpathentry kind="lib" path="lib/ormlite-jdbc-4.45.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-9.1-901.jdbc4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
