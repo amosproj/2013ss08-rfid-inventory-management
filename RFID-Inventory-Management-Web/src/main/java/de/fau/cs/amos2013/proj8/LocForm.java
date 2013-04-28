@@ -31,15 +31,48 @@
 
 package de.fau.cs.amos2013.proj8;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.model.CompoundPropertyModel;
 
-public class HomePage extends WebPage {
+public class LocForm extends Form<Object>{
 	private static final long serialVersionUID = 1L;
-
-	public HomePage(final PageParameters parameters) {
-		super(parameters);
-
-		add(new LocForm("locForm"));
-    }
+	
+	private String room;
+	private String owner;
+	private String status;
+	private String result;
+	private boolean success = false;
+	
+	public LocForm(String id) {
+		super(id);
+		setDefaultModel(new CompoundPropertyModel<Object>(this));
+		add(new TextField<Object>("room"));
+		add(new TextField<Object>("owner"));
+		add(new Label("status"));
+		add(new Label("result"));
+		
+			
+		try {
+			result = TestAccess.Result();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public final void onSubmit() {
+		try {
+			TestDatabase.TestDatabase(room, owner);
+			success = true;
+		} catch (Exception e) {
+			if (!success) {
+				status = "Data saved!";
+			} else {
+				e.printStackTrace();
+				status = "An error occured!";
+			}
+		}
+		
+	}
 }
