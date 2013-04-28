@@ -31,8 +31,15 @@
 
 package de.fau.cs.amos2013.proj8;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 
 public class LocForm extends Form<Object>{
@@ -41,7 +48,7 @@ public class LocForm extends Form<Object>{
 	private String room;
 	private String owner;
 	private String status;
-	private String result;
+	private String result = " ";
 	private boolean success = false;
 	
 	public LocForm(String id) {
@@ -50,28 +57,31 @@ public class LocForm extends Form<Object>{
 		add(new TextField<Object>("room"));
 		add(new TextField<Object>("owner"));
 		add(new Label("status"));
-		add(new Label("result"));
-		
-			
+					
 		try {
 			result = TestAccess.Result();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		List<String> myList = new ArrayList<String>(Arrays.asList(result.split(";")));
+		add(new ListView<String>("listview", myList) {
+			private static final long serialVersionUID = 1L;
+
+			protected void populateItem(ListItem<String> item) {
+				item.add(new Label("label", item.getModel()));
+			}
+		});
 	}
 	
 	public final void onSubmit() {
 		try {
 			TestDatabase.TestDatabase(room, owner);
-			success = true;
+			status = "Data saved - please refresh view!";
 		} catch (Exception e) {
-			if (!success) {
-				status = "Data saved!";
-			} else {
-				e.printStackTrace();
-				status = "An error occured!";
-			}
+			status = "An error occured!";
+			e.printStackTrace();
 		}
 		
 	}

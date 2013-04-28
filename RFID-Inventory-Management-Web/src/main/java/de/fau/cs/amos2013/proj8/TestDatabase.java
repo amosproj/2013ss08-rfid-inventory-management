@@ -31,10 +31,6 @@
 
 package de.fau.cs.amos2013.proj8;
 
-import static org.junit.Assert.assertEquals;
-
-import java.sql.SQLException;
-
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -44,7 +40,6 @@ import com.j256.ormlite.table.TableUtils;
 
 public class TestDatabase {
 
-
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 	
 	// add the database password here, but always erase it before making a commit !!!
@@ -52,10 +47,16 @@ public class TestDatabase {
 
 	private Dao<Location, Integer> locationDao;
 	
+	/**
+	 * Main method in this class
+	 */
 	public static void TestDatabase(String room, String owner) throws Exception {
 		new TestDatabase().Write(room, owner);
 	}
 
+	/**
+	 * Writes into the database
+	 */
 	public void Write(String room, String owner) throws Exception {
 		ConnectionSource connectionSource = null;
 		try {
@@ -67,16 +68,11 @@ public class TestDatabase {
 			// write the given Strings
 			String thisRoom = room;
 			Location location = new Location(thisRoom);
+			location.setOwner(owner);
 
 			// persist the account object to the database
 			locationDao.create(location);
-			int id = location.getId();
-			verifyDb(id, location);
-
-			location.setOwner(owner);
-			// update the database after changing the object
-			locationDao.update(location);
-			verifyDb(id, location);
+						
 		} finally {
 			// destroy the data source which should close underlying connections
 			if (connectionSource != null) {
@@ -100,26 +96,4 @@ public class TestDatabase {
 			e.printStackTrace();
 		}
 	}
-
-
-	/**
-	 * Verify that the account stored in the database was the same as the expected object.
-	 */
-	private void verifyDb(int id, Location expected) throws SQLException, Exception {
-		// make sure we can read it back
-		Location location2 = locationDao.queryForId(id);
-		if (location2 == null) {
-			throw new Exception("Should have found id '" + id + "' in the database");
-		}
-		verifyLocation(expected, location2);
-	}
-
-	/**
-	 * Verify that the account is the same as expected.
-	 */
-	private static void verifyLocation(Location expected, Location location2) {
-		assertEquals("expected room does not equal location room", expected, location2);
-		assertEquals("expected owner does not equal location room", expected.getOwner(), location2.getOwner());
-	}
-
 }
