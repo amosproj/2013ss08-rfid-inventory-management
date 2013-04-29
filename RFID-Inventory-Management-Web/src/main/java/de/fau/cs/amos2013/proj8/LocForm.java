@@ -49,7 +49,6 @@ public class LocForm extends Form<Object>{
 	private String owner;
 	private String status;
 	private String result = " ";
-	private boolean success = false;
 	
 	public LocForm(String id) {
 		super(id);

@@ -42,8 +42,8 @@ public class TestDatabase {
 
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 	
-	// add the database password here, but always erase it before making a commit !!!
-	private final static String DATABASE_PW = "";
+	// the class ConfigLoader.java which loads the db-password, is not committed to git
+	private final static String DATABASE_PW = ConfigLoader.Result();
 
 	private Dao<Location, Integer> locationDao;
 	
