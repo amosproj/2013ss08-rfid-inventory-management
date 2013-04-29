@@ -35,10 +35,12 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * Example location object that is persisted to disk by the DAO and other example classes.
+ * Example location object that is persisted to disk by the DAO and other
+ * example classes.
  */
 @DatabaseTable(tableName = "location")
-public class Location {
+public class Location
+{
 
 	// for QueryBuilder to be able to find the fields
 	public static final String ROOM_FIELD_NAME = "room";
@@ -53,42 +55,53 @@ public class Location {
 	@DatabaseField(columnName = OWNER_FIELD_NAME)
 	private String owner;
 
-	Location() {
-		// all persisted classes must define a no-arg constructor with at least package visibility
+	Location()
+	{
+		// all persisted classes must define a no-arg constructor with at least
+		// package visibility
 	}
 
-	public Location(String room) {
+	public Location(String room)
+	{
 		this.room = room;
 	}
 
-	public Location(String room, String owner) {
+	public Location(String room, String owner)
+	{
 		this.room = room;
 		this.owner = owner;
 	}
 
-	public int getId() {
+	public int getId()
+	{
 		return id;
 	}
 
-	public String getRoom() {
+	public String getRoom()
+	{
 		return room;
 	}
 
-	public void setRoom(String room) {
+	public void setRoom(String room)
+	{
 		this.room = room;
 	}
 
-	public String getOwner() {
+	public String getOwner()
+	{
 		return owner;
 	}
 
-	public void setOwner(String owner) {
+	public void setOwner(String owner)
+	{
 		this.owner = owner;
 	}
 
 	@Override
-	public boolean equals(Object other) {
-		if (other == null || other.getClass() != getClass()) {
+	public boolean equals(Object other)
+	{
+		if (other == null || other.getClass() != getClass())
+		{
 			return false;
 		}
 		return room.equals(((Location) other).room);

@@ -42,46 +42,58 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 
-public class LocForm extends Form<Object>{
+public class LocForm extends Form<Object>
+{
 	private static final long serialVersionUID = 1L;
-	
+
 	private String room;
 	private String owner;
 	private String status;
 	private String result = " ";
-	
-	public LocForm(String id) {
+
+	public LocForm(String id)
+	{
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this));
 		add(new TextField<Object>("room"));
 		add(new TextField<Object>("owner"));
 		add(new Label("status"));
-					
-		try {
+
+		try
+		{
 			result = TestAccess.Result();
-		} catch (Exception e) {
+		} 
+		catch (Exception e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		List<String> myList = new ArrayList<String>(Arrays.asList(result.split(";")));
-		add(new ListView<String>("listview", myList) {
+
+		List<String> myList = new ArrayList<String>(Arrays.asList(result
+				.split(";")));
+		add(new ListView<String>("listview", myList)
+		{
 			private static final long serialVersionUID = 1L;
 
-			protected void populateItem(ListItem<String> item) {
+			protected void populateItem(ListItem<String> item)
+			{
 				item.add(new Label("label", item.getModel()));
 			}
 		});
 	}
-	
-	public final void onSubmit() {
-		try {
+
+	public final void onSubmit()
+	{
+		try
+		{
 			TestDatabase.TestDatabase(room, owner);
 			status = "Data saved - please refresh view!";
-		} catch (Exception e) {
+		} 
+		catch (Exception e)
+		{
 			status = "An error occured!";
 			e.printStackTrace();
 		}
-		
+
 	}
 }

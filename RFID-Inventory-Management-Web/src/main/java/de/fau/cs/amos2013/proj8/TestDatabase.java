@@ -31,38 +31,45 @@
 
 package de.fau.cs.amos2013.proj8;
 
+import java.util.List;
+
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-
-public class TestDatabase {
+public class TestDatabase
+{
 
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
-	
-	// the class ConfigLoader.java which loads the db-password, is not committed to git
+
+	// the class ConfigLoader.java which loads the db-password, is not committed
+	// to git
 	private final static String DATABASE_PW = ConfigLoader.Result();
 
 	private Dao<Location, Integer> locationDao;
-	
+
 	/**
 	 * Main method in this class
 	 */
-	public static void TestDatabase(String room, String owner) throws Exception {
+	public static void TestDatabase(String room, String owner) throws Exception
+	{
 		new TestDatabase().Write(room, owner);
 	}
 
 	/**
 	 * Writes into the database
 	 */
-	public void Write(String room, String owner) throws Exception {
+	public void Write(String room, String owner) throws Exception
+	{
 		ConnectionSource connectionSource = null;
-		try {
+		try
+		{
 			// create our data-source for the database
-			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
-			// setup our database and DAOs
+			connectionSource = new JdbcConnectionSource(DATABASE_URL,
+					"ss13-proj8", DATABASE_PW);
+			// setup our database and database access objects
 			setupDatabase(connectionSource);
 
 			// write the given Strings
@@ -72,10 +79,13 @@ public class TestDatabase {
 
 			// persist the account object to the database
 			locationDao.create(location);
-						
-		} finally {
+
+		} 
+		finally
+		{
 			// destroy the data source which should close underlying connections
-			if (connectionSource != null) {
+			if (connectionSource != null)
+			{
 				connectionSource.close();
 			}
 		}
@@ -84,16 +94,27 @@ public class TestDatabase {
 	/**
 	 * Setup our database and DAOs
 	 */
-	private void setupDatabase(ConnectionSource connectionSource) throws Exception {
+	private void setupDatabase(ConnectionSource connectionSource)
+			throws Exception
+	{
 
 		locationDao = DaoManager.createDao(connectionSource, Location.class);
+		List<Location> locations = null;
+		locations = locationDao.queryForAll();
 
-		// if you need to create the table
-		try {
-			TableUtils.createTable(connectionSource, Location.class);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (locations == null)
+		{
+
+			// if there is a need to create the table first
+			try
+			{
+				TableUtils.createTable(connectionSource, Location.class);
+			} 
+			catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

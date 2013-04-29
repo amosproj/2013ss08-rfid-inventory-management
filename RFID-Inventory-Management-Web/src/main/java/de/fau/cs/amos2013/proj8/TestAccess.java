@@ -38,51 +38,55 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
-
-public class TestAccess {
+public class TestAccess
+{
 
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 
-	// the class ConfigLoader.java which loads the db-password, is not committed to git
+	// the class ConfigLoader.java which loads the db-password, is not committed
+	// to git
 	private final static String DATABASE_PW = ConfigLoader.Result();
 
 	/**
-	 * Loops through one table of the database and writes the content into a string
+	 * Loops through one table of the database and writes the content into a
+	 * string
 	 */
-	public static String Result() throws Exception 
+	public static String Result() throws Exception
 	{
 		ConnectionSource connectionSource = null;
 		List<Location> locations = null;
 		String result = "";
-		
-		try 
+
+		try
 		{
 			// create our data-source for the database
-			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			connectionSource = new JdbcConnectionSource(DATABASE_URL,
+					"ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
-			Dao<Location, Integer> locationDao = DaoManager.createDao(connectionSource, Location.class);
+			Dao<Location, Integer> locationDao = DaoManager.createDao(
+					connectionSource, Location.class);
 
 			locations = locationDao.queryForAll();
-		}
+		} 
 		catch (Exception e)
 		{
 			return "empty";
 		} 
-		finally 
+		finally
 		{
 			// destroy the data source which should close underlying connections
-			if (connectionSource != null) 
+			if (connectionSource != null)
 			{
 				connectionSource.close();
 			}
 		}
-		
+
 		if (locations == null)
 		{
 			return "empty";
 		}
-		
-		for (Location location2 : locations) 
+
+		for (Location location2 : locations)
 		{
 			String room = location2.getRoom();
 			String owner = location2.getOwner();
