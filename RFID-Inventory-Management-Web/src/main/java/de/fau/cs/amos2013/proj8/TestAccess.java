@@ -49,33 +49,45 @@ public class TestAccess {
 	/**
 	 * Loops through one table of the database and writes the content into a string
 	 */
-	public static String Result() throws Exception {
+	public static String Result() throws Exception 
+	{
 		ConnectionSource connectionSource = null;
-		try {
+		List<Location> locations = null;
+		String result = "";
+		
+		try 
+		{
 			// create our data-source for the database
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
 			Dao<Location, Integer> locationDao = DaoManager.createDao(connectionSource, Location.class);
 
-			List<Location> locations = locationDao.queryForAll();
-
-			String result = "";
-			for (Location location2 : locations) {
-				String room = location2.getRoom();
-				String owner = location2.getOwner();
-				result += room + " | " + owner + ";";
-			}
-			if (result == "") {
-				result = "empty";
-			}
-
-			return result;
-		} finally {
+			locations = locationDao.queryForAll();
+		}
+		catch (Exception e)
+		{
+			return "empty";
+		} 
+		finally 
+		{
 			// destroy the data source which should close underlying connections
-			if (connectionSource != null) {
+			if (connectionSource != null) 
+			{
 				connectionSource.close();
 			}
 		}
+		
+		if (locations == null)
+		{
+			return "empty";
+		}
+		
+		for (Location location2 : locations) 
+		{
+			String room = location2.getRoom();
+			String owner = location2.getOwner();
+			result += room + " | " + owner + ";";
+		}
+		return result;
 	}
-
 }
