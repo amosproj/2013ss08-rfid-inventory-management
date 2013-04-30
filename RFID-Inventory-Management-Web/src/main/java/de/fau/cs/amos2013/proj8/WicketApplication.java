@@ -38,6 +38,13 @@ import org.apache.wicket.protocol.http.WebApplication;
  * Application object for your web application. If you want to run this
  * application without deploying, run the Start class.
  * 
+ * For deploying on Tomcat -> export a .war file with Maven:
+ * Command line in your project folder: "mvn package"
+ * Then rename to ROOT.war, put inside the webapps folder of Tomcat
+ * and (re)start the server. It will be deployed automatically.
+ * Then direct your browser to the root directory of the server
+ * (e.g. http://localhost:8080 or http://proj8.ss13.osramos.de/)
+ * 
  * @see de.fau.cs.amos2013.proj8.Start#main(String[])
  */
 public class WicketApplication extends WebApplication
@@ -58,7 +65,5 @@ public class WicketApplication extends WebApplication
 	public void init()
 	{
 		super.init();
-
-		// add your configuration here
 	}
 }

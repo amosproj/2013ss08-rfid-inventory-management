@@ -35,13 +35,13 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
+ * TODO: This is a Database
  * Example location object that is persisted to disk by the DAO and other
  * example classes.
  */
 @DatabaseTable(tableName = "location")
 public class Location
 {
-
 	// for QueryBuilder to be able to find the fields
 	public static final String ROOM_FIELD_NAME = "room";
 	public static final String OWNER_FIELD_NAME = "owner";
@@ -55,48 +55,75 @@ public class Location
 	@DatabaseField(columnName = OWNER_FIELD_NAME)
 	private String owner;
 
+	/**
+	 * TODO comment
+	 */
 	Location()
 	{
 		// all persisted classes must define a no-arg constructor with at least
 		// package visibility
 	}
 
+	/**
+	 * TODO comment
+	 */
 	public Location(String room)
 	{
 		this.room = room;
 	}
 
+	/**
+	 * TODO comment
+	 */
 	public Location(String room, String owner)
 	{
 		this.room = room;
 		this.owner = owner;
 	}
 
+	/**
+	 * TODO comment
+	 */
 	public int getId()
 	{
 		return id;
 	}
 
+	/**
+	 * TODO comment
+	 */
 	public String getRoom()
 	{
 		return room;
 	}
 
+	/**
+	 * TODO comment
+	 */
 	public void setRoom(String room)
 	{
 		this.room = room;
 	}
 
+	/**
+	 * TODO comment
+	 */
 	public String getOwner()
 	{
 		return owner;
 	}
 
+	/**
+	 * TODO comment
+	 */
 	public void setOwner(String owner)
 	{
 		this.owner = owner;
 	}
 
+	/**
+	 * TODO comment
+	 */
 	@Override
 	public boolean equals(Object other)
 	{

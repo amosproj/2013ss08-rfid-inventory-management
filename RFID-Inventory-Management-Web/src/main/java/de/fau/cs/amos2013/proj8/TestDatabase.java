@@ -39,13 +39,14 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+/**
+ * TODO comment
+ */
 public class TestDatabase
 {
-
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 
-	// the class ConfigLoader.java which loads the db-password, is not committed
-	// to git
+	// the class ConfigLoader.java which loads the db-password, is not committed to git
 	private final static String DATABASE_PW = ConfigLoader.Result();
 
 	private Dao<Location, Integer> locationDao;
@@ -59,7 +60,10 @@ public class TestDatabase
 	}
 
 	/**
-	 * Writes into the database
+	 * Writes the given strings to the database
+	 * @param room string to set
+	 * @param owner string to set
+	 * @throws Exception
 	 */
 	public void Write(String room, String owner) throws Exception
 	{
@@ -67,19 +71,16 @@ public class TestDatabase
 		try
 		{
 			// create our data-source for the database
-			connectionSource = new JdbcConnectionSource(DATABASE_URL,
-					"ss13-proj8", DATABASE_PW);
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and database access objects
 			setupDatabase(connectionSource);
 
 			// write the given Strings
-			String thisRoom = room;
-			Location location = new Location(thisRoom);
+			Location location = new Location(room);
 			location.setOwner(owner);
 
 			// persist the account object to the database
 			locationDao.create(location);
-
 		} 
 		finally
 		{
@@ -92,12 +93,13 @@ public class TestDatabase
 	}
 
 	/**
-	 * Setup our database and DAOs
+	 * Setup database and DAOs
+	 * @param connectionSource required for setting up db
+	 * @throws Exception
 	 */
 	private void setupDatabase(ConnectionSource connectionSource)
 			throws Exception
 	{
-
 		locationDao = DaoManager.createDao(connectionSource, Location.class);
 		List<Location> locations = null;
 		locations = locationDao.queryForAll();

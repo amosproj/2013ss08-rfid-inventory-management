@@ -38,9 +38,11 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
+/**
+ * TODO comment
+ */
 public class TestAccess
 {
-
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 
 	// the class ConfigLoader.java which loads the db-password, is not committed
@@ -55,7 +57,7 @@ public class TestAccess
 	{
 		ConnectionSource connectionSource = null;
 		List<Location> locations = null;
-		String result = "";
+		String result = "empty";
 
 		try
 		{
@@ -70,11 +72,11 @@ public class TestAccess
 		} 
 		catch (Exception e)
 		{
-			return "empty";
+			return result;
 		} 
 		finally
 		{
-			// destroy the data source which should close underlying connections
+			// always destroy the data source which should close underlying connections
 			if (connectionSource != null)
 			{
 				connectionSource.close();
@@ -83,15 +85,17 @@ public class TestAccess
 
 		if (locations == null)
 		{
-			return "empty";
+			return result;
 		}
 
+		result = "";
 		for (Location location2 : locations)
 		{
 			String room = location2.getRoom();
 			String owner = location2.getOwner();
 			result += room + " | " + owner + ";";
 		}
+		
 		return result;
 	}
 }

@@ -42,6 +42,9 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 
+/**
+ * TODO comment
+ */
 public class LocForm extends Form<Object>
 {
 	private static final long serialVersionUID = 1L;
@@ -51,6 +54,9 @@ public class LocForm extends Form<Object>
 	private String status;
 	private String result = " ";
 
+	/**
+	 * TODO comment
+	 */
 	public LocForm(String id)
 	{
 		super(id);
@@ -69,8 +75,7 @@ public class LocForm extends Form<Object>
 			e.printStackTrace();
 		}
 
-		List<String> myList = new ArrayList<String>(Arrays.asList(result
-				.split(";")));
+		List<String> myList = new ArrayList<String>(Arrays.asList(result.split(";")));
 		add(new ListView<String>("listview", myList)
 		{
 			private static final long serialVersionUID = 1L;
@@ -82,6 +87,9 @@ public class LocForm extends Form<Object>
 		});
 	}
 
+	/**
+	 * TODO comment
+	 */
 	public final void onSubmit()
 	{
 		try
@@ -94,6 +102,5 @@ public class LocForm extends Form<Object>
 			status = "An error occured!";
 			e.printStackTrace();
 		}
-
 	}
 }

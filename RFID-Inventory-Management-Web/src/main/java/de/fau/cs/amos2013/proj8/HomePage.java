@@ -34,10 +34,16 @@ package de.fau.cs.amos2013.proj8;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.markup.html.WebPage;
 
+/**
+ * TODO comment
+ */
 public class HomePage extends WebPage
 {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -108456169709883508L;
 
+	/**
+	 * TODO comment
+	 */
 	public HomePage(final PageParameters parameters)
 	{
 		super(parameters);
