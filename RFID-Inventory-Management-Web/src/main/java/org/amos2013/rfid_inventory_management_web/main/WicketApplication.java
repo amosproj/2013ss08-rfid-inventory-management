@@ -29,8 +29,9 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package de.fau.cs.amos2013.proj8;
+package org.amos2013.rfid_inventory_management_web.main;
 
+import org.amos2013.rfid_inventory_management_web.webparts.HomePage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -45,7 +46,7 @@ import org.apache.wicket.protocol.http.WebApplication;
  * Then direct your browser to the root directory of the server
  * (e.g. http://localhost:8080 or http://proj8.ss13.osramos.de/)
  * 
- * @see de.fau.cs.amos2013.proj8.Start#main(String[])
+ * @see org.amos2013.rfid_inventory_management_web.main.Start#main(String[])
  */
 public class WicketApplication extends WebApplication
 {

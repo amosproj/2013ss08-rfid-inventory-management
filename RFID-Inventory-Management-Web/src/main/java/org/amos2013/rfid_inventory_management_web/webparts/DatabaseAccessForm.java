@@ -29,12 +29,11 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package de.fau.cs.amos2013.proj8;
+package org.amos2013.rfid_inventory_management_web.webparts;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.amos2013.rfid_inventory_management_web.database.DatabaseHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -43,58 +42,60 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 
 /**
- * TODO comment
+ * Form that is displayed on the website. Used for reading and writen data from/ to the database
  */
-public class LocForm extends Form<Object>
+public class DatabaseAccessForm extends Form<Object>
 {
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 2948880218956382827L;
+	
+	private int rfid_id;
 	private String room;
 	private String owner;
 	private String status;
-	private String result = " ";
+	
 
 	/**
-	 * TODO comment
+	 * Creates a Form Object
 	 */
-	public LocForm(String id)
+	public DatabaseAccessForm(String id)
 	{
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this));
+		add(new TextField<Object>("rfid_id"));
 		add(new TextField<Object>("room"));
 		add(new TextField<Object>("owner"));
 		add(new Label("status"));
-
+		
+		List<String> databaseRecords = null;
 		try
 		{
-			result = TestAccess.Result();
+			databaseRecords = DatabaseHandler.getRecordsFromDatabase();
 		} 
 		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		List<String> myList = new ArrayList<String>(Arrays.asList(result.split(";")));
-		add(new ListView<String>("listview", myList)
+		add(new ListView<String>("recordsReadListView", databaseRecords)
 		{
-			private static final long serialVersionUID = 1L;
+			private static final long serialVersionUID = 25754831191690183L;
 
-			protected void populateItem(ListItem<String> item)
+			protected void populateItem(ListItem<String> record)
 			{
-				item.add(new Label("label", item.getModel()));
+				record.add(new Label("recordLabel", record.getModel()));
 			}
 		});
 	}
 
 	/**
-	 * TODO comment
+	 * This method is called, when the submit button on the homepage it is clicked.
+	 * It will write the entered record into the database
 	 */
 	public final void onSubmit()
 	{
 		try
 		{
-			TestDatabase.TestDatabase(room, owner);
+			DatabaseHandler.writeRecordToDatabase(rfid_id, room, owner);
 			status = "Data saved - please refresh view!";
 		} 
 		catch (Exception e)

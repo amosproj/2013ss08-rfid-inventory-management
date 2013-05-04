@@ -29,25 +29,34 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package de.fau.cs.amos2013.proj8;
+package org.amos2013.rfid_inventory_management_web.webparts;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.markup.html.WebPage;
+import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
+import org.amos2013.rfid_inventory_management_web.webparts.HomePage;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- * TODO comment
+ * Simple test using the WicketTester
  */
-public class HomePage extends WebPage
+public class TestHomePage
 {
-	private static final long serialVersionUID = -108456169709883508L;
+	private WicketTester tester;
 
-	/**
-	 * TODO comment
-	 */
-	public HomePage(final PageParameters parameters)
+	@Before
+	public void setUp()
 	{
-		super(parameters);
+		tester = new WicketTester(new WicketApplication());
+	}
 
-		add(new LocForm("locForm"));
+	@Test
+	public void homepageRendersSuccessfully()
+	{
+		//start and render the test page
+		tester.startPage(HomePage.class);
+
+		//assert rendered page class
+		tester.assertRenderedPage(HomePage.class);
 	}
 }

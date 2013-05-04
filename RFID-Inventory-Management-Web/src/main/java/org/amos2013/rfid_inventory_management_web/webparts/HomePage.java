@@ -29,32 +29,26 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package de.fau.cs.amos2013.proj8;
+package org.amos2013.rfid_inventory_management_web.webparts;
 
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.markup.html.WebPage;
 
 /**
- * Simple test using the WicketTester
+ * This class defines a website
  */
-public class TestHomePage
+public class HomePage extends WebPage
 {
-	private WicketTester tester;
+	private static final long serialVersionUID = -108456169709883508L;
 
-	@Before
-	public void setUp()
+	/**
+	 * The constructor creates a website which contains a Form to connect to the database
+	 */
+	public HomePage(final PageParameters parameters)
 	{
-		tester = new WicketTester(new WicketApplication());
-	}
+		super(parameters);
 
-	@Test
-	public void homepageRendersSuccessfully()
-	{
-		//start and render the test page
-		tester.startPage(HomePage.class);
-
-		//assert rendered page class
-		tester.assertRenderedPage(HomePage.class);
+		// adds a From which is able to contact the database (read, write)
+		add(new DatabaseAccessForm("databaseHandlerForm"));
 	}
 }

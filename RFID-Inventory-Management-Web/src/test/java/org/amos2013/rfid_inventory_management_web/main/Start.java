@@ -29,7 +29,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package de.fau.cs.amos2013.proj8;
+package org.amos2013.rfid_inventory_management_web.main;
 
 import org.apache.wicket.util.time.Duration;
 import org.eclipse.jetty.server.Server;

@@ -53,23 +53,22 @@
 			<p>
 				Please fill in the following form:
 			</p> 
-				<form id="locForm" method="get" wicket:id="locForm">
+				<form id="databaseHandlerForm" method="get" wicket:id="databaseHandlerForm">
 					<fieldset>
 						<legend style="color: #fb3d09; font-weight: bold;">Company Cleaner</legend>
 						<p wicket:id="status" style="color: #fb3d09;"></p>
+						<span >RFID ID: </span><input wicket:id="rfid_id" type="text" id="rfid_id" /><br/>
 						<span >New room: </span><input wicket:id="room" type="text" id="room" /><br/>
 						<span >Your name:</span><input wicket:id="owner" type="text" id="owner" />
 						<p>
 							<input type="submit" name="Submit" value="Submit"/>
 						</p>
 					</fieldset>
-					<p>
-						<h4>
-							List of all room/owner pairs currently saved in the Database:
-						</h4>
-					</p>
-					<span wicket:id="listview">
-  						 <span wicket:id="label"></span><br/>
+					<h4>
+						List of all devices (RFID id, room, owner) currently saved in the database:
+					</h4>
+					<span wicket:id="recordsReadListView">
+  						 <span wicket:id="recordLabel"></span><br/>
 					</span>
 					<p>
 						<a href="/">Refresh view</a>

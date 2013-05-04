@@ -1,2 +1,2 @@
 /target
-/src/main/java/de/fau/cs/amos2013/proj8/ConfigLoader.java
+src/main/java/org/amos2013/rfid_inventory_management_web/database/ConfigLoader.java

@@ -29,68 +29,71 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package de.fau.cs.amos2013.proj8;
+package org.amos2013.rfid_inventory_management_web.database;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * TODO: This is a Database
- * Example location object that is persisted to disk by the DAO and other
- * example classes.
+ * This class defines the structure (the columns) of the database
  */
-@DatabaseTable(tableName = "location")
-public class Location
+@DatabaseTable(tableName = "inventoryTable")
+public class DatabaseRecord
 {
-	// for QueryBuilder to be able to find the fields
-	public static final String ROOM_FIELD_NAME = "room";
-	public static final String OWNER_FIELD_NAME = "owner";
+	// for QueryBuilder to be able to find the columns
+	public static final String ROOM_COLUMN = "room";
+	public static final String OWNER_COLUMN = "owner";
+	public static final String RFID_ID_COLUMN = "rfid_id";
 
-	@DatabaseField(generatedId = true)
-	private int id;
+	
+	// Columns definition:
+	@DatabaseField(columnName = RFID_ID_COLUMN, canBeNull = false, id = true)	// primary key
+	private int rfid_id;
 
-	@DatabaseField(columnName = ROOM_FIELD_NAME, canBeNull = false)
+	@DatabaseField(columnName = ROOM_COLUMN, canBeNull = false)
 	private String room;
 
-	@DatabaseField(columnName = OWNER_FIELD_NAME)
+	@DatabaseField(columnName = OWNER_COLUMN)
 	private String owner;
 
 	/**
-	 * TODO comment
+	 * Default constructor (empty)
+	 *
 	 */
-	Location()
+	public DatabaseRecord()
 	{
-		// all persisted classes must define a no-arg constructor with at least
-		// package visibility
+		// all persisted classes must define a no-arg constructor with at least package visibility
 	}
 
 	/**
-	 * TODO comment
+	 * Constructor for creating a new database record
 	 */
-	public Location(String room)
+	public DatabaseRecord(int rfid_id, String room, String owner)
 	{
-		this.room = room;
-	}
-
-	/**
-	 * TODO comment
-	 */
-	public Location(String room, String owner)
-	{
+		this.rfid_id = rfid_id;
 		this.room = room;
 		this.owner = owner;
 	}
-
+	
 	/**
-	 * TODO comment
+	 * Gets the RFID Id
 	 */
-	public int getId()
+	public int getRFIDId()
 	{
-		return id;
+		return rfid_id;
 	}
 
 	/**
-	 * TODO comment
+	 * Sets the RFID Id
+	 * @param rfid_id Id to be set
+	 */
+	public void setRFIDId(int rfid_id)
+	{
+		this.rfid_id = rfid_id;
+	}
+
+	/**
+	 * Gets the room
 	 */
 	public String getRoom()
 	{
@@ -98,7 +101,8 @@ public class Location
 	}
 
 	/**
-	 * TODO comment
+	 * Sets the room
+	 * @param room Room to be set
 	 */
 	public void setRoom(String room)
 	{
@@ -106,7 +110,7 @@ public class Location
 	}
 
 	/**
-	 * TODO comment
+	 * Gets the current owner of the device
 	 */
 	public String getOwner()
 	{
@@ -114,7 +118,8 @@ public class Location
 	}
 
 	/**
-	 * TODO comment
+	 * Sets the current owner of the device
+	 * @param owner Owner to be set
 	 */
 	public void setOwner(String owner)
 	{
@@ -122,7 +127,7 @@ public class Location
 	}
 
 	/**
-	 * TODO comment
+	 * Compares two Objects
 	 */
 	@Override
 	public boolean equals(Object other)
@@ -131,6 +136,6 @@ public class Location
 		{
 			return false;
 		}
-		return room.equals(((Location) other).room);
+		return room.equals(((DatabaseRecord) other).room);
 	}
 }
