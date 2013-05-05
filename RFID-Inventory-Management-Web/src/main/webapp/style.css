@@ -63,3 +63,10 @@ h3 {
 	font-size:24pt;
 	color:#092E67;
 }
+label {
+    display: block;
+    text-align: right;
+    margin-right:8px;
+    width: 100px;
+    float:left;
+}

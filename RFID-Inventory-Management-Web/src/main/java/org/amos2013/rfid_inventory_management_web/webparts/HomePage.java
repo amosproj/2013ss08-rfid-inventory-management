@@ -31,8 +31,15 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
+
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.file.File;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.link.DownloadLink;
 
 /**
  * This class defines a website
@@ -44,11 +51,19 @@ public class HomePage extends WebPage
 	/**
 	 * The constructor creates a website which contains a Form to connect to the database
 	 */
-	public HomePage(final PageParameters parameters)
+	public HomePage(final PageParameters parameters) throws IOException
 	{
 		super(parameters);
 
-		// adds a From which is able to contact the database (read, write)
+		// adds a from which is able to contact the database (read, write)
 		add(new DatabaseAccessForm("databaseHandlerForm"));
+		
+		// adds a label for downloading a particular resource
+		URL url = getClass().getResource("/RFID-Inventory-Management-App.apk");
+		if (url == null)
+			throw new FileNotFoundException("Resource `RFID-Inventory-Management-App.apk' not found.");
+		File file = new File(URLDecoder.decode(url.getFile(), "UTF8"));
+		DownloadLink dl = new DownloadLink("download", file);
+		add(dl);
 	}
 }

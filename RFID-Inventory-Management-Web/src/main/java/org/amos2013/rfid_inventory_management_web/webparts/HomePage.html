@@ -48,20 +48,20 @@
 			<h3>RFID-Inventory Management</h3>
 			<p>
 				With this tool, you can easily manage your RFID-tagged hardware parts.
-				Please set the new room and the new owner for the hardware you are hijacking.
 			</p>
+			<a wicket:id="download" href="#">Download App</a>
 			<p>
-				Please fill in the following form:
-			</p> 
+				Please set the new room and the new owner for the hardware you are hijacking:
+			</p>
 				<form id="databaseHandlerForm" method="get" wicket:id="databaseHandlerForm">
 					<fieldset>
 						<legend style="color: #fb3d09; font-weight: bold;">Company Cleaner</legend>
 						<p wicket:id="status" style="color: #fb3d09;"></p>
-						<span >RFID ID: </span><input wicket:id="rfid_id" type="text" id="rfid_id" /><br/>
-						<span >New room: </span><input wicket:id="room" type="text" id="room" /><br/>
-						<span >Your name:</span><input wicket:id="owner" type="text" id="owner" />
+						<label>RFID ID</label><input wicket:id="rfid_id" type="text" id="rfid_id" /><br/>
+						<label>New room</label><input wicket:id="room" type="text" id="room" /><br/>
+						<label>Your name</label><input wicket:id="owner" type="text" id="owner" />
 						<p>
-							<input type="submit" name="Submit" value="Submit"/>
+							<input style="margin-left:150px;" type="submit" name="Submit" value="Submit"/>
 						</p>
 					</fieldset>
 					<h4>
