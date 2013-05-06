@@ -119,13 +119,13 @@ public class DatabaseHandler
 	 * @return a string containing all records
 	 * @throws Exception
 	 */
-	public static List<String> getRecordsFromDatabase() throws Exception
+	public static List<DatabaseRecord> getRecordsFromDatabase() throws Exception
 	{
 		ConnectionSource connectionSource = null;
 		List<DatabaseRecord> databaseRecords = null;
-		ArrayList<String> resultList = new ArrayList<String>(); 
-		String recordString = "empty";
-
+		ArrayList<DatabaseRecord> resultList = new ArrayList<DatabaseRecord>(); 
+		DatabaseRecord recordString = null;
+		
 		try
 		{
 			// create our data-source for the database (url, user, pwd)
@@ -160,11 +160,8 @@ public class DatabaseHandler
 		// add string for record to result list
 		for (DatabaseRecord record : databaseRecords)
 		{
-			int rfid_id = record.getRFIDId();
-			String room = record.getRoom();
-			String owner = record.getOwner();
-			recordString = rfid_id + " | " + room + " | " + owner;
-			resultList.add(recordString);
+			
+			resultList.add(record);
 		}
 		
 		return resultList;

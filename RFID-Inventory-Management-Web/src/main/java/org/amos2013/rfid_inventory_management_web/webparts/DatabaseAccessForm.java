@@ -34,6 +34,7 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.DatabaseRecord;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -42,7 +43,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 
 /**
- * Form that is displayed on the website. Used for reading and writen data from/ to the database
+ * Form that is displayed on the website. Used for reading and written data from/ to the database
  */
 public class DatabaseAccessForm extends Form<Object>
 {
@@ -66,7 +67,7 @@ public class DatabaseAccessForm extends Form<Object>
 		add(new TextField<Object>("owner"));
 		add(new Label("status"));
 		
-		List<String> databaseRecords = null;
+		List<DatabaseRecord> databaseRecords = null;
 		try
 		{
 			databaseRecords = DatabaseHandler.getRecordsFromDatabase();
@@ -76,13 +77,16 @@ public class DatabaseAccessForm extends Form<Object>
 			e.printStackTrace();
 		}
 
-		add(new ListView<String>("recordsReadListView", databaseRecords)
+		add(new ListView<DatabaseRecord>("recordsReadListView", databaseRecords)
 		{
 			private static final long serialVersionUID = 25754831191690183L;
 
-			protected void populateItem(ListItem<String> record)
+			protected void populateItem(ListItem<DatabaseRecord> item)
 			{
-				record.add(new Label("recordLabel", record.getModel()));
+				DatabaseRecord record = (DatabaseRecord) item.getModelObject();
+				item.add(new Label("recordLabel1", record.getRFIDId()));
+				item.add(new Label("recordLabel2", record.getRoom()));
+				item.add(new Label("recordLabel3", record.getOwner()));
 			}
 		});
 	}

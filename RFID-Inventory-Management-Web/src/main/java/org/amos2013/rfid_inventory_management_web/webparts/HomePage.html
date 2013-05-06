@@ -55,21 +55,30 @@
 			</p>
 				<form id="databaseHandlerForm" method="get" wicket:id="databaseHandlerForm">
 					<fieldset>
-						<legend style="color: #fb3d09; font-weight: bold;">Company Cleaner</legend>
+						<legend style="color: #fb3d09; font-weight: bold;">RFID Scanner</legend>
 						<p wicket:id="status" style="color: #fb3d09;"></p>
-						<label>RFID ID</label><input wicket:id="rfid_id" type="text" id="rfid_id" /><br/>
+						<label>RFID-Id</label><input wicket:id="rfid_id" type="text" id="rfid_id" /><br/>
 						<label>New room</label><input wicket:id="room" type="text" id="room" /><br/>
 						<label>Your name</label><input wicket:id="owner" type="text" id="owner" />
 						<p>
 							<input style="margin-left:150px;" type="submit" name="Submit" value="Submit"/>
 						</p>
 					</fieldset>
-					<h4>
-						List of all devices (RFID id, room, owner) currently saved in the database:
-					</h4>
-					<span wicket:id="recordsReadListView">
-  						 <span wicket:id="recordLabel"></span><br/>
-					</span>
+					<p>
+						List of all devices currently saved in the database:
+					</p>
+					<table>
+						<th>RFID-Id</th>
+						<th>Room</th>
+						<th>Owner</th>
+						<span wicket:id="recordsReadListView">
+  							 <tr>
+  						 		<td><span wicket:id="recordLabel1"></span></td>	
+  							 	<td><span wicket:id="recordLabel2"></span></td>
+  							 	<td><span wicket:id="recordLabel3"></span></td>
+  							 </tr>
+						</span>
+					</table>
 					<p>
 						<a href="/">Refresh view</a>
 					</p>
