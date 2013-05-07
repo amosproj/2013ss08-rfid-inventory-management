@@ -33,29 +33,54 @@ package org.amos2013.rfid_inventory_management_web.database;
 
 import static org.junit.Assert.*;
 
+import junit.framework.Assert;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- * @author David
- *
- */
-public class DatabaseRecordTest
+public class DatabaseHandlerTest
 {
-	private String room = "42.42";
-	private String owner = "Musterfrau";
-	private int id = 42;
 
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseRecord#DatabaseRecord(int, java.lang.String, java.lang.String)}.
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception
+	{
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception
+	{
+	}
+
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#writeRecordToDatabase(int, java.lang.String, java.lang.String)}.
 	 */
 	@Test
-	public final void testDatabaseRecordIntStringString()
+	public final void testWriteRecordToDatabase()
 	{
-		DatabaseRecord tester = new DatabaseRecord(id, room, owner);
-		
-		assertEquals(room, tester.getRoom());
-		assertEquals(owner, tester.getOwner());
-		assertEquals(id, tester.getRFIDId());
+		assertTrue(true); // TODO
+	}
+
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#getRecordsFromDatabase()}.
+	 */
+	@Test
+	public final void testGetRecordsFromDatabase()
+	{	
+	    try
+	    {
+	        DatabaseHandler.getRecordsFromDatabase();
+	    }
+	    catch (Exception ex)
+	    {
+	        Assert.fail("Expected no exception, but got: " + ex.getMessage());
+	    }
 	}
 
 }
