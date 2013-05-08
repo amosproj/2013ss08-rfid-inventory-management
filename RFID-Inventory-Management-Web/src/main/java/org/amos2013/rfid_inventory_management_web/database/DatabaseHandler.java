@@ -31,6 +31,7 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +90,11 @@ public class DatabaseHandler
 	 */
 	public static void writeRecordToDatabase(int rfid_id, String room, String owner) throws Exception
 	{
+		if (room == null || owner == null)
+		{
+			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is null.");
+		}
+		
 		ConnectionSource connectionSource = null;
 		try
 		{
@@ -103,12 +109,31 @@ public class DatabaseHandler
 			// writes to the database: create if new id, or update if existing
 			databaseHandlerDao.createOrUpdate(record);
 		} 
+		catch (SQLException e)
+		{
+			throw e;
+		}
+		catch (InstantiationException e)
+		{
+			throw e;
+		}
+		catch (Exception e)
+		{
+			throw e;
+		}
 		finally
 		{
 			// destroy the data source which should close underlying connections
 			if (connectionSource != null)
 			{
-				connectionSource.close();
+				try
+				{
+					connectionSource.close();
+				}
+				catch (SQLException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -160,7 +185,6 @@ public class DatabaseHandler
 		// add string for record to result list
 		for (DatabaseRecord record : databaseRecords)
 		{
-			
 			resultList.add(record);
 		}
 		

@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2013 by 
+ * Copyright (c) 2013 by
  * AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
  *
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
  *  Kerstin Stern
- * 
+ *
  * SDs:
  *  Andreas Singer
  *  Liping Wang
@@ -29,32 +29,26 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package org.amos2013.rfid_inventory_management_web.database;
+package org.amos2013.rfid_inventory_management_web.main;
 
-import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-import org.junit.Test;
+@RunWith(Suite.class)
+@SuiteClasses(
+		{	// add all test classes here
+			org.amos2013.rfid_inventory_management_web.database.DatabaseHandlerTest.class,
+			org.amos2013.rfid_inventory_management_web.database.DatabaseRecordTest.class,
+			org.amos2013.rfid_inventory_management_web.webparts.TestHomePage.class,
+		})
 
 /**
- * Tests the DatabaseRecord class
+ * 
+ * Test Suite for running all the junit tests created
+ *
  */
-public class DatabaseRecordTest
+public class AllTests
 {
-	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseRecord#DatabaseRecord(int, java.lang.String, java.lang.String)}.
-	 */
-	@Test
-	public final void testDatabaseRecordIntStringString()
-	{
-		String room = "42.42";
-		String owner = "Musterfrau";
-		int id = 42;
-
-		DatabaseRecord testRecord = new DatabaseRecord(id, room, owner);
-		
-		assertEquals(room, testRecord.getRoom());
-		assertEquals(owner, testRecord.getOwner());
-		assertEquals(id, testRecord.getRFIDId());		
-	}
-
+	/* do nothing here */
 }

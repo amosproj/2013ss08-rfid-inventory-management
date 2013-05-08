@@ -68,16 +68,20 @@
 						List of all devices currently saved in the database:
 					</p>
 					<table>
-						<th>RFID-Id</th>
-						<th>Room</th>
-						<th>Owner</th>
-						<span wicket:id="recordsReadListView">
-  							 <tr>
-  						 		<td><span wicket:id="recordLabel1"></span></td>	
-  							 	<td><span wicket:id="recordLabel2"></span></td>
-  							 	<td><span wicket:id="recordLabel3"></span></td>
-  							 </tr>
-						</span>
+						<tbody>
+							<tr>
+								<th>RFID-Id</th>
+								<th>Room</th>
+								<th>Owner</th>
+							</tr>
+								<span wicket:id="recordsReadListView">  								
+  						 		<tr>
+  						 			<td><span wicket:id="recordRFIDIdLabel"></span></td>	
+  							 		<td><span wicket:id="recordRoomLabel"></span></td>
+  							 		<td><span wicket:id="recordOwnerLabel"></span></td>
+								</tr>
+							</span>
+						</tbody>
 					</table>
 					<p>
 						<a href="/">Refresh view</a>

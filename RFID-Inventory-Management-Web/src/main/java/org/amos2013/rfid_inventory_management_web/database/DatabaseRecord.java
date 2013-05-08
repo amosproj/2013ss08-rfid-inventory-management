@@ -31,6 +31,8 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
+import java.io.Serializable;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -38,8 +40,10 @@ import com.j256.ormlite.table.DatabaseTable;
  * This class defines the structure (the columns) of the database
  */
 @DatabaseTable(tableName = "inventoryTable")
-public class DatabaseRecord
+public class DatabaseRecord implements Serializable
 {
+	private static final long serialVersionUID = 3718871095899325629L;
+
 	// for QueryBuilder to be able to find the columns
 	public static final String ROOM_COLUMN = "room";
 	public static final String OWNER_COLUMN = "owner";

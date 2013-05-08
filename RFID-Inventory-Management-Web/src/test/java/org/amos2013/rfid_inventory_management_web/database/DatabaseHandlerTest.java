@@ -33,15 +33,22 @@ package org.amos2013.rfid_inventory_management_web.database;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class DatabaseHandlerTest
 {
-
+	@Rule 
+	public ExpectedException exception = ExpectedException.none();
+	
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -60,11 +67,13 @@ public class DatabaseHandlerTest
 
 	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#writeRecordToDatabase(int, java.lang.String, java.lang.String)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public final void testWriteRecordToDatabase()
+	public final void testWriteRecordToDatabase() throws Exception
 	{
-		assertTrue(true); // TODO
+		exception.expect(IllegalArgumentException.class);	// asserts that a IllegalArgumentException is thrown
+		DatabaseHandler.writeRecordToDatabase(123, null, null);
 	}
 
 	/**
@@ -73,14 +82,17 @@ public class DatabaseHandlerTest
 	@Test
 	public final void testGetRecordsFromDatabase()
 	{	
+		List<DatabaseRecord> resultList = null;
 	    try
 	    {
-	        DatabaseHandler.getRecordsFromDatabase();
+	        resultList = DatabaseHandler.getRecordsFromDatabase();
 	    }
 	    catch (Exception ex)
 	    {
 	        Assert.fail("Expected no exception, but got: " + ex.getMessage());
 	    }
+	    
+	    assertNotNull(resultList);
 	}
 
 }

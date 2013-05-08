@@ -84,9 +84,9 @@ public class DatabaseAccessForm extends Form<Object>
 			protected void populateItem(ListItem<DatabaseRecord> item)
 			{
 				DatabaseRecord record = (DatabaseRecord) item.getModelObject();
-				item.add(new Label("recordLabel1", record.getRFIDId()));
-				item.add(new Label("recordLabel2", record.getRoom()));
-				item.add(new Label("recordLabel3", record.getOwner()));
+				item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));
+				item.add(new Label("recordRoomLabel", record.getRoom()));
+				item.add(new Label("recordOwnerLabel", record.getOwner()));
 			}
 		});
 	}
@@ -102,6 +102,10 @@ public class DatabaseAccessForm extends Form<Object>
 			DatabaseHandler.writeRecordToDatabase(rfid_id, room, owner);
 			status = "Data saved - please refresh view!";
 		} 
+		catch (IllegalArgumentException e)
+		{
+			status = "Please enter a room and a name.";
+		}
 		catch (Exception e)
 		{
 			status = "An error occured!";
