@@ -6,7 +6,7 @@ body { margin:0;padding:0;background-color:#2B2B2B; }
 	height : 87px;
 	background-color : #000;
 	margin-top : 0;
-	padding-top : 10px;
+	padding-top : 16px;
 	border-bottom : 1px solid #888;
 	z-index : 0;
 }
@@ -26,7 +26,7 @@ body { margin:0;padding:0;background-color:#2B2B2B; }
 }
 #logo h1 {
 	color : white;
-	font-size:36pt;
+	font-size:30pt;
 	display: inline;
 }
 #logo img { 
@@ -55,12 +55,12 @@ a, a:visited, a:hover, a:active {
 }
 h2 {
 	padding : 0; margin:0;
-	font-size:36pt;
+	font-size:24pt;
 	color:#FF5500;
 }
 h3 {
 	padding : 0; margin:0;
-	font-size:24pt;
+	font-size:20pt;
 	color:#092E67;
 }
 label {

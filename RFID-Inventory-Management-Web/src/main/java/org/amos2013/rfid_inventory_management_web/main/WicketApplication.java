@@ -31,7 +31,9 @@
 
 package org.amos2013.rfid_inventory_management_web.main;
 
-import org.amos2013.rfid_inventory_management_web.webparts.HomePage;
+import org.amos2013.rfid_inventory_management_web.webparts.AppPage;
+import org.amos2013.rfid_inventory_management_web.webparts.ListPage;
+import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -51,12 +53,12 @@ import org.apache.wicket.protocol.http.WebApplication;
 public class WicketApplication extends WebApplication
 {
 	/**
-	 * @see org.apache.wicket.Application#getHomePage()
+	 * @see org.apache.wicket.Application#getAppPage()
 	 */
 	@Override
 	public Class<? extends WebPage> getHomePage()
 	{
-		return HomePage.class;
+		return AppPage.class;
 	}
 
 	/**
@@ -66,5 +68,6 @@ public class WicketApplication extends WebApplication
 	public void init()
 	{
 		super.init();
+		mount(new MountedMapper("/main", ListPage.class));
 	}
 }

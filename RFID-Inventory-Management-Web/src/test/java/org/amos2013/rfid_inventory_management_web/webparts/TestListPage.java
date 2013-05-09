@@ -29,28 +29,34 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package org.amos2013.rfid_inventory_management_web.main;
+package org.amos2013.rfid_inventory_management_web.webparts;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
-
-@RunWith(Suite.class)
-@SuiteClasses(
-		{	// add all test classes here
-			org.amos2013.rfid_inventory_management_web.database.DatabaseHandlerTest.class,
-			org.amos2013.rfid_inventory_management_web.database.DatabaseRecordTest.class,
-			org.amos2013.rfid_inventory_management_web.webparts.TestAppPage.class,
-			org.amos2013.rfid_inventory_management_web.webparts.TestListPage.class,
-			org.amos2013.rfid_inventory_management_web.webparts.TestAdminPage.class,
-		})
+import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
+import org.amos2013.rfid_inventory_management_web.webparts.AppPage;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- *
- * Test Suite for running all the junit tests created
- *
+ * Simple test using the WicketTester
  */
-public class AllTests
+public class TestListPage
 {
-	/* do nothing here */
+	private WicketTester tester;
+
+	@Before
+	public void setUp()
+	{
+		tester = new WicketTester(new WicketApplication());
+	}
+
+	@Test
+	public void homepageRendersSuccessfully()
+	{
+		//start and render the test page
+		tester.startPage(ListPage.class);
+
+		//assert rendered page class
+		tester.assertRenderedPage(ListPage.class);
+	}
 }

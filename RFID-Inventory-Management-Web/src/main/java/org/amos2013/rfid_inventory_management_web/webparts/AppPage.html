@@ -33,23 +33,11 @@
 <html xmlns:wicket="http://wicket.apache.org">
 	<head>
 		<meta charset="utf-8" />
-		<title>RFID-Inventory Management</title>
-		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
+		<title>App RFID-Inventory Management</title>
+		<link rel="stylesheet" href="app_style.css" type="text/css" media="screen" title="Stylesheet" />
 	</head>
 	<body>
-		<div id="hd">
-			<div id="logo">
-				. 
-				<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />
-				<h1>Project 8</h1>
-			</div>
-		</div>
 		<div id="bd">
-			<h3>RFID-Inventory Management</h3>
-			<p>
-				With this tool, you can easily manage your RFID-tagged hardware parts.
-			</p>
-			<a wicket:id="download" href="#">Download App</a>
 			<p>
 				Please set the new room and the new owner for the hardware you are hijacking:
 			</p>
@@ -65,30 +53,9 @@
 						</p>
 					</fieldset>
 					<p>
-						List of all devices currently saved in the database:
-					</p>
-					<table>
-						<tbody>
-							<tr>
-								<th>RFID-Id</th>
-								<th>Room</th>
-								<th>Owner</th>
-							</tr>
-								<span wicket:id="recordsReadListView">  								
-  						 		<tr>
-  						 			<td><span wicket:id="recordRFIDIdLabel"></span></td>	
-  							 		<td><span wicket:id="recordRoomLabel"></span></td>
-  							 		<td><span wicket:id="recordOwnerLabel"></span></td>
-								</tr>
-							</span>
-						</tbody>
-					</table>
-					<p>
-						<a href="/">Refresh view</a>
+						<a href="/main">Switch to the frontend.</a>
 					</p>
 				</form>
-		</div>
-		<div id="ft">
 		</div>
 	</body>
 </html>

@@ -29,28 +29,22 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package org.amos2013.rfid_inventory_management_web.main;
+package org.amos2013.rfid_inventory_management_web.webparts;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
-
-@RunWith(Suite.class)
-@SuiteClasses(
-		{	// add all test classes here
-			org.amos2013.rfid_inventory_management_web.database.DatabaseHandlerTest.class,
-			org.amos2013.rfid_inventory_management_web.database.DatabaseRecordTest.class,
-			org.amos2013.rfid_inventory_management_web.webparts.TestAppPage.class,
-			org.amos2013.rfid_inventory_management_web.webparts.TestListPage.class,
-			org.amos2013.rfid_inventory_management_web.webparts.TestAdminPage.class,
-		})
+import java.io.IOException;
 
 /**
- *
- * Test Suite for running all the junit tests created
- *
+ * This class defines a sub-website
  */
-public class AllTests
-{
-	/* do nothing here */
+public class ListPage extends MainPage {
+	
+	private static final long serialVersionUID = 7449232746846404264L;
+
+	/**
+	 * The constructor creates a website which contains a Form listing all data from the database
+	 */
+	public ListPage() throws IOException
+	{
+		add(new DatabaseAccessForm("databaseHandlerForm"));
+	}
 }

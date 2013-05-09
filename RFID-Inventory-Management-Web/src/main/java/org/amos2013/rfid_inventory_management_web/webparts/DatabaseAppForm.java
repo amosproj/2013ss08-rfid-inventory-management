@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2013 by 
+ * Copyright (c) 2013 by
  * AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
  *
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
  *  Kerstin Stern
- * 
+ *
  * SDs:
  *  Andreas Singer
  *  Liping Wang
@@ -31,50 +31,57 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
-import java.util.List;
-
 import org.amos2013.rfid_inventory_management_web.database.DatabaseHandler;
-import org.amos2013.rfid_inventory_management_web.database.DatabaseRecord;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.CompoundPropertyModel;
 
 /**
- * Form that is displayed on the website. Used for reading and written data from/ to the database
+ * Form that is displayed on the website. Used for reading data to the database
  */
-public class DatabaseAccessForm extends Form<Object>
+public class DatabaseAppForm extends Form<Object>
 {
 	private static final long serialVersionUID = 2948880218956382827L;
-	
+
+	private int rfid_id;
+	private String room;
+	private String owner;
+	private String status;
+
+
 	/**
 	 * Creates a Form Object
 	 */
-	public DatabaseAccessForm(String id)
+	public DatabaseAppForm(String id)
 	{
 		super(id);
-				
-		List<DatabaseRecord> databaseRecords = null;
+		setDefaultModel(new CompoundPropertyModel<Object>(this));
+		add(new TextField<Object>("rfid_id"));
+		add(new TextField<Object>("room"));
+		add(new TextField<Object>("owner"));
+		add(new Label("status"));
+	}
+
+	/**
+	 * This method is called, when the submit button on the homepage it is clicked.
+	 * It will write the entered record into the database
+	 */
+	public final void onSubmit()
+	{
 		try
 		{
-			databaseRecords = DatabaseHandler.getRecordsFromDatabase();
-		} 
+			DatabaseHandler.writeRecordToDatabase(rfid_id, room, owner);
+			status = "Data saved";
+		}
+		catch (IllegalArgumentException e)
+		{
+			status = "Please enter a room and a name";
+		}
 		catch (Exception e)
 		{
+			status = "An error occured!";
 			e.printStackTrace();
 		}
-
-		add(new ListView<DatabaseRecord>("recordsReadListView", databaseRecords)
-		{
-			private static final long serialVersionUID = 25754831191690183L;
-
-			protected void populateItem(ListItem<DatabaseRecord> item)
-			{
-				DatabaseRecord record = (DatabaseRecord) item.getModelObject();
-				item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));
-				item.add(new Label("recordRoomLabel", record.getRoom()));
-				item.add(new Label("recordOwnerLabel", record.getOwner()));
-			}
-		});
 	}
 }
