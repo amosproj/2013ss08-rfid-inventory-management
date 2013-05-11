@@ -37,6 +37,7 @@ import org.amos2013.rfid_inventory_management_web.database.DatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.DatabaseRecord;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
@@ -63,17 +64,38 @@ public class DatabaseAccessForm extends Form<Object>
 		{
 			e.printStackTrace();
 		}
-
+		
 		add(new ListView<DatabaseRecord>("recordsReadListView", databaseRecords)
 		{
 			private static final long serialVersionUID = 25754831191690183L;
 
 			protected void populateItem(ListItem<DatabaseRecord> item)
 			{
-				DatabaseRecord record = (DatabaseRecord) item.getModelObject();
+				final DatabaseRecord record = (DatabaseRecord) item.getModelObject();
 				item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));
 				item.add(new Label("recordRoomLabel", record.getRoom()));
-				item.add(new Label("recordOwnerLabel", record.getOwner()));
+				item.add(new Label("recordOwnerLabel", record.getOwner()));			
+				
+				// adds a link to delete the current record item
+				item.add(new Link<Object>("delete-record")
+			    {
+					private static final long serialVersionUID = 8843977459555507386L;
+
+					public void onClick()
+					{
+						// call to delete the product
+						try
+						{
+							DatabaseHandler.deleteRecordFromDatabase(record);
+						} 
+						catch (Exception e)
+						{
+							e.printStackTrace();
+						}
+						// refreshes the page
+						setResponsePage(ListPage.class);
+					}
+			    });
 			}
 		});
 	}

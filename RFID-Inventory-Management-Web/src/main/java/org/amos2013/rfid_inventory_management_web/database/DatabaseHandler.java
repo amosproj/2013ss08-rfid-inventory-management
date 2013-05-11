@@ -190,4 +190,37 @@ public class DatabaseHandler
 		
 		return resultList;
 	}
+	
+	
+	/**
+	 * Deletes a given row of the table 
+	 * @throws Exception
+	 */
+	public static void deleteRecordFromDatabase(DatabaseRecord record) throws Exception
+	{
+		ConnectionSource connectionSource = null;
+				
+		try
+		{
+			// create our data-source for the database (url, user, pwd)
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// setup our database and DAOs
+			databaseHandlerDao = DaoManager.createDao(connectionSource, DatabaseRecord.class);
+
+			// delete given database record
+			databaseHandlerDao.delete(record);
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		} 
+		finally
+		{
+			// always destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
+	}
 }
