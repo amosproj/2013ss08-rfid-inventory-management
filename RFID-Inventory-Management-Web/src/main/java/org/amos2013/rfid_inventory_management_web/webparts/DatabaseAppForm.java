@@ -56,7 +56,7 @@ public class DatabaseAppForm extends Form<Object>
 	public DatabaseAppForm(String id)
 	{
 		super(id);
-		setDefaultModel(new CompoundPropertyModel<Object>(this));
+		setDefaultModel(new CompoundPropertyModel<Object>(this));	//setss the model to bind to the wicket ids
 		add(new TextField<Object>("rfid_id"));
 		add(new TextField<Object>("room"));
 		add(new TextField<Object>("owner"));

@@ -37,9 +37,11 @@ import org.amos2013.rfid_inventory_management_web.database.DatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.DatabaseRecord;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.CompoundPropertyModel;
 
 /**
  * Form that is displayed on the website. Used for reading and written data from/ to the database
@@ -54,7 +56,8 @@ public class DatabaseAccessForm extends Form<Object>
 	public DatabaseAccessForm(String id)
 	{
 		super(id);
-				
+//		setDefaultModel(new CompoundPropertyModel<Object>(this));		
+		
 		List<DatabaseRecord> databaseRecords = null;
 		try
 		{
@@ -77,7 +80,7 @@ public class DatabaseAccessForm extends Form<Object>
 				item.add(new Label("recordOwnerLabel", record.getOwner()));			
 				
 				// adds a link to delete the current record item
-				item.add(new Link<Object>("delete-record")
+				item.add(new Link<Object>("deleteRecordLink")
 			    {
 					private static final long serialVersionUID = 8843977459555507386L;
 
@@ -98,5 +101,28 @@ public class DatabaseAccessForm extends Form<Object>
 			    });
 			}
 		});
+		
+		// add serach field
+		add(new TextField<Object>("searchField"));
+	}
+	
+
+	/**
+	 * This method is called, when the search button on the homepage it is clicked.
+	 * It will perform a search
+	 */
+	public final void onSubmit()
+	{
+		// TODO FIX exception when clicking on the search button; read from database and update listview
+		
+		/*List<DatabaseRecord> databaseRecords = null;
+		try
+		{
+			databaseRecords = DatabaseHandler.getRecordsFromDatabase();
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		} */
 	}
 }

@@ -47,6 +47,6 @@ public class AppPage extends WebPage
 	public AppPage() 
 	{
 		// adds a from which is able to contact the database (write)
-		add(new DatabaseAppForm("databaseHandlerForm"));
+		add(new DatabaseAppForm("databaseAppForm"));
 	}
 }

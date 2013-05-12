@@ -41,7 +41,7 @@
 		<p>
 			List of all devices currently saved in the database:
 		</p>
-			<form id="databaseHandlerForm" method="get" wicket:id="databaseHandlerForm">
+			<form id="databaseAccessForm" method="get" wicket:id="databaseAccessForm">
 			<fieldset>
 				<legend style="color: #fb3d09; font-weight: bold;">Hardware List</legend>
 				<table>
@@ -57,12 +57,17 @@
 					 			<td><span wicket:id="recordRFIDIdLabel"></span></td>	
 						 		<td><span wicket:id="recordRoomLabel"></span></td>
 				 				<td><span wicket:id="recordOwnerLabel"></span></td>
-				 				<td><a href="#" wicket:id="delete-record">remove</a></td>
+				 				<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>
 							</tr>
 						</span>
 					</tbody>
 				</table>
 			</fieldset>
+			
+			<br/>
+			<label style="width:200px;">Search for an RFID ID:</label>
+			<input style="margin-left:10px;" wicket:id="searchField" type="text" id="searchField" />
+			<input style="margin-left:50px;" type="submit" name="SearchButton" value="Search"/>
 		</form>
 	</wicket:extend>
 	</body>

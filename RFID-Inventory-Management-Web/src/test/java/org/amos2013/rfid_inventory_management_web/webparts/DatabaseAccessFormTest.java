@@ -61,11 +61,29 @@ public class DatabaseAccessFormTest
 	{
 		try
 		{
-			new DatabaseAccessForm("databaseHandlerForm");
+			new DatabaseAccessForm("databaseAccessForm");
 		}
 		catch (Exception ex)
 		{
-			 Assert.fail("Expected no exception in DatabaseAccessForm, but got: " + ex.getMessage());
+			 Assert.fail("Expected no exception in DatabaseAccessForm(), but got: " + ex.getMessage());
+		}
+	}
+	
+	/**
+	 * tests the onSubmit() function
+	 */
+	@Test
+	public void testOnSubmit()
+	{
+		DatabaseAccessForm databaseAccessForm = new DatabaseAccessForm("databaseAccessForm");
+	
+		try
+		{
+			databaseAccessForm.onSubmit();
+		}
+		catch (Exception ex)
+		{
+			Assert.fail("Expected no exception in onSubmit(), but got: " + ex.getMessage());
 		}
 	}
 }

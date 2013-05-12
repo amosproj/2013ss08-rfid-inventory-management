@@ -46,6 +46,6 @@ public class ListPage extends MainPage {
 	 */
 	public ListPage() throws IOException
 	{
-		add(new DatabaseAccessForm("databaseHandlerForm"));
+		add(new DatabaseAccessForm("databaseAccessForm"));
 	}
 }
