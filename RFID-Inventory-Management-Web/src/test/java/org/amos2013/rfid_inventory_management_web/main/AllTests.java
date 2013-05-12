@@ -40,9 +40,10 @@ import org.junit.runners.Suite.SuiteClasses;
 		{	// add all test classes here
 			org.amos2013.rfid_inventory_management_web.database.DatabaseHandlerTest.class,
 			org.amos2013.rfid_inventory_management_web.database.DatabaseRecordTest.class,
-			org.amos2013.rfid_inventory_management_web.webparts.TestAppPage.class,
-			org.amos2013.rfid_inventory_management_web.webparts.TestListPage.class,
-			org.amos2013.rfid_inventory_management_web.webparts.TestAdminPage.class,
+			org.amos2013.rfid_inventory_management_web.webparts.AdminPageTest.class,
+			org.amos2013.rfid_inventory_management_web.webparts.AppPageTest.class,
+			org.amos2013.rfid_inventory_management_web.webparts.DatabaseAccessFormTest.class,
+			org.amos2013.rfid_inventory_management_web.webparts.ListPageTest.class,
 		})
 
 /**

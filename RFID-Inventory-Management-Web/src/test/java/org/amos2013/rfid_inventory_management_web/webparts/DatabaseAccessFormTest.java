@@ -52,27 +52,6 @@ public class DatabaseAccessFormTest
 		new WicketTester(new WicketApplication());
 	}
 
-	/**
-	 * Tests the onSumbit function
-	 */
-	@Test
-	public void testOnSubmit() 
-	{
-		DatabaseAccessForm databaseAccessFormTester = new DatabaseAccessForm("databaseHandlerForm");
-        try 
-		{
-		//	databaseAccessFormTester.onSubmit();
-		}
-		catch (IllegalArgumentException ex)
-		{
-			Assert.fail("Expected no exception in OnSubmit, but got: " + ex.getMessage());
-		}
-		catch (Exception ex)
-		{
-			Assert.fail("Expected no exception in OnSubmit, but got: " + ex.getMessage());
-		}
-	} 
-
 	
 	/**
 	 *	Tests the DataBaseAccessForm constructor

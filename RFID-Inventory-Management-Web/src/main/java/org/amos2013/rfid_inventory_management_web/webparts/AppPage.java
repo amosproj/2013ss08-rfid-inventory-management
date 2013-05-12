@@ -35,7 +35,7 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 import org.apache.wicket.markup.html.WebPage;
 
 /**
- * This class defines a website
+ * This class defines the main page of the app website
  */
 public class AppPage extends WebPage
 {
