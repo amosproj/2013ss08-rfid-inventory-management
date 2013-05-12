@@ -42,7 +42,7 @@ import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.util.file.File;
 
 /**
- * This class defines a website
+ * This class defines the main page of desktop website
  */
 public abstract class MainPage extends WebPage {
 	

@@ -38,7 +38,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 
 /**
- * Form that is displayed on the website. Used for reading data to the database
+ * Form that is displayed on the website. Used for writing data to the database
  */
 public class DatabaseAppForm extends Form<Object>
 {
@@ -51,7 +51,7 @@ public class DatabaseAppForm extends Form<Object>
 
 
 	/**
-	 * Creates a Form Object
+	 * Creates a Form Object to submit updates to the database
 	 */
 	public DatabaseAppForm(String id)
 	{

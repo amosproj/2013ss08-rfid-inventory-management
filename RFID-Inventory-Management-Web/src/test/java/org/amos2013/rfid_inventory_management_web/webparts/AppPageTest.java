@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2013 by
+ * Copyright (c) 2013 by 
  * AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
  *
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
  *  Kerstin Stern
- *
+ * 
  * SDs:
  *  Andreas Singer
  *  Liping Wang
@@ -38,25 +38,31 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Simple test using the WicketTester
+ * UnitTest for the AppPage using the WicketTester
  */
-public class TestListPage
+public class AppPageTest
 {
-	private WicketTester tester;
+	private WicketTester wicketTester;
 
+	/**
+	 * create a WicketApplication for testing
+	 */
 	@Before
 	public void setUp()
 	{
-		tester = new WicketTester(new WicketApplication());
+		wicketTester = new WicketTester(new WicketApplication());
 	}
 
+	/**
+	 * tests if the homepage renders
+	 */
 	@Test
 	public void homepageRendersSuccessfully()
 	{
 		//start and render the test page
-		tester.startPage(ListPage.class);
+		wicketTester.startPage(AppPage.class);
 
 		//assert rendered page class
-		tester.assertRenderedPage(ListPage.class);
+		wicketTester.assertRenderedPage(AppPage.class);
 	}
 }

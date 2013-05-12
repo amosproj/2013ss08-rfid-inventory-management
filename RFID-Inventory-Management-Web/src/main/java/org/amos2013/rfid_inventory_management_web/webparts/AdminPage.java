@@ -34,7 +34,8 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 import java.io.IOException;
 
 /**
- * This class defines a sub-website
+ * This class defines a sub-website from MainPage, which creates a Form to administrate
+ *  data in the database
  */
 public class AdminPage extends MainPage {
 	

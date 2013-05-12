@@ -32,7 +32,6 @@
 package org.amos2013.rfid_inventory_management_web.webparts;
 
 import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
-import org.amos2013.rfid_inventory_management_web.webparts.AppPage;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,23 +39,29 @@ import org.junit.Test;
 /**
  * Simple test using the WicketTester
  */
-public class TestAdminPage
+public class ListPageTest
 {
-	private WicketTester tester;
+	private WicketTester wicketTester;
 
+	/**
+	 * create a WicketApplication for testing
+	 */
 	@Before
 	public void setUp()
 	{
-		tester = new WicketTester(new WicketApplication());
+		wicketTester = new WicketTester(new WicketApplication());
 	}
 
+	/**
+	 * tests if the homepage renders
+	 */
 	@Test
 	public void homepageRendersSuccessfully()
 	{
 		//start and render the test page
-		tester.startPage(AdminPage.class);
+		wicketTester.startPage(ListPage.class);
 
 		//assert rendered page class
-		tester.assertRenderedPage(AdminPage.class);
+		wicketTester.assertRenderedPage(ListPage.class);
 	}
 }
