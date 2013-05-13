@@ -94,5 +94,19 @@ public class DatabaseHandlerTest
 	    
 	    assertNotNull(resultList);
 	}
+	
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#deleteRecordFromDatabase()}.
+	 */
+	
+	@Test
+	public final void testDeleteRecordFromDatabase()
+	{
+/*		DatabaseRecord record = new (123,"Room_110","Alex");
+		
+		exception.expect(IllegalArgumentException.class);
+		DatabaseHandler.deleteRecordFromDatabase();
+*/
+	}
 
 }
