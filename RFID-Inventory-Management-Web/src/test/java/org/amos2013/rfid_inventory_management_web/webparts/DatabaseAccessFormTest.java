@@ -39,7 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for DatabaseAccessForm
+ * Unit test for {@link DatabaseAccessForm}
  */
 public class DatabaseAccessFormTest 
 {
@@ -54,7 +54,7 @@ public class DatabaseAccessFormTest
 
 	
 	/**
-	 *	Tests the DataBaseAccessForm constructor
+	 *	Tests the {@link DatabaseAccessForm#DatabaseAccessForm(String)} constructor 
 	 */
 	@Test
 	public void testDatabaseAccessForm() 
@@ -70,7 +70,7 @@ public class DatabaseAccessFormTest
 	}
 	
 	/**
-	 * tests the onSubmit() function
+	 * tests the {@link DatabaseAccessForm#onSubmit()} function
 	 */
 	@Test
 	public void testOnSubmit()

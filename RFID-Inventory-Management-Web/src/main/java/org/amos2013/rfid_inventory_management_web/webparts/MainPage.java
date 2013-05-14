@@ -49,7 +49,8 @@ public abstract class MainPage extends WebPage {
 	private static final long serialVersionUID = 6545187642710272786L;
 
 	/**
-	 * The constructor creates a parent-website which contains a menu to access several sub-websites and files
+	 * The constructor creates a parent-website which contains a menu to access several sub-websites and files.
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public MainPage() throws IOException
 	{

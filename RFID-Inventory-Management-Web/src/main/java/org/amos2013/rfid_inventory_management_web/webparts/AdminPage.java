@@ -35,14 +35,16 @@ import java.io.IOException;
 
 /**
  * This class defines a sub-website from MainPage, which creates a Form to administrate
- *  data in the database
+ * data in the database.
  */
 public class AdminPage extends MainPage {
 	
 	private static final long serialVersionUID = 931941446133830339L;
 
 	/**
-	 * The constructor creates a website which contains a Form to administrate data in the database
+	 * The constructor creates a website which contains a Form to administrate data in the database.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public AdminPage() throws IOException
 	{

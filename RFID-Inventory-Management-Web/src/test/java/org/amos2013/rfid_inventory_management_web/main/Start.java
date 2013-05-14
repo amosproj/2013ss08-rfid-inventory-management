@@ -40,15 +40,18 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
- * 
  * This class is used for local testing.
  * It uses Jetty (not Tomcat!)
  * (right click on this file -> run as -> java application. 
  * then navigate your browser to http://localhost:8080)
- *
  */
 public class Start 
 {
+    /**
+     * The main method.
+     * @param args the arguments
+     * @throws Exception the exception
+     */
     public static void main(String[] args) throws Exception 
     {
         int timeout = (int) Duration.ONE_HOUR.getMilliseconds();

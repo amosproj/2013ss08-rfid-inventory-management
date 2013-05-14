@@ -37,7 +37,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * UnitTest for the AdminPage using the WicketTester
+ * UnitTest for the {@link AdminPage} using the WicketTester
  */
 public class AdminPageTest
 {

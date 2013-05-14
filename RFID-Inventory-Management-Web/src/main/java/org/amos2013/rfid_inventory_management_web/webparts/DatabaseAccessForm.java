@@ -31,17 +31,21 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.DatabaseRecord;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.convert.IConverter;
 
 /**
  * Form that is displayed on the website. Used for reading and written data from/ to the database
@@ -50,16 +54,23 @@ public class DatabaseAccessForm extends Form<Object>
 {
 	private static final long serialVersionUID = 2948880218956382827L;
 	
-	private int searchField;
+	private Integer searchField; // use Integer instead of int, so the default value is null and not 0. so nothing will be displayed
+	private String statusMessage;
 	
 	/**
-	 * Creates a Form Object
+	 * Creates a Form Object.
+	 * @param id the name of this form, to use in html
 	 */
 	public DatabaseAccessForm(String id)
 	{
 		super(id);
-//		setDefaultModel(new CompoundPropertyModel<Object>(this));		
+		setDefaultModel(new CompoundPropertyModel<Object>(this));		
+
+		// add search field
+		add(new NumberTextField<Integer>("searchField"));	
+		add(new Label("statusMessage"));
 		
+		// get all database records and display in a listview
 		List<DatabaseRecord> databaseRecords = null;
 		try
 		{
@@ -103,9 +114,6 @@ public class DatabaseAccessForm extends Form<Object>
 			    });
 			}
 		});
-		
-		// add serach field
-		add(new TextField<Integer>("searchField", new Model<Integer>()));	// set new model, else exception is thrown
 	}
 	
 
@@ -114,19 +122,43 @@ public class DatabaseAccessForm extends Form<Object>
 	 * It will perform a search
 	 */
 	public final void onSubmit()
-	{
-		// TODO FIX exception when clicking on the search button; read from database and update listview
-		
+	{	
 		DatabaseRecord searchResultRecord = null;
+		
+		if (searchField == null)
+		{
+			statusMessage = "Please enter a number";
+			return;
+		}
+		
 		try
 		{
 			searchResultRecord = DatabaseHandler.getRecordFromDatabaseById(searchField);
 		} 
-		catch (Exception e)
+		catch (IllegalArgumentException e)
 		{
+			statusMessage = e.getMessage();
+			e.printStackTrace();
+		}
+		catch (IllegalStateException e)
+		{
+			statusMessage = e.getMessage();
+			e.printStackTrace();
+		}
+		catch (SQLException e)
+		{
+			statusMessage = e.getMessage();
 			e.printStackTrace();
 		}
 		
-		System.out.println(searchField + ": " + searchResultRecord.toString());
+		// display results
+		if (searchResultRecord != null)
+		{
+			statusMessage = "Record found: " + searchResultRecord.toString();		
+		}
+		else
+		{
+			statusMessage = "No record found, while searching for: " + searchField;		
+		}
 	}
 }

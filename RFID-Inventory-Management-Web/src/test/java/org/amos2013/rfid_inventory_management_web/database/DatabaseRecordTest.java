@@ -36,7 +36,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests the DatabaseRecord class
+ * Tests the {@link DatabaseRecord} class
  */
 public class DatabaseRecordTest
 {

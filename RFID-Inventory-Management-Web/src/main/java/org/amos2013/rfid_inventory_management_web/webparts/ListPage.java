@@ -42,7 +42,8 @@ public class ListPage extends MainPage {
 	private static final long serialVersionUID = 7449232746846404264L;
 
 	/**
-	 * The constructor creates a website which contains a Form listing all data from the database
+	 * The constructor creates a website which contains a Form listing all data from the database.
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public ListPage() throws IOException
 	{

@@ -38,6 +38,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+/**
+ * The Class MainActivity.
+ */
 public class MainActivity extends Activity
 {
 

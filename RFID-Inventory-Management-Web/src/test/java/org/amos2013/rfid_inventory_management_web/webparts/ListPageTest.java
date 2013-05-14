@@ -37,7 +37,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Simple test using the WicketTester
+ * Unit test for {@link ListPage} using the WicketTester
  */
 public class ListPageTest
 {

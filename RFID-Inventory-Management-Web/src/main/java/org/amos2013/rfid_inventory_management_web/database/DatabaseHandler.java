@@ -84,11 +84,14 @@ public class DatabaseHandler
 	
 	/**
 	 * Writes the given strings to the database
+	 * @param rfid_id int to set
 	 * @param room string to set
 	 * @param owner string to set
-	 * @throws Exception
+	 * @throws SQLException when database connection close() fails
+	 * @throws IllegalArgumentException when room or owner is null
+	 * @throws Exception when database setup fails
 	 */
-	public static void writeRecordToDatabase(int rfid_id, String room, String owner) throws Exception
+	public static void writeRecordToDatabase(int rfid_id, String room, String owner) throws SQLException, IllegalArgumentException, Exception
 	{
 		if (room == null || owner == null)
 		{
@@ -109,31 +112,12 @@ public class DatabaseHandler
 			// writes to the database: create if new id, or update if existing
 			databaseHandlerDao.createOrUpdate(record);
 		} 
-		catch (SQLException e)
-		{
-			throw e;
-		}
-		catch (InstantiationException e)
-		{
-			throw e;
-		}
-		catch (Exception e)
-		{
-			throw e;
-		}
 		finally
 		{
 			// destroy the data source which should close underlying connections
 			if (connectionSource != null)
 			{
-				try
-				{
-					connectionSource.close();
-				}
-				catch (SQLException e)
-				{
-					e.printStackTrace();
-				}
+				connectionSource.close();
 			}
 		}
 	}
@@ -141,9 +125,10 @@ public class DatabaseHandler
 	
 	/**
 	 * Searches and returns the record by its id 
-	 * @return a string containing all records
-	 * @throws SQLException 
-	 * @throws Exception
+	 * @param rfidId int id to search for
+	 * @return a string containing all records, null when nothing was found
+	 * @throws SQLException when error occurs with the database
+	 * @throws IllegalStateException when null or more than one record is returned from the database
 	 */
 	public static DatabaseRecord getRecordFromDatabaseById(int rfidId) throws IllegalStateException, SQLException
 	{
@@ -177,7 +162,7 @@ public class DatabaseHandler
 		// if empty database, return empty
 		if (databaseRecords == null)
 		{
-			return null;
+			throw new IllegalStateException("Error while serarching for RFID ID " + rfidId + ": no list was returned!");
 		}
 		
 		// if more than one entry, a error has occured, because the id is unique!
@@ -185,8 +170,12 @@ public class DatabaseHandler
 		{
 			throw new IllegalStateException("Error while serarching for RFID ID " + rfidId + ": more than one result was found!");
 		}
-			
-		resultRecord = databaseRecords.get(0);
+		
+		// if not empty, return first (and hopefully only result) else return null
+		if (databaseRecords.isEmpty() == false)
+		{
+			resultRecord = databaseRecords.get(0);
+		}
 		
 		return resultRecord;
 	}
@@ -195,7 +184,7 @@ public class DatabaseHandler
 	/**
 	 * Loops through one table of the database and reads the content 
 	 * @return a string containing all records
-	 * @throws SQLException
+	 * @throws SQLException when database connection close fails
 	 */
 	public static List<DatabaseRecord> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
 	{
@@ -246,8 +235,11 @@ public class DatabaseHandler
 	
 	
 	/**
-	 * Deletes a given row of the table 
-	 * @throws SQLException
+	 * Deletes a given row of the table.
+	 *
+	 * @param record the record
+	 * @throws SQLException when database connection close() fails
+	 * @throws IllegalArgumentException when null is passed as argument
 	 */
 	public static void deleteRecordFromDatabase(DatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
 	{

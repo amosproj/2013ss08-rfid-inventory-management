@@ -38,7 +38,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * UnitTest for the AppPage using the WicketTester
+ * UnitTest for the {@link AppPage} using the WicketTester
  */
 public class AppPageTest
 {

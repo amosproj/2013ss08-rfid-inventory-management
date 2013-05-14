@@ -34,6 +34,7 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 import org.amos2013.rfid_inventory_management_web.database.DatabaseHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 
@@ -44,23 +45,24 @@ public class DatabaseAppForm extends Form<Object>
 {
 	private static final long serialVersionUID = 2948880218956382827L;
 
-	private int rfid_id;
+	private Integer rfid_id; // use Integer instead of int, so the default value is null and not 0. so nothing will be displayed
 	private String room;
 	private String owner;
-	private String status;
+	private String statusMessage;
 
 
 	/**
-	 * Creates a Form Object to submit updates to the database
+	 * Creates a Form Object to submit updates to the database.
+	 * @param id the name of this form, to use it in html
 	 */
 	public DatabaseAppForm(String id)
 	{
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this));	// sets the model to bind to the wicket ids
-		add(new TextField<Integer>("rfid_id"));
+		add(new NumberTextField<Integer>("rfid_id"));
 		add(new TextField<String>("room"));
 		add(new TextField<String>("owner"));
-		add(new Label("status"));
+		add(new Label("statusMessage"));
 	}
 
 	/**
@@ -69,18 +71,24 @@ public class DatabaseAppForm extends Form<Object>
 	 */
 	public final void onSubmit()
 	{
+		if (rfid_id == null)
+		{
+			statusMessage = "Please enter a number in the rfid_id";
+			return;
+		}
+		
 		try
 		{
 			DatabaseHandler.writeRecordToDatabase(rfid_id, room, owner);
-			status = "Data saved";
+			statusMessage = "Data saved";
 		}
 		catch (IllegalArgumentException e)
 		{
-			status = "Please enter a room and a name";
+			statusMessage = "Please enter a room and a name";
 		}
 		catch (Exception e)
 		{
-			status = "An error occured!";
+			statusMessage = "An error occured!";
 			e.printStackTrace();
 		}
 	}

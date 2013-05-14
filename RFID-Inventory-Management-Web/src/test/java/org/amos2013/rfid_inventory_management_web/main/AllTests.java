@@ -35,6 +35,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+/**
+ * Test Suite for running all the junit tests created
+ */
 @RunWith(Suite.class)
 @SuiteClasses(
 		{	// add all test classes here
@@ -48,9 +51,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		})
 
 /**
- *
- * Test Suite for running all the junit tests created
- *
+ * constructor for the test suite, should be empty
  */
 public class AllTests
 {

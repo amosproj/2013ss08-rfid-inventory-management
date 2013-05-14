@@ -45,8 +45,13 @@ public class DatabaseRecord implements Serializable
 	private static final long serialVersionUID = 3718871095899325629L;
 
 	// for QueryBuilder to be able to find the columns
+	/** The Constant ROOM_COLUMN. */
 	public static final String ROOM_COLUMN = "room";
+	
+	/** The Constant OWNER_COLUMN. */
 	public static final String OWNER_COLUMN = "owner";
+	
+	/** The Constant RFID_ID_COLUMN. */
 	public static final String RFID_ID_COLUMN = "rfid_id";
 
 	
@@ -70,7 +75,11 @@ public class DatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Constructor for creating a new database record
+	 * Constructor for creating a new database record.
+	 *
+	 * @param rfid_id the rfid_id
+	 * @param room the room
+	 * @param owner the owner
 	 */
 	public DatabaseRecord(int rfid_id, String room, String owner)
 	{
@@ -80,7 +89,8 @@ public class DatabaseRecord implements Serializable
 	}
 	
 	/**
-	 * Gets the RFID Id
+	 * Gets the RFID Id.
+	 * @return the rFID id
 	 */
 	public int getRFIDId()
 	{
@@ -97,7 +107,8 @@ public class DatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Gets the room
+	 * Gets the room.
+	 * @return the room
 	 */
 	public String getRoom()
 	{
@@ -114,7 +125,8 @@ public class DatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Gets the current owner of the device
+	 * Gets the current owner of the device.
+	 * @return the owner
 	 */
 	public String getOwner()
 	{

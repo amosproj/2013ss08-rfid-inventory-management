@@ -54,9 +54,9 @@
 						</tr>
 						<span wicket:id="recordsReadListView">  								
 					 		<tr>
-					 			<td><span wicket:id="recordRFIDIdLabel"></span></td>	
-						 		<td><span wicket:id="recordRoomLabel"></span></td>
-				 				<td><span wicket:id="recordOwnerLabel"></span></td>
+					 			<td><span wicket:id="recordRFIDIdLabel" /></td>	
+						 		<td><span wicket:id="recordRoomLabel" /></td>
+				 				<td><span wicket:id="recordOwnerLabel" /></td>
 				 				<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>
 							</tr>
 						</span>
@@ -66,8 +66,9 @@
 			
 			<br/>
 			<label style="width:200px;">Search for an RFID ID:</label>
-			<input style="margin-left:10px;" wicket:id="searchField" type="text" id="searchField" />
+			<input style="margin-left:10px;" wicket:id="searchField" type="number" id="searchField" />
 			<input style="margin-left:50px;" type="submit" name="SearchButton" value="Search"/>
+			<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
 		</form>
 	</wicket:extend>
 	</body>
