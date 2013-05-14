@@ -1,7 +1,5 @@
 package org.amos2013.rfid_inventory_management_web.webparts;
 
-import static org.junit.Assert.*;
-
 import junit.framework.Assert;
 import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
 import org.apache.wicket.util.tester.WicketTester;

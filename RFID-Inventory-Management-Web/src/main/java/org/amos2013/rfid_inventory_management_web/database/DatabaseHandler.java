@@ -249,10 +249,15 @@ public class DatabaseHandler
 	 * Deletes a given row of the table 
 	 * @throws SQLException
 	 */
-	public static void deleteRecordFromDatabase(DatabaseRecord record) throws SQLException // connection.close() can throw
+	public static void deleteRecordFromDatabase(DatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
-				
+		
+		if (record == null)
+		{
+			throw new IllegalArgumentException("Parameter for deleteRecordFromDatabase is null.");
+		}
+		
 		try
 		{
 			// create our data-source for the database (url, user, pwd)

@@ -31,14 +31,13 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import junit.framework.Assert;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -50,22 +49,6 @@ public class DatabaseHandlerTest
 	
 	
 	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception
-	{
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception
-	{
-	}
-
-	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#writeRecordToDatabase(int, java.lang.String, java.lang.String)}.
 	 * @throws Exception 
 	 */
@@ -76,6 +59,7 @@ public class DatabaseHandlerTest
 		DatabaseHandler.writeRecordToDatabase(123, null, null);
 	}
 
+	
 	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#getRecordsFromDatabase()}.
 	 */
@@ -94,5 +78,23 @@ public class DatabaseHandlerTest
 	    
 	    assertNotNull(resultList);
 	}
-
+	
+	
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#deleteRecordFromDatabase()}.
+	 * @throws IllegalArgumentException 
+	 */
+	@Test
+	public final void testDeleteRecordFromDatabase() throws IllegalArgumentException
+	{
+			exception.expect(IllegalArgumentException.class);
+			try
+			{
+				DatabaseHandler.deleteRecordFromDatabase(null);
+			}
+			catch (SQLException ex)
+			{
+				Assert.fail("Expected no exception, but got: " + ex.getMessage());	
+			}
+	}
 }

@@ -43,6 +43,7 @@ import org.junit.runners.Suite.SuiteClasses;
 			org.amos2013.rfid_inventory_management_web.webparts.AdminPageTest.class,
 			org.amos2013.rfid_inventory_management_web.webparts.AppPageTest.class,
 			org.amos2013.rfid_inventory_management_web.webparts.DatabaseAccessFormTest.class,
+			org.amos2013.rfid_inventory_management_web.webparts.DatabaseAppFormTest.class,
 			org.amos2013.rfid_inventory_management_web.webparts.ListPageTest.class,
 		})
 
