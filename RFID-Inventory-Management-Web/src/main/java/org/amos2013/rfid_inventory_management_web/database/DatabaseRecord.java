@@ -132,6 +132,7 @@ public class DatabaseRecord implements Serializable
 
 	/**
 	 * Compares two Objects
+	 * @return true if equal, false else
 	 */
 	@Override
 	public boolean equals(Object other)
@@ -141,5 +142,17 @@ public class DatabaseRecord implements Serializable
 			return false;
 		}
 		return room.equals(((DatabaseRecord) other).room);
+	}
+	
+	
+	/**
+	 * Returns a string, containing all fields separated by comma
+	 * @return String representing the record
+	 */
+	@Override
+	public String toString()
+	{
+		return rfid_id + ", " + room + ", " + owner;
+		
 	}
 }

@@ -41,7 +41,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 
 /**
  * Form that is displayed on the website. Used for reading and written data from/ to the database
@@ -49,6 +49,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 public class DatabaseAccessForm extends Form<Object>
 {
 	private static final long serialVersionUID = 2948880218956382827L;
+	
+	private int searchField;
 	
 	/**
 	 * Creates a Form Object
@@ -80,7 +82,7 @@ public class DatabaseAccessForm extends Form<Object>
 				item.add(new Label("recordOwnerLabel", record.getOwner()));			
 				
 				// adds a link to delete the current record item
-				item.add(new Link<Object>("deleteRecordLink")
+				item.add(new Link<String>("deleteRecordLink")
 			    {
 					private static final long serialVersionUID = 8843977459555507386L;
 
@@ -103,7 +105,7 @@ public class DatabaseAccessForm extends Form<Object>
 		});
 		
 		// add serach field
-		add(new TextField<Object>("searchField"));
+		add(new TextField<Integer>("searchField", new Model<Integer>()));	// set new model, else exception is thrown
 	}
 	
 
@@ -115,14 +117,16 @@ public class DatabaseAccessForm extends Form<Object>
 	{
 		// TODO FIX exception when clicking on the search button; read from database and update listview
 		
-		/*List<DatabaseRecord> databaseRecords = null;
+		DatabaseRecord searchResultRecord = null;
 		try
 		{
-			databaseRecords = DatabaseHandler.getRecordsFromDatabase();
+			searchResultRecord = DatabaseHandler.getRecordFromDatabaseById(searchField);
 		} 
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		} */
+		}
+		
+		System.out.println(searchField + ": " + searchResultRecord.toString());
 	}
 }

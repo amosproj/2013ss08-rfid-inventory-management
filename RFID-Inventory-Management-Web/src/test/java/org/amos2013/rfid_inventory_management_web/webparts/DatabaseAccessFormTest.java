@@ -75,7 +75,7 @@ public class DatabaseAccessFormTest
 	@Test
 	public void testOnSubmit()
 	{
-/*		DatabaseAccessForm databaseAccessForm = new DatabaseAccessForm("databaseAccessForm");
+		DatabaseAccessForm databaseAccessForm = new DatabaseAccessForm("databaseAccessForm");
 	
 		try
 		{
@@ -85,7 +85,5 @@ public class DatabaseAccessFormTest
 		{
 			Assert.fail("Expected no exception in onSubmit(), but got: " + ex.getMessage());
 		}
-		*/
 	}
-
 }

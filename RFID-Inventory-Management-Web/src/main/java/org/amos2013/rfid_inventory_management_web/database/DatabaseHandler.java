@@ -140,11 +140,64 @@ public class DatabaseHandler
 
 	
 	/**
-	 * Loops through one table of the database and reads the content 
+	 * Searches and returns the record by its id 
 	 * @return a string containing all records
+	 * @throws SQLException 
 	 * @throws Exception
 	 */
-	public static List<DatabaseRecord> getRecordsFromDatabase() throws Exception
+	public static DatabaseRecord getRecordFromDatabaseById(int rfidId) throws IllegalStateException, SQLException
+	{
+		ConnectionSource connectionSource = null;
+		List<DatabaseRecord> databaseRecords = null;
+		DatabaseRecord resultRecord = null; 
+		
+		try
+		{
+			// create our data-source for the database (url, user, pwd)
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// setup our database and DAOs
+			databaseHandlerDao = DaoManager.createDao(connectionSource, DatabaseRecord.class);
+			
+			// read database records
+			databaseRecords = databaseHandlerDao.queryForEq("rfid_id", rfidId);
+		} 
+		catch (SQLException e)
+		{
+			return null;
+		} 
+		finally
+		{
+			// always destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
+		
+		// if empty database, return empty
+		if (databaseRecords == null)
+		{
+			return null;
+		}
+		
+		// if more than one entry, a error has occured, because the id is unique!
+		if (databaseRecords.size() > 1)
+		{
+			throw new IllegalStateException("Error while serarching for RFID ID " + rfidId + ": more than one result was found!");
+		}
+			
+		resultRecord = databaseRecords.get(0);
+		
+		return resultRecord;
+	}
+	
+	
+	/**
+	 * Loops through one table of the database and reads the content 
+	 * @return a string containing all records
+	 * @throws SQLException
+	 */
+	public static List<DatabaseRecord> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		List<DatabaseRecord> databaseRecords = null;
@@ -194,9 +247,9 @@ public class DatabaseHandler
 	
 	/**
 	 * Deletes a given row of the table 
-	 * @throws Exception
+	 * @throws SQLException
 	 */
-	public static void deleteRecordFromDatabase(DatabaseRecord record) throws Exception
+	public static void deleteRecordFromDatabase(DatabaseRecord record) throws SQLException // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 				
