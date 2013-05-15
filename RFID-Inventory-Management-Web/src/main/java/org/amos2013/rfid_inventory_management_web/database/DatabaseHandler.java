@@ -93,7 +93,7 @@ public class DatabaseHandler
 	 */
 	public static void writeRecordToDatabase(int rfid_id, String room, String owner) throws SQLException, IllegalArgumentException, Exception
 	{
-		if (room == null || owner == null)
+		if (room == null || owner == null || rfid_id < 0)
 		{
 			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is null.");
 		}
@@ -217,7 +217,7 @@ public class DatabaseHandler
 			}
 		}
 
-		// if empty database, add "empty" and return
+		// if empty database, add 'empty' and return
 		if (databaseRecords == null)
 		{
 			resultList.add(recordString);
