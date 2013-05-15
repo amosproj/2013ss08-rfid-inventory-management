@@ -82,10 +82,20 @@ public class DatabaseAppForm extends Form<Object>
 			DatabaseHandler.writeRecordToDatabase(rfid_id, room, owner);
 			statusMessage = "Data saved";
 		}
+		
 		catch (IllegalArgumentException e)
 		{
-			statusMessage = "Please enter a room and a name";
+			if (rfid_id < 0)
+			{
+				statusMessage = "Invalid input: rfid_id should not be less than 0.";
+			}
+			
+			if (room == null || owner == null)
+			{
+				statusMessage = "Missing a room or a name";
+			}
 		}
+		
 		catch (Exception e)
 		{
 			statusMessage = "An error occured!";

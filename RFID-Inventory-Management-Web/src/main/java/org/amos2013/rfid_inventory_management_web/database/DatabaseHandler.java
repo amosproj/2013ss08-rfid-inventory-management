@@ -97,7 +97,7 @@ public class DatabaseHandler
 		{
 			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is null.");
 		}
-		
+				
 		ConnectionSource connectionSource = null;
 		try
 		{
