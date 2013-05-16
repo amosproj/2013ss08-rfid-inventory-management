@@ -58,7 +58,8 @@ public class WicketApplication extends WebApplication
 	@Override
 	public Class<? extends WebPage> getHomePage()
 	{
-		return AppPage.class;
+		// the homepage will now be set in the init()
+		return null;
 	}
 
 	/**
@@ -68,6 +69,8 @@ public class WicketApplication extends WebApplication
 	public void init()
 	{
 		super.init();
-		mount(new MountedMapper("/main", ListPage.class));
+		// mount homepage and pages without the PageComponentInfo being displayed
+		mount(new HidePageComponentInfoMounter("/main", ListPage.class));
+		mount(new HideHomePageComponentInfoMounter(AppPage.class));
 	}
 }

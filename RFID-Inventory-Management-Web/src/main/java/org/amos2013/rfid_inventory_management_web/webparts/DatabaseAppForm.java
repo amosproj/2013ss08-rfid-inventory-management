@@ -71,24 +71,30 @@ public class DatabaseAppForm extends Form<Object>
 	 */
 	public final void onSubmit()
 	{
+		// catch invalid input first
 		if (rfid_id == null || rfid_id < 0)
 		{
 			statusMessage = "Please enter a positive number in the RFID ID field.";
 			return;
 		}
 		
+		if (room == null || owner == null || room.isEmpty() || owner.isEmpty())
+		{
+			statusMessage = "Please enter a room and an owner.";
+			return;
+		}
+		
+		// write to the database
 		try
 		{
 			DeviceDatabaseHandler.writeRecordToDatabase(rfid_id, room, owner);
 			statusMessage = "Data saved";
 		}
-		
 		catch (IllegalArgumentException e)
 		{
 			
 			statusMessage = e.getMessage();
 		}
-		
 		catch (Exception e)
 		{
 			statusMessage = "An error occured!";
