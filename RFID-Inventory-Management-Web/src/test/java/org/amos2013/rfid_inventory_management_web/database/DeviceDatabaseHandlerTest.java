@@ -43,9 +43,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Unit test for {@link DatabaseHandler} class
+ * Unit test for {@link DeviceDatabaseHandler} class
  */
-public class DatabaseHandlerTest
+public class DeviceDatabaseHandlerTest
 {
 	
 	/** The expected exception. */
@@ -54,27 +54,27 @@ public class DatabaseHandlerTest
 	
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#writeRecordToDatabase(int, java.lang.String, java.lang.String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#writeRecordToDatabase(int, java.lang.String, java.lang.String)}.
 	 * @throws Exception not testing for this one
 	 */
 	@Test
 	public final void testWriteRecordToDatabase() throws Exception
 	{
 		exception.expect(IllegalArgumentException.class);	// asserts that a IllegalArgumentException is thrown
-		DatabaseHandler.writeRecordToDatabase(123, null, null);
+		DeviceDatabaseHandler.writeRecordToDatabase(123, null, null);
 	}
 
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#getRecordsFromDatabase()}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsFromDatabase()}.
 	 */
 	@Test
 	public final void testGetRecordsFromDatabase()
 	{	
-		List<DatabaseRecord> resultList = null;
+		List<DeviceDatabaseRecord> resultList = null;
 	    try
 	    {
-	        resultList = DatabaseHandler.getRecordsFromDatabase();
+	        resultList = DeviceDatabaseHandler.getRecordsFromDatabase();
 	    }
 	    catch (Exception ex)
 	    {
@@ -86,7 +86,7 @@ public class DatabaseHandlerTest
 	
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#deleteRecordFromDatabase()}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#deleteRecordFromDatabase()}.
 	 * @throws IllegalArgumentException excepting this exception here 
 	 */
 	@Test
@@ -95,7 +95,7 @@ public class DatabaseHandlerTest
 			exception.expect(IllegalArgumentException.class);
 			try
 			{
-				DatabaseHandler.deleteRecordFromDatabase(null);
+				DeviceDatabaseHandler.deleteRecordFromDatabase(null);
 			}
 			catch (SQLException ex)
 			{
@@ -105,15 +105,15 @@ public class DatabaseHandlerTest
 	
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseHandler#getRecordFromDatabaseById()}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordFromDatabaseById()}.
 	 */
 	@Test
 	public final void testgetRecordFromDatabaseById()
 	{
-		DatabaseRecord searchResultRecord = null;
+		DeviceDatabaseRecord searchResultRecord = null;
 		try
 		{
-			searchResultRecord = DatabaseHandler.getRecordFromDatabaseById(-1);
+			searchResultRecord = DeviceDatabaseHandler.getRecordFromDatabaseById(-1);
 		}
 		catch (IllegalStateException ex)
 		{

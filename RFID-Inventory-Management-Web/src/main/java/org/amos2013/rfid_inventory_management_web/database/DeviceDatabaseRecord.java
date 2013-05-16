@@ -40,7 +40,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * This class defines the structure (the columns) of the database
  */
 @DatabaseTable(tableName = "inventoryTable")
-public class DatabaseRecord implements Serializable
+public class DeviceDatabaseRecord implements Serializable
 {
 	private static final long serialVersionUID = 3718871095899325629L;
 
@@ -69,7 +69,7 @@ public class DatabaseRecord implements Serializable
 	 * Default constructor (empty)
 	 *
 	 */
-	public DatabaseRecord()
+	public DeviceDatabaseRecord()
 	{
 		// all persisted classes must define a no-arg constructor with at least package visibility
 	}
@@ -81,7 +81,7 @@ public class DatabaseRecord implements Serializable
 	 * @param room the room
 	 * @param owner the owner
 	 */
-	public DatabaseRecord(int rfid_id, String room, String owner)
+	public DeviceDatabaseRecord(int rfid_id, String room, String owner)
 	{
 		this.rfid_id = rfid_id;
 		this.room = room;
@@ -153,7 +153,7 @@ public class DatabaseRecord implements Serializable
 		{
 			return false;
 		}
-		return room.equals(((DatabaseRecord) other).room);
+		return room.equals(((DeviceDatabaseRecord) other).room);
 	}
 	
 	

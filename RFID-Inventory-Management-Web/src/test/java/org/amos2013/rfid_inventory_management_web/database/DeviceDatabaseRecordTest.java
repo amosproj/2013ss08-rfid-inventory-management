@@ -36,12 +36,12 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests the {@link DatabaseRecord} class
+ * Tests the {@link DeviceDatabaseRecord} class
  */
-public class DatabaseRecordTest
+public class DeviceDatabaseRecordTest
 {
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DatabaseRecord#DatabaseRecord(int, java.lang.String, java.lang.String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord#DatabaseRecord(int, java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public final void testDatabaseRecordIntStringString()
@@ -50,7 +50,7 @@ public class DatabaseRecordTest
 		String owner = "Musterfrau";
 		int id = 42;
 
-		DatabaseRecord testRecord = new DatabaseRecord(id, room, owner);
+		DeviceDatabaseRecord testRecord = new DeviceDatabaseRecord(id, room, owner);
 		
 		assertEquals(room, testRecord.getRoom());
 		assertEquals(owner, testRecord.getOwner());

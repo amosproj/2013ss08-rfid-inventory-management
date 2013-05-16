@@ -45,7 +45,7 @@ import com.j256.ormlite.table.TableUtils;
 /**
  * This class is used, to access the database
  */
-public class DatabaseHandler
+public class DeviceDatabaseHandler
 {
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 
@@ -53,7 +53,7 @@ public class DatabaseHandler
 	private final static String DATABASE_PW = ConfigLoader.getDatabasePassword();
 
 	// Database Access Object, is a handler for reading and writing
-	private static Dao<DatabaseRecord, Integer> databaseHandlerDao;
+	private static Dao<DeviceDatabaseRecord, Integer> databaseHandlerDao;
 
 	
 	/**
@@ -63,7 +63,7 @@ public class DatabaseHandler
 	 */
 	private static void setupDatabase(ConnectionSource connectionSource) throws Exception
 	{
-		databaseHandlerDao = DaoManager.createDao(connectionSource, DatabaseRecord.class);
+		databaseHandlerDao = DaoManager.createDao(connectionSource, DeviceDatabaseRecord.class);
 	
 		// if the database is not existing create a new one
 		if (databaseHandlerDao.isTableExists() == false)
@@ -72,7 +72,7 @@ public class DatabaseHandler
 			{
 				// createTableIfNotExists is not working: always tries to create a new database
 				// -> if block around
-				TableUtils.createTableIfNotExists(connectionSource, DatabaseRecord.class);
+				TableUtils.createTableIfNotExists(connectionSource, DeviceDatabaseRecord.class);
 			} 
 			catch (Exception e)
 			{
@@ -95,7 +95,7 @@ public class DatabaseHandler
 	{
 		if (room == null || owner == null || rfid_id < 0)
 		{
-			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is null.");
+			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is invalid (null or below 0)");
 		}
 				
 		ConnectionSource connectionSource = null;
@@ -107,7 +107,7 @@ public class DatabaseHandler
 			setupDatabase(connectionSource);
 
 			// write the given Strings
-			DatabaseRecord record = new DatabaseRecord(rfid_id, room, owner);
+			DeviceDatabaseRecord record = new DeviceDatabaseRecord(rfid_id, room, owner);
 
 			// writes to the database: create if new id, or update if existing
 			databaseHandlerDao.createOrUpdate(record);
@@ -130,18 +130,18 @@ public class DatabaseHandler
 	 * @throws SQLException when error occurs with the database
 	 * @throws IllegalStateException when null or more than one record is returned from the database
 	 */
-	public static DatabaseRecord getRecordFromDatabaseById(int rfidId) throws IllegalStateException, SQLException
+	public static DeviceDatabaseRecord getRecordFromDatabaseById(int rfidId) throws IllegalStateException, SQLException
 	{
 		ConnectionSource connectionSource = null;
-		List<DatabaseRecord> databaseRecords = null;
-		DatabaseRecord resultRecord = null; 
+		List<DeviceDatabaseRecord> databaseRecords = null;
+		DeviceDatabaseRecord resultRecord = null; 
 		
 		try
 		{
 			// create our data-source for the database (url, user, pwd)
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
-			databaseHandlerDao = DaoManager.createDao(connectionSource, DatabaseRecord.class);
+			databaseHandlerDao = DaoManager.createDao(connectionSource, DeviceDatabaseRecord.class);
 			
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForEq("rfid_id", rfidId);
@@ -186,19 +186,19 @@ public class DatabaseHandler
 	 * @return a string containing all records
 	 * @throws SQLException when database connection close fails
 	 */
-	public static List<DatabaseRecord> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
+	public static List<DeviceDatabaseRecord> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
-		List<DatabaseRecord> databaseRecords = null;
-		ArrayList<DatabaseRecord> resultList = new ArrayList<DatabaseRecord>(); 
-		DatabaseRecord recordString = null;
+		List<DeviceDatabaseRecord> databaseRecords = null;
+		ArrayList<DeviceDatabaseRecord> resultList = new ArrayList<DeviceDatabaseRecord>(); 
+		DeviceDatabaseRecord recordString = null;
 		
 		try
 		{
 			// create our data-source for the database (url, user, pwd)
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
-			databaseHandlerDao = DaoManager.createDao(connectionSource, DatabaseRecord.class);
+			databaseHandlerDao = DaoManager.createDao(connectionSource, DeviceDatabaseRecord.class);
 
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForAll();
@@ -225,7 +225,7 @@ public class DatabaseHandler
 		}
 
 		// add string for record to result list
-		for (DatabaseRecord record : databaseRecords)
+		for (DeviceDatabaseRecord record : databaseRecords)
 		{
 			resultList.add(record);
 		}
@@ -241,7 +241,7 @@ public class DatabaseHandler
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when null is passed as argument
 	 */
-	public static void deleteRecordFromDatabase(DatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
+	public static void deleteRecordFromDatabase(DeviceDatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		
@@ -255,7 +255,7 @@ public class DatabaseHandler
 			// create our data-source for the database (url, user, pwd)
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
-			databaseHandlerDao = DaoManager.createDao(connectionSource, DatabaseRecord.class);
+			databaseHandlerDao = DaoManager.createDao(connectionSource, DeviceDatabaseRecord.class);
 
 			// delete given database record
 			databaseHandlerDao.delete(record);

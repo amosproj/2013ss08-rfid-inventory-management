@@ -31,7 +31,7 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
-import org.amos2013.rfid_inventory_management_web.database.DatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
@@ -71,29 +71,22 @@ public class DatabaseAppForm extends Form<Object>
 	 */
 	public final void onSubmit()
 	{
-		if (rfid_id == null)
+		if (rfid_id == null || rfid_id < 0)
 		{
-			statusMessage = "Please enter a number in the rfid_id";
+			statusMessage = "Please enter a positive number in the RFID ID field.";
 			return;
 		}
 		
 		try
 		{
-			DatabaseHandler.writeRecordToDatabase(rfid_id, room, owner);
+			DeviceDatabaseHandler.writeRecordToDatabase(rfid_id, room, owner);
 			statusMessage = "Data saved";
 		}
 		
 		catch (IllegalArgumentException e)
 		{
-			if (rfid_id < 0)
-			{
-				statusMessage = "Invalid input: rfid_id should not be less than 0.";
-			}
 			
-			if (room == null || owner == null)
-			{
-				statusMessage = "Missing a room or a name";
-			}
+			statusMessage = e.getMessage();
 		}
 		
 		catch (Exception e)

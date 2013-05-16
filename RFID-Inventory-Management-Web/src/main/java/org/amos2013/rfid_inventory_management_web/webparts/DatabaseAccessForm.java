@@ -34,8 +34,8 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.amos2013.rfid_inventory_management_web.database.DatabaseHandler;
-import org.amos2013.rfid_inventory_management_web.database.DatabaseRecord;
+import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
@@ -71,23 +71,23 @@ public class DatabaseAccessForm extends Form<Object>
 		add(new Label("statusMessage"));
 		
 		// get all database records and display in a listview
-		List<DatabaseRecord> databaseRecords = null;
+		List<DeviceDatabaseRecord> databaseRecords = null;
 		try
 		{
-			databaseRecords = DatabaseHandler.getRecordsFromDatabase();
+			databaseRecords = DeviceDatabaseHandler.getRecordsFromDatabase();
 		} 
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 		
-		add(new ListView<DatabaseRecord>("recordsReadListView", databaseRecords)
+		add(new ListView<DeviceDatabaseRecord>("recordsReadListView", databaseRecords)
 		{
 			private static final long serialVersionUID = 25754831191690183L;
 
-			protected void populateItem(ListItem<DatabaseRecord> item)
+			protected void populateItem(ListItem<DeviceDatabaseRecord> item)
 			{
-				final DatabaseRecord record = (DatabaseRecord) item.getModelObject();
+				final DeviceDatabaseRecord record = (DeviceDatabaseRecord) item.getModelObject();
 				item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));
 				item.add(new Label("recordRoomLabel", record.getRoom()));
 				item.add(new Label("recordOwnerLabel", record.getOwner()));			
@@ -102,7 +102,7 @@ public class DatabaseAccessForm extends Form<Object>
 						// call to delete the product
 						try
 						{
-							DatabaseHandler.deleteRecordFromDatabase(record);
+							DeviceDatabaseHandler.deleteRecordFromDatabase(record);
 						} 
 						catch (Exception e)
 						{
@@ -123,7 +123,7 @@ public class DatabaseAccessForm extends Form<Object>
 	 */
 	public final void onSubmit()
 	{	
-		DatabaseRecord searchResultRecord = null;
+		DeviceDatabaseRecord searchResultRecord = null;
 		
 		if (searchField == null)
 		{
@@ -133,7 +133,7 @@ public class DatabaseAccessForm extends Form<Object>
 		
 		try
 		{
-			searchResultRecord = DatabaseHandler.getRecordFromDatabaseById(searchField);
+			searchResultRecord = DeviceDatabaseHandler.getRecordFromDatabaseById(searchField);
 		} 
 		catch (IllegalArgumentException e)
 		{
