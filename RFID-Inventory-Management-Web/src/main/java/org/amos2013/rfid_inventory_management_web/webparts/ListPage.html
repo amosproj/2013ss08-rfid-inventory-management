@@ -38,10 +38,15 @@
 	<body>
 	<wicket:extend>
 	    <h3>RFID-Inventory Management Frontend</h3>
-		<p>
-			List of all devices currently saved in the database:
-		</p>
-			<form id="databaseAccessForm" method="get" wicket:id="databaseAccessForm">
+	    <p>&nbsp;</p>
+		<form id="databaseAccessForm" method="get" wicket:id="databaseAccessForm">
+			<p>
+				<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
+				<input style="margin-left:10px;" type="submit" name="SearchButton" value="Search for"/>	
+				<input style="margin-left:10px;" wicket:id="searchField" type="text" id="searchField" />
+				&nbsp;&nbsp;in&nbsp;&nbsp;
+				<select wicket:id="search_dropdown"></select>
+			</p>
 			<fieldset>
 				<legend style="color: #fb3d09; font-weight: bold;">Hardware List</legend>
 				<table>
@@ -63,12 +68,6 @@
 					</tbody>
 				</table>
 			</fieldset>
-			
-			<br/>
-			<label style="width:200px;">Search for a RFID ID:</label>
-			<input style="margin-left:10px;" wicket:id="searchField" type="number" id="searchField" />
-			<input style="margin-left:50px;" type="submit" name="SearchButton" value="Search"/>
-			<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
 		</form>
 	</wicket:extend>
 	</body>

@@ -125,12 +125,12 @@ public class DeviceDatabaseHandler
 	
 	/**
 	 * Searches and returns the record by its id 
-	 * @param rfidId int id to search for
+	 * @param rfidId String id to search for
 	 * @return a string containing all records, null when nothing was found
 	 * @throws SQLException when error occurs with the database
 	 * @throws IllegalStateException when null or more than one record is returned from the database
 	 */
-	public static DeviceDatabaseRecord getRecordFromDatabaseById(int rfidId) throws IllegalStateException, SQLException
+	public static List<DeviceDatabaseRecord> getRecordFromDatabaseById(String search_input, String search_option) throws IllegalStateException, SQLException
 	{
 		ConnectionSource connectionSource = null;
 		List<DeviceDatabaseRecord> databaseRecords = null;
@@ -144,7 +144,7 @@ public class DeviceDatabaseHandler
 			databaseHandlerDao = DaoManager.createDao(connectionSource, DeviceDatabaseRecord.class);
 			
 			// read database records
-			databaseRecords = databaseHandlerDao.queryForEq("rfid_id", rfidId);
+			databaseRecords = databaseHandlerDao.queryForEq(search_option, search_input);
 		} 
 		catch (SQLException e)
 		{
@@ -162,22 +162,10 @@ public class DeviceDatabaseHandler
 		// if empty database, return empty
 		if (databaseRecords == null)
 		{
-			throw new IllegalStateException("Error while serarching for RFID ID " + rfidId + ": no list was returned!");
+			throw new IllegalStateException("Error while serarching for RFID ID " + search_input + ": no list was returned!");
 		}
-		
-		// if more than one entry, a error has occured, because the id is unique!
-		if (databaseRecords.size() > 1)
-		{
-			throw new IllegalStateException("Error while serarching for RFID ID " + rfidId + ": more than one result was found!");
-		}
-		
-		// if not empty, return first (and hopefully only result) else return null
-		if (databaseRecords.isEmpty() == false)
-		{
-			resultRecord = databaseRecords.get(0);
-		}
-		
-		return resultRecord;
+				
+		return databaseRecords;
 	}
 	
 	

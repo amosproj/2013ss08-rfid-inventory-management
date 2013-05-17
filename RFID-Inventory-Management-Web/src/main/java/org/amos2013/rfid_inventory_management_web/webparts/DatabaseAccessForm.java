@@ -32,20 +32,20 @@
 package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  * Form that is displayed on the website. Used for reading and written data from/ to the database
@@ -54,8 +54,11 @@ public class DatabaseAccessForm extends Form<Object>
 {
 	private static final long serialVersionUID = 2948880218956382827L;
 	
-	private Integer searchField; // use Integer instead of int, so the default value is null and not 0. so nothing will be displayed
+	private String searchField;
+	private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"rfid_id", "room", "owner" });
 	private String statusMessage;
+	
+	private String selected = "rfid_id";
 	
 	/**
 	 * Creates a Form Object.
@@ -67,7 +70,8 @@ public class DatabaseAccessForm extends Form<Object>
 		setDefaultModel(new CompoundPropertyModel<Object>(this));		
 
 		// add search field
-		add(new NumberTextField<Integer>("searchField"));	
+		add(new TextField<String>("searchField"));
+		add(new DropDownChoice<String>("search_dropdown", new PropertyModel<String>(this, "selected"), SEARCH_OPTIONS));
 		add(new Label("statusMessage"));
 		
 		// get all database records and display in a listview
@@ -123,17 +127,17 @@ public class DatabaseAccessForm extends Form<Object>
 	 */
 	public final void onSubmit()
 	{	
-		DeviceDatabaseRecord searchResultRecord = null;
+		List<DeviceDatabaseRecord> searchResultRecord = null;
 		
 		if (searchField == null)
 		{
-			statusMessage = "Please enter a number";
+			statusMessage = "Please enter a search query";
 			return;
 		}
 		
 		try
 		{
-			searchResultRecord = DeviceDatabaseHandler.getRecordFromDatabaseById(searchField);
+			searchResultRecord = DeviceDatabaseHandler.getRecordFromDatabaseById(searchField, selected);
 		} 
 		catch (IllegalArgumentException e)
 		{

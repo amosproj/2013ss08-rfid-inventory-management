@@ -33,7 +33,7 @@ package org.amos2013.rfid_inventory_management_web.main;
 
 import org.amos2013.rfid_inventory_management_web.webparts.AppPage;
 import org.amos2013.rfid_inventory_management_web.webparts.ListPage;
-import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.amos2013.rfid_inventory_management_web.webparts.AdminPage;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -71,6 +71,7 @@ public class WicketApplication extends WebApplication
 		super.init();
 		// mount homepage and pages without the PageComponentInfo being displayed
 		mount(new HidePageComponentInfoMounter("/main", ListPage.class));
+		mount(new HidePageComponentInfoMounter("/admin", AdminPage.class));
 		mount(new HideHomePageComponentInfoMounter(AppPage.class));
 	}
 }

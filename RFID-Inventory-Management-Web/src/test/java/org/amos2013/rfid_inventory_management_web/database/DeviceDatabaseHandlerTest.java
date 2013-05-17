@@ -110,20 +110,6 @@ public class DeviceDatabaseHandlerTest
 	@Test
 	public final void testgetRecordFromDatabaseById()
 	{
-		DeviceDatabaseRecord searchResultRecord = null;
-		try
-		{
-			searchResultRecord = DeviceDatabaseHandler.getRecordFromDatabaseById(-1);
-		}
-		catch (IllegalStateException ex)
-		{
-			Assert.fail("Expected no exception, but got: " + ex.getMessage());	
-		}
-		catch (SQLException ex)
-		{
-			Assert.fail("Expected no exception, but got: " + ex.getMessage());	
-		}
-		
-		assertEquals(searchResultRecord, null);
+		//TODO
 	}
 }

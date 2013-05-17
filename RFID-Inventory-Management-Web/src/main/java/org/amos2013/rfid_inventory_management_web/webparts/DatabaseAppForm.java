@@ -72,9 +72,9 @@ public class DatabaseAppForm extends Form<Object>
 	public final void onSubmit()
 	{
 		// catch invalid input first
-		if (rfid_id == null || rfid_id < 0)
+		if (rfid_id == null)
 		{
-			statusMessage = "Please enter a positive number in the RFID ID field.";
+			statusMessage = "Please enter a search query into the field.";
 			return;
 		}
 		
