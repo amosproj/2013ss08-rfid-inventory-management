@@ -32,22 +32,155 @@
 package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
-/**
- * This class defines a sub-website from MainPage, which creates a Form to administrate
- * data in the database.
- */
-public class AdminPage extends MainPage {
-	
-	private static final long serialVersionUID = 931941446133830339L;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.PropertyModel;
 
-	/**
-	 * The constructor creates a website which contains a Form to administrate data in the database.
-	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	public AdminPage() throws IOException
-	{
+import java.sql.SQLException;
+import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.CompoundPropertyModel;
 
-	}
+public class AdminPage extends MainPage
+{
+    //private int counter;
+
+    /**
+     * Construct.
+     */
+    public AdminPage() throws IOException
+    {
+                
+        //private String searchField;
+    	//private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"rfid_id", "room", "owner" });
+    	//private String statusMessage;
+    	
+    	//private String selected = "rfid_id";
+
+    	List<DeviceDatabaseRecord> databaseRecords = null;
+		try
+		{
+			databaseRecords = DeviceDatabaseHandler.getRecordsFromDatabase();
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+        // add a container
+        WebMarkupContainer container = new WebMarkupContainer("container");
+        add(container);
+        container.add(new CounterLabel("recordsReadListView", databaseRecords));
+
+        // add a form
+        Form<?> form = new Form<Void>("form");
+        add(form);
+
+        // add the textfield that will update the counter value
+        form.add(new TextField<String>("counter", new PropertyModel<String>(this, "counter"),
+            String.class).setRequired(true));
+
+        // add button that will broadcast counter update event
+        form.add(new AjaxButton("submit")
+        {
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form)
+            {
+                send(getPage(), Broadcast.BREADTH, new CounterUpdate(target));
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form)
+            {
+            }
+
+        });
+    }
+
+    /**
+     * An event payload that represents a counter update
+     */
+    public class CounterUpdate
+    {
+        private final AjaxRequestTarget target;
+
+        /**
+         * Constructor
+         * 
+         * @param target
+         */
+        public CounterUpdate(AjaxRequestTarget target)
+        {
+            this.target = target;
+        }
+
+        /** @return ajax request target */
+        public AjaxRequestTarget getTarget()
+        {
+            return target;
+        }
+    }
+
+    /**
+     * A label that renders the value of the page's counter variable. Also listens to
+     * {@link CounterUpdate} event and updates itself.
+     */
+    public class CounterLabel extends Label
+    {
+
+        /**
+         * Construct.
+         * 
+         * @param id
+         */
+        public CounterLabel(String id, List<DeviceDatabaseRecord> databaseRecords)
+        {
+            super(id, new PropertyModel<String>(AdminPage.this, "counter"));
+            setOutputMarkupId(true);
+            
+            ListView<DeviceDatabaseRecord> test = new ListView<DeviceDatabaseRecord>(id, databaseRecords)
+            {
+            
+            	public void populateItem(ListItem<DeviceDatabaseRecord> item)
+            	{
+            		final DeviceDatabaseRecord record = (DeviceDatabaseRecord) item.getModelObject();
+            		item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));
+            		item.add(new Label("recordRoomLabel", record.getRoom()));
+            		item.add(new Label("recordOwnerLabel", record.getOwner()));			
+            	}
+            };
+        }
+
+        /**
+         * @see org.apache.wicket.Component#onEvent(org.apache.wicket.event.IEvent)
+         */
+        @Override
+        public void onEvent(IEvent<?> event)
+        {
+            super.onEvent(event);
+
+            // check if this is a counter update event and if so repaint self
+            if (event.getPayload() instanceof CounterUpdate)
+            {
+                CounterUpdate update = (CounterUpdate)event.getPayload();
+                update.getTarget().add(this);
+            }
+        }
+
+    }
 }

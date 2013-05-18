@@ -38,6 +38,7 @@ import java.util.List;
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -118,51 +119,56 @@ public class DatabaseAccessForm extends Form<Object>
 			    });
 			}
 		});
-	}
-	
+		
+		Button searchButton = new Button("search_button") 
+		{
+			private static final long serialVersionUID = 1L;
 
-	/**
-	 * This method is called, when the search button on the homepage it is clicked.
-	 * It will perform a search
-	 */
-	public final void onSubmit()
-	{	
-		List<DeviceDatabaseRecord> searchResultRecord = null;
-		
-		if (searchField == null)
-		{
-			statusMessage = "Please enter a search query";
-			return;
-		}
-		
-		try
-		{
-			searchResultRecord = DeviceDatabaseHandler.getRecordFromDatabaseById(searchField, selected);
-		} 
-		catch (IllegalArgumentException e)
-		{
-			statusMessage = e.getMessage();
-			e.printStackTrace();
-		}
-		catch (IllegalStateException e)
-		{
-			statusMessage = e.getMessage();
-			e.printStackTrace();
-		}
-		catch (SQLException e)
-		{
-			statusMessage = e.getMessage();
-			e.printStackTrace();
-		}
-		
-		// display results
-		if (searchResultRecord != null)
-		{
-			statusMessage = "Record found: " + searchResultRecord.toString();		
-		}
-		else
-		{
-			statusMessage = "No record found, while searching for: " + searchField;		
-		}
+			/**
+			 * This is called, when the search button on the homepage is clicked.
+			 * It will perform a search
+			 */
+			public void onSubmit() 
+			{
+				List<DeviceDatabaseRecord> searchResultRecord = null;
+				
+				if (searchField == null)
+				{
+					statusMessage = "Please enter a search query";
+					return;
+				}
+				
+				try
+				{
+					searchResultRecord = DeviceDatabaseHandler.getRecordFromDatabaseById(searchField, selected);
+				} 
+				catch (IllegalArgumentException e)
+				{
+					statusMessage = e.getMessage();
+					e.printStackTrace();
+				}
+				catch (IllegalStateException e)
+				{
+					statusMessage = e.getMessage();
+					e.printStackTrace();
+				}
+				catch (SQLException e)
+				{
+					statusMessage = e.getMessage();
+					e.printStackTrace();
+				}
+				
+				// display results
+				if (searchResultRecord != null)
+				{
+					statusMessage = "Record found: " + searchResultRecord.toString();		
+				}
+				else
+				{
+					statusMessage = "No record found, while searching for: " + searchField;		
+				}			 	 
+			}
+		};
+		add(searchButton);
 	}
 }

@@ -36,8 +36,34 @@
 		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
 	</head>
 	<body>
-	<wicket:extend>
-	    This is an administrative view yet to be implemented.
-	</wicket:extend>
+		<wicket:extend>
+		<div wicket:id="container">
+			<fieldset>
+				<legend style="color: #fb3d09; font-weight: bold;">Hardware List</legend>
+				<table>
+					<tbody>
+						<tr>
+							<th>RFID-Id</th>
+							<th>Room</th>
+							<th>Owner</th>
+							<th></th>
+						</tr>
+						<span wicket:id="recordsReadListView">  								
+					 		<tr>
+					 			<td><span wicket:id="recordRFIDIdLabel" /></td>	
+						 		<td><span wicket:id="recordRoomLabel" /></td>
+				 				<td><span wicket:id="recordOwnerLabel" /></td>
+				 				<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>
+							</tr>
+						</span>
+					</tbody>
+				</table>
+			</fieldset>
+		</div>
+
+		<form wicket:id="form">
+   			Counter Value: <input wicket:id="counter" type="text"/> <input wicket:id="submit" type="submit" value="Update"/>
+		</form>
+		</wicket:extend>
 	</body>
 </html>

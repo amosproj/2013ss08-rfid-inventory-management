@@ -34,7 +34,7 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 import java.io.IOException;
 
 /**
- * This class defines a sub-website from MainPage, wich contains a From listing all 
+ * This class defines a sub-website from MainPage, which contains a From listing all 
  * data from the database
  */
 public class ListPage extends MainPage {

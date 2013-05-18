@@ -68,22 +68,4 @@ public class DatabaseAccessFormTest
 			 Assert.fail("Expected no exception in DatabaseAccessForm(), but got: " + ex.getMessage());
 		}
 	}
-	
-	/**
-	 * tests the {@link DatabaseAccessForm#onSubmit()} function
-	 */
-	@Test
-	public void testOnSubmit()
-	{
-		DatabaseAccessForm databaseAccessForm = new DatabaseAccessForm("databaseAccessForm");
-	
-		try
-		{
-			databaseAccessForm.onSubmit();
-		}
-		catch (Exception ex)
-		{
-			Assert.fail("Expected no exception in onSubmit(), but got: " + ex.getMessage());
-		}
-	}
 }
