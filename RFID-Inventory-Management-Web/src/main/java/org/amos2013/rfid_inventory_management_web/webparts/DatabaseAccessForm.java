@@ -140,7 +140,7 @@ public class DatabaseAccessForm extends Form<Object>
 				
 				try
 				{
-					searchResultRecord = DeviceDatabaseHandler.getRecordFromDatabaseById(searchField, selected);
+					searchResultRecord = DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn(searchField, selected);
 				} 
 				catch (IllegalArgumentException e)
 				{
@@ -159,7 +159,8 @@ public class DatabaseAccessForm extends Form<Object>
 				}
 				
 				// display results
-				if (searchResultRecord != null)
+				// BEFORE: if (searchResultRecord != null)
+				if (searchResultRecord.toString() != "[]")
 				{
 					statusMessage = "Record found: " + searchResultRecord.toString();		
 				}

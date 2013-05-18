@@ -39,6 +39,7 @@ import java.util.List;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -124,17 +125,17 @@ public class DeviceDatabaseHandler
 
 	
 	/**
-	 * Searches and returns the record by its id 
-	 * @param rfidId String id to search for
-	 * @return a string containing all records, null when nothing was found
+	 * Searches and returns all records that match the search string in the specified column 
+	 * @param 	search_input 	the string fragment that is searched for
+	 * @param 	search_option 	the column of the DB-table where the method should search in
+	 * @return a list of the type DeviceDatabaseRecord containing all records, null when nothing was found
 	 * @throws SQLException when error occurs with the database
 	 * @throws IllegalStateException when null or more than one record is returned from the database
 	 */
-	public static List<DeviceDatabaseRecord> getRecordFromDatabaseById(String search_input, String search_option) throws IllegalStateException, SQLException
+	public static List<DeviceDatabaseRecord> getRecordsFromDatabaseByPartialStringAndColumn(String search_input, String search_option) throws IllegalStateException, SQLException
 	{
 		ConnectionSource connectionSource = null;
 		List<DeviceDatabaseRecord> databaseRecords = null;
-		DeviceDatabaseRecord resultRecord = null; 
 		
 		try
 		{
@@ -143,8 +144,19 @@ public class DeviceDatabaseHandler
 			// setup our database and DAOs
 			databaseHandlerDao = DaoManager.createDao(connectionSource, DeviceDatabaseRecord.class);
 			
-			// read database records
-			databaseRecords = databaseHandlerDao.queryForEq(search_option, search_input);
+			// TODO this "if" is necessary because SQL-LIKE doesn't work on Integer
+			// possible solution: change the column rfid_id to a String type
+			if (search_option == "rfid_id")
+			{
+				databaseRecords = databaseHandlerDao.queryForEq(search_option, search_input);
+			}
+			else
+			{
+				QueryBuilder<DeviceDatabaseRecord, Integer> queryBuilder = databaseHandlerDao.queryBuilder();
+				// list all DeviceDatabaseRecords that include the search string in the specified column
+				queryBuilder.where().like(search_option, "%"+search_input+"%");
+				databaseRecords = queryBuilder.query();
+			}
 		} 
 		catch (SQLException e)
 		{
@@ -162,7 +174,7 @@ public class DeviceDatabaseHandler
 		// if empty database, return empty
 		if (databaseRecords == null)
 		{
-			throw new IllegalStateException("Error while serarching for RFID ID " + search_input + ": no list was returned!");
+			throw new IllegalStateException("Error while serarching for " + search_input + ": no list was returned!");
 		}
 				
 		return databaseRecords;
