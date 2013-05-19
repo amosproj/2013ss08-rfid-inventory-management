@@ -35,11 +35,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -105,10 +103,6 @@ public class EmployeeDatabaseHandler
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForAll();
 		}
-		catch (Exception e)
-		{
-			return resultList;
-		}
 		finally
 		{
 			// always destroy the data source which should close underlying connections
@@ -123,7 +117,7 @@ public class EmployeeDatabaseHandler
 		{
 			if (record.getLocation().equals(location))
 			{
-			resultList.add(record.getName());
+				resultList.add(record.getName());
 			}
 		}
 

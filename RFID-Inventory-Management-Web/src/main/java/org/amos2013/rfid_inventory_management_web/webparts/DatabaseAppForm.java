@@ -36,11 +36,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
-import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
-import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
-import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
-import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseRecord;
+import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -56,8 +53,6 @@ public class DatabaseAppForm extends Form<Object>
 	private static final long serialVersionUID = 2948880218956382827L;
 
 	private Integer rfid_id; // use Integer instead of int, so the default value is null and not 0. so nothing will be displayed
-	private String room;
-	private String owner;
 	private String statusMessage;
 	
 	private List<String> options_room = Arrays.asList(new String[] {"please select" });

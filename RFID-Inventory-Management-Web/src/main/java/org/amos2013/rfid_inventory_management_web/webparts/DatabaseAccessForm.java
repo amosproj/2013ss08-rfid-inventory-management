@@ -56,10 +56,10 @@ public class DatabaseAccessForm extends Form<Object>
 	private static final long serialVersionUID = 2948880218956382827L;
 	
 	private String searchField;
-	private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"rfid_id", "room", "owner" });
 	private String statusMessage;
 	
-	private String selected = "rfid_id";
+	private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"RFID ID", "Room", "Owner" });
+	private String selectedSearchOption = "RFID ID";
 	
 	/**
 	 * Creates a Form Object.
@@ -72,7 +72,7 @@ public class DatabaseAccessForm extends Form<Object>
 
 		// add search field
 		add(new TextField<String>("searchField"));
-		add(new DropDownChoice<String>("search_dropdown", new PropertyModel<String>(this, "selected"), SEARCH_OPTIONS));
+		add(new DropDownChoice<String>("search_dropdown", new PropertyModel<String>(this, "selectedSearchOption"), SEARCH_OPTIONS));
 		add(new Label("statusMessage"));
 		
 		// get all database records and display in a listview
@@ -138,9 +138,29 @@ public class DatabaseAccessForm extends Form<Object>
 					return;
 				}
 				
+				// get search type
+				String searchType;
+				if (selectedSearchOption.equals("RFID ID"))
+				{
+					searchType = "rfid_id";
+				}
+				else if (selectedSearchOption.equals("Room"))
+				{
+					searchType = "room";
+				}
+				else if (selectedSearchOption.equals("Owner"))
+				{
+					searchType = "owner";
+				}
+				else
+				{
+					statusMessage = "Unknown search type";
+					return;
+				}
+				
 				try
 				{
-					searchResultRecord = DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn(searchField, selected);
+					searchResultRecord = DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn(searchField, searchType);
 				} 
 				catch (IllegalArgumentException e)
 				{

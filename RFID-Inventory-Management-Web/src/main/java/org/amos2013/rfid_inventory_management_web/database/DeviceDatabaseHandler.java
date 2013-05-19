@@ -158,10 +158,6 @@ public class DeviceDatabaseHandler
 				databaseRecords = queryBuilder.query();
 			}
 		} 
-		catch (SQLException e)
-		{
-			return null;
-		} 
 		finally
 		{
 			// always destroy the data source which should close underlying connections

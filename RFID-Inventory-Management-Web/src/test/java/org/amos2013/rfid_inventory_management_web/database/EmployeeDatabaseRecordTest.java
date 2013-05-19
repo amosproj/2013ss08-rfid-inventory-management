@@ -36,25 +36,23 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests the {@link DeviceDatabaseRecord} class
+ * Tests the {@link EmployeeDatabaseRecord} class
  */
-public class DeviceDatabaseRecordTest
+public class EmployeeDatabaseRecordTest
 {
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord#DeviceDatabaseRecord(int, String, String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseRecord#EmployeeDatabaseRecord(String, String)}.
 	 */
 	@Test
-	public final void testDeviceDatabaseRecordConstructor()
+	public final void testEmployeeDatabaseRecordConstructor()
 	{
-		String room = "42.42";
-		String owner = "Musterfrau";
-		int id = 42;
+		String employee = "Gerd Müller";
+		String location = "Erlangen";
 
-		DeviceDatabaseRecord testRecord = new DeviceDatabaseRecord(id, room, owner);
+		RoomDatabaseRecord testRecord = new RoomDatabaseRecord(employee, location);
 		
-		assertEquals(room, testRecord.getRoom());
-		assertEquals(owner, testRecord.getOwner());
-		assertEquals(id, testRecord.getRFIDId());		
+		assertEquals(employee, testRecord.getName());
+		assertEquals(location, testRecord.getLocation());
 	}
 
 }

@@ -32,9 +32,10 @@
 package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
+import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.event.Broadcast;
@@ -43,21 +44,16 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.PropertyModel;
-
-import java.sql.SQLException;
-import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
-import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 
 public class AdminPage extends MainPage
 {
-    //private int counter;
+
+	private static final long serialVersionUID = 931941446133830339L;
+
+	//private int counter;
 
     /**
      * Construct.
@@ -97,8 +93,9 @@ public class AdminPage extends MainPage
         // add button that will broadcast counter update event
         form.add(new AjaxButton("submit")
         {
+			private static final long serialVersionUID = -8194180069776977224L;
 
-            @Override
+			@Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form)
             {
                 send(getPage(), Broadcast.BREADTH, new CounterUpdate(target));
@@ -142,8 +139,9 @@ public class AdminPage extends MainPage
      */
     public class CounterLabel extends Label
     {
+		private static final long serialVersionUID = -7297418270218339098L;
 
-        /**
+		/**
          * Construct.
          * 
          * @param id
@@ -155,8 +153,9 @@ public class AdminPage extends MainPage
             
             ListView<DeviceDatabaseRecord> test = new ListView<DeviceDatabaseRecord>(id, databaseRecords)
             {
-            
-            	public void populateItem(ListItem<DeviceDatabaseRecord> item)
+				private static final long serialVersionUID = 6763095385797269964L;
+
+				public void populateItem(ListItem<DeviceDatabaseRecord> item)
             	{
             		final DeviceDatabaseRecord record = (DeviceDatabaseRecord) item.getModelObject();
             		item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));

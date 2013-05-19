@@ -72,17 +72,44 @@ public class DeviceDatabaseHandlerTest
 	public final void testGetRecordsFromDatabase()
 	{	
 		List<DeviceDatabaseRecord> resultList = null;
-	    try
+		try
+		{
+			resultList = DeviceDatabaseHandler.getRecordsFromDatabase();
+		}
+		catch (Exception ex)
+		{
+			Assert.fail("Expected no exception, but got: " + ex.getMessage());
+		}
+		
+		assertNotNull(resultList);
+	}
+	
+	
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsFromDatabaseByPartialStringAndColumn(String, String)}.
+	 * @throws SQLException 
+	 * @throws IllegalStateException is expected
+	 */
+	@Test
+	public final void testGetRecordsFromDatabaseByPartialStringAndColumn() throws IllegalStateException, SQLException
+	{	
+		List<DeviceDatabaseRecord> resultList = null;
+
+		exception.expect(IllegalArgumentException.class);
+		DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn("search", "option123456");
+	    
+		try
 	    {
-	        resultList = DeviceDatabaseHandler.getRecordsFromDatabase();
+	    	DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn("search", "owner");
 	    }
 	    catch (Exception ex)
 	    {
 	        Assert.fail("Expected no exception, but got: " + ex.getMessage());
 	    }
 	    
-	    assertNotNull(resultList);
+		assertNotNull(resultList);
 	}
+	
 	
 	
 	/**
@@ -101,15 +128,5 @@ public class DeviceDatabaseHandlerTest
 			{
 				Assert.fail("Expected no exception, but got: " + ex.getMessage());	
 			}
-	}
-	
-	
-	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordFromDatabaseById()}.
-	 */
-	@Test
-	public final void testgetRecordFromDatabaseById()
-	{
-		//TODO
 	}
 }
