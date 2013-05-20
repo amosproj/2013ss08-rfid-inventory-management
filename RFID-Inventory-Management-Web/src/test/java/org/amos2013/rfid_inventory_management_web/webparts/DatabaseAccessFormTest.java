@@ -61,7 +61,7 @@ public class DatabaseAccessFormTest
 	{
 		try
 		{
-			new DatabaseAccessForm("databaseAccessForm");
+			new DatabaseAccessForm("databaseAccessForm", null);
 		}
 		catch (Exception ex)
 		{

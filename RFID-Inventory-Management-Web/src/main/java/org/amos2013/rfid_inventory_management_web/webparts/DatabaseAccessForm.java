@@ -47,6 +47,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * Form that is displayed on the website. Used for reading and written data from/ to the database
@@ -63,27 +64,67 @@ public class DatabaseAccessForm extends Form<Object>
 	
 	/**
 	 * Creates a Form Object.
-	 * @param id the name of this form, to use in html
+	 * @param	id 							the name of this form, to use in html
+	 * @param	previousSearchParameters	contains the selected search option and the search string from the previous query
 	 */
-	public DatabaseAccessForm(String id)
+	public DatabaseAccessForm(String id, final PageParameters previousSearchParameters)
 	{
 		super(id);
-		setDefaultModel(new CompoundPropertyModel<Object>(this));		
+		setDefaultModel(new CompoundPropertyModel<Object>(this));
+		List<DeviceDatabaseRecord> databaseRecords = null;
 
 		// add search field
 		add(new TextField<String>("searchField"));
 		add(new DropDownChoice<String>("search_dropdown", new PropertyModel<String>(this, "selectedSearchOption"), SEARCH_OPTIONS));
 		add(new Label("statusMessage"));
 		
-		// get all database records and display in a listview
-		List<DeviceDatabaseRecord> databaseRecords = null;
-		try
+		if (previousSearchParameters != null)
 		{
-			databaseRecords = DeviceDatabaseHandler.getRecordsFromDatabase();
-		} 
-		catch (Exception e)
+			String search_string = "";
+			String search_option = "";
+			 			
+			search_string = previousSearchParameters.get("search_string").toString();
+			search_option = previousSearchParameters.get("search_option").toString();
+			
+			// search for the string in the specified column
+			try
+			{
+				databaseRecords = DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn(search_string, search_option);
+			} 
+			catch (IllegalArgumentException e)
+			{
+				statusMessage = e.getMessage();
+				e.printStackTrace();
+			}
+			catch (IllegalStateException e)
+			{
+				statusMessage = e.getMessage();
+				e.printStackTrace();
+			}
+			catch (SQLException e)
+			{
+				statusMessage = e.getMessage();
+				e.printStackTrace();
+			}
+			
+			// found nothing and returns a status message
+			if (databaseRecords == null || databaseRecords.toString() == "[]")
+			{
+				statusMessage = "No record found, while searching for: " + search_string;		
+			}	
+		
+		}
+		else
 		{
-			e.printStackTrace();
+			// get all database records and display in a listview
+			try
+			{
+				databaseRecords = DeviceDatabaseHandler.getRecordsFromDatabase();
+			} 
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		add(new ListView<DeviceDatabaseRecord>("recordsReadListView", databaseRecords)
@@ -122,15 +163,17 @@ public class DatabaseAccessForm extends Form<Object>
 		
 		Button searchButton = new Button("search_button") 
 		{
-			private static final long serialVersionUID = 1L;
+			
+			private static final long serialVersionUID = -1480472797060494747L;
 
 			/**
 			 * This is called, when the search button on the homepage is clicked.
-			 * It will perform a search
+			 * It will give the search parameters to the URL and opens a search page with a new iteration of this
+			 * class which will perform the search.
 			 */
 			public void onSubmit() 
 			{
-				List<DeviceDatabaseRecord> searchResultRecord = null;
+				PageParameters searchParameters = new PageParameters();
 				
 				if (searchField == null)
 				{
@@ -158,38 +201,30 @@ public class DatabaseAccessForm extends Form<Object>
 					return;
 				}
 				
-				try
-				{
-					searchResultRecord = DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn(searchField, searchType);
-				} 
-				catch (IllegalArgumentException e)
-				{
-					statusMessage = e.getMessage();
-					e.printStackTrace();
-				}
-				catch (IllegalStateException e)
-				{
-					statusMessage = e.getMessage();
-					e.printStackTrace();
-				}
-				catch (SQLException e)
-				{
-					statusMessage = e.getMessage();
-					e.printStackTrace();
-				}
-				
-				// display results
-				// BEFORE: if (searchResultRecord != null)
-				if (searchResultRecord.toString() != "[]")
-				{
-					statusMessage = "Record found: " + searchResultRecord.toString();		
-				}
-				else
-				{
-					statusMessage = "No record found, while searching for: " + searchField;		
-				}			 	 
+				searchParameters.add("search_string", searchField);
+				searchParameters.add("search_option", searchType);
+				setResponsePage(SearchPage.class, searchParameters); 	 
 			}
 		};
 		add(searchButton);
+		
+		/**
+		 * This will be executed, when the back button on the searchpage is clicked.
+		 * It will go back to the whole list view
+		 */
+		if (previousSearchParameters != null)
+		{
+			Button backButton = new Button("back_button") 
+			{
+
+				private static final long serialVersionUID = 2207995377260273773L;
+
+				public void onSubmit() 
+				{
+					setResponsePage(ListPage.class);
+				}
+			};
+			add(backButton);
+		}
 	}
 }

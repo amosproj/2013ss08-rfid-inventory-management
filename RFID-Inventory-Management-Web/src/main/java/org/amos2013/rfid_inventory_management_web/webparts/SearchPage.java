@@ -33,21 +33,22 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.io.IOException;
 
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 /**
- * This class defines a sub-website from MainPage, which creates a Form to administrate
- * data in the database.
+ * This class defines a sub-website from MainPage, which contains a From listing all
+ * data from the database
  */
-public class AdminPage extends MainPage {
-	
-	private static final long serialVersionUID = 931941446133830339L;
+public class SearchPage extends MainPage {
+
+	private static final long serialVersionUID = 7449232746846404264L;
 
 	/**
-	 * The constructor creates a website which contains a Form to administrate data in the database.
-	 *
+	 * The constructor creates a website which contains a Form listing all data from the database.
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public AdminPage() throws IOException
+	public SearchPage(final PageParameters previousSearchParameters) throws IOException
 	{
-
+		add(new DatabaseAccessForm("databaseAccessForm", previousSearchParameters));
 	}
 }

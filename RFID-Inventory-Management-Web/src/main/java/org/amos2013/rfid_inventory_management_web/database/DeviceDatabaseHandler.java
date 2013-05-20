@@ -146,7 +146,7 @@ public class DeviceDatabaseHandler
 			
 			// TODO this "if" is necessary because SQL-LIKE doesn't work on Integer
 			// possible solution: change the column rfid_id to a String type
-			if (search_option == "rfid_id")
+			if (search_option.equals("rfid_id"))
 			{
 				databaseRecords = databaseHandlerDao.queryForEq(search_option, search_input);
 			}
