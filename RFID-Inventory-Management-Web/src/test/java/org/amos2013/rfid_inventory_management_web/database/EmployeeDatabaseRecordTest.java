@@ -48,11 +48,13 @@ public class EmployeeDatabaseRecordTest
 	{
 		String employee = "Gerd Müller";
 		String location = "Erlangen";
+		int id = 100;
 
-		RoomDatabaseRecord testRecord = new RoomDatabaseRecord(employee, location);
+		RoomDatabaseRecord testRecord = new RoomDatabaseRecord(id, employee, location);
 		
 		assertEquals(employee, testRecord.getName());
 		assertEquals(location, testRecord.getLocation());
+		assertEquals(id, testRecord.getID());
 	}
 
 }

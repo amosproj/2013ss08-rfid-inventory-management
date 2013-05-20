@@ -51,13 +51,19 @@ public class RoomDatabaseRecord implements Serializable
 	/** The Constant LOCATION_COLUMN. */
 	public static final String LOCATION_COLUMN = "location";
 	
+	/** The Constant ID_COLUMN. */
+	public static final String ID_COLUMN = "id";
+	
 	
 	// Columns definition:
-	@DatabaseField(columnName = NAME_COLUMN, canBeNull = false, id = true)	// primary key
+	@DatabaseField(columnName = NAME_COLUMN, canBeNull = false)
 	private String name;
 
 	@DatabaseField(columnName = LOCATION_COLUMN, canBeNull = false)
 	private String location;
+	
+	@DatabaseField(columnName = ID_COLUMN, canBeNull = false, id = true)	// primary key
+	private int id;
 
 	/**
 	 * Default constructor (empty)
@@ -74,8 +80,9 @@ public class RoomDatabaseRecord implements Serializable
 	 * @param name the name
 	 * @param location the location
 	 */
-	public RoomDatabaseRecord(String name, String location)
+	public RoomDatabaseRecord(int id, String name, String location)
 	{
+		this.id = id;
 		this.name = name;
 		this.location = location;
 	}
@@ -115,6 +122,24 @@ public class RoomDatabaseRecord implements Serializable
 	{
 		this.location = location;
 	}
+	
+	/**
+	 * Gets the ID.
+	 * @return the ID
+	 */
+	public int getID()
+	{
+		return id;
+	}
+
+	/**
+	 * Sets the ID
+	 * @param id ID to be set
+	 */
+	public void setID(int id)
+	{
+		this.id = id;
+	}
 
 	/**
 	 * Compares two Objects
@@ -127,7 +152,7 @@ public class RoomDatabaseRecord implements Serializable
 		{
 			return false;
 		}
-		return name.equals(((RoomDatabaseRecord) other).name);
+		return id == (((RoomDatabaseRecord) other).id);
 	}
 	
 	

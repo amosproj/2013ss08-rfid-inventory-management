@@ -51,13 +51,19 @@ public class EmployeeDatabaseRecord implements Serializable
 	/** The Constant LOCATION_COLUMN. */
 	public static final String LOCATION_COLUMN = "location";
 	
+	/** The Constant ID_COLUMN. */
+	public static final String ID_COLUMN = "id";
+	
 	
 	// Columns definition:
-	@DatabaseField(columnName = NAME_COLUMN, canBeNull = false, id = true)	// primary key
+	@DatabaseField(columnName = NAME_COLUMN, canBeNull = false)
 	private String name;
 
 	@DatabaseField(columnName = LOCATION_COLUMN, canBeNull = false)
 	private String location;
+	
+	@DatabaseField(columnName = ID_COLUMN, canBeNull = false, id = true)	// primary key
+	private int id;
 
 	/**
 	 * Default constructor (empty)
@@ -74,8 +80,9 @@ public class EmployeeDatabaseRecord implements Serializable
 	 * @param name the name
 	 * @param location the location
 	 */
-	public EmployeeDatabaseRecord(String name, String location)
+	public EmployeeDatabaseRecord(int id, String name, String location)
 	{
+		this.id = id;
 		this.name = name;
 		this.location = location;
 	}
@@ -106,7 +113,7 @@ public class EmployeeDatabaseRecord implements Serializable
 	{
 		return location;
 	}
-
+	
 	/**
 	 * Sets the location
 	 * @param location Location to be set
@@ -114,6 +121,24 @@ public class EmployeeDatabaseRecord implements Serializable
 	public void setLocation(String location)
 	{
 		this.location = location;
+	}
+	
+	/**
+	 * Gets the ID.
+	 * @return the ID
+	 */
+	public int getID()
+	{
+		return id;
+	}
+
+	/**
+	 * Sets the ID
+	 * @param id ID to be set
+	 */
+	public void setID(int id)
+	{
+		this.id = id;
 	}
 
 	/**
@@ -127,7 +152,7 @@ public class EmployeeDatabaseRecord implements Serializable
 		{
 			return false;
 		}
-		return name.equals(((EmployeeDatabaseRecord) other).name);
+		return id == (((EmployeeDatabaseRecord) other).id);
 	}
 	
 	
