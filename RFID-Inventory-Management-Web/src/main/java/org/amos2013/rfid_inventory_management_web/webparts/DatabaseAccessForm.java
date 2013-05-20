@@ -37,6 +37,7 @@ import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -73,6 +74,7 @@ public class DatabaseAccessForm extends Form<Object>
 		setDefaultModel(new CompoundPropertyModel<Object>(this));
 		List<DeviceDatabaseRecord> databaseRecords = null;
 
+		
 		// add search field
 		add(new TextField<String>("searchField"));
 		add(new DropDownChoice<String>("search_dropdown", new PropertyModel<String>(this, "selectedSearchOption"), SEARCH_OPTIONS));
@@ -80,12 +82,16 @@ public class DatabaseAccessForm extends Form<Object>
 		
 		if (previousSearchParameters != null)
 		{
-			String search_string = "";
-			String search_option = "";
-			 			
-			search_string = previousSearchParameters.get("search_string").toString();
-			search_option = previousSearchParameters.get("search_option").toString();
+			String search_string = previousSearchParameters.get("search_string").toString();
+			String search_option = previousSearchParameters.get("search_option").toString();
 			
+			// if /main/search is entered previousSearchParameters is not null! but the toString()s will return null
+			// then just throw an RestartResponseAtInterceptPageException, which will redirect to /main
+			if ((search_string == null) && (search_option == null))
+			{				
+				throw new RestartResponseAtInterceptPageException(ListPage.class);
+			}
+		
 			// search for the string in the specified column
 			try
 			{
@@ -94,17 +100,14 @@ public class DatabaseAccessForm extends Form<Object>
 			catch (IllegalArgumentException e)
 			{
 				statusMessage = e.getMessage();
-				e.printStackTrace();
 			}
 			catch (IllegalStateException e)
 			{
 				statusMessage = e.getMessage();
-				e.printStackTrace();
 			}
 			catch (SQLException e)
 			{
 				statusMessage = e.getMessage();
-				e.printStackTrace();
 			}
 			
 			// found nothing and returns a status message

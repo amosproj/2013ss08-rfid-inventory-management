@@ -73,7 +73,7 @@ public class WicketApplication extends WebApplication
 		// mount homepage and pages without the PageComponentInfo being displayed
 		mount(new HidePageComponentInfoMounter("/main", ListPage.class));
 		mount(new HidePageComponentInfoMounter("/admin", AdminPage.class));
-		mount(new HidePageComponentInfoMounter("/search", SearchPage.class));
+		mount(new HidePageComponentInfoMounter("/main/search", SearchPage.class));
 		mount(new HideHomePageComponentInfoMounter(AppPage.class));
 	}
 }
