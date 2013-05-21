@@ -49,7 +49,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 /**
- * Form that is displayed on the website. Used for writing data to the database
+ * Form that is displayed on the app-website. Used for writing data to the database
  */
 public class DatabaseAppForm extends Form<Object>
 {
@@ -60,6 +60,7 @@ public class DatabaseAppForm extends Form<Object>
 	
 	private List<String> roomDropDownCoices = new ArrayList<String>();
 	private List<String> ownerDropDownCoices = new ArrayList<String>();
+	// TODO later on we should probably get the contents for the following string from the database
 	private List<String> locationDropDownCoices = Arrays.asList(new String[] {"Tennenlohe (DE)", "Bothell (US)"});
 	private String selected_location = "Tennenlohe (DE)";
 	private String selected_room = "please select";
