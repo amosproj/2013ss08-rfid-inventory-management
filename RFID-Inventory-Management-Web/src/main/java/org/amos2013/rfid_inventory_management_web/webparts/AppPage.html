@@ -43,13 +43,17 @@
 			</p>
 				<form id="databaseAppForm" method="get" wicket:id="databaseAppForm">
 					<fieldset>
+						<p>First select the location of which employees and rooms should be displayed</p>
+						<select wicket:id="locationDropdown" style="width:180px"></select>
+						<input wicket:id="saveLocationButton" type="submit" /><br/><br/>
+					
 						<legend style="color: #fb3d09; font-weight: bold;">RFID Scanner</legend>
 						<p wicket:id="statusMessage" style="color: #fb3d09;"></p>
 						<label>RFID-Id</label><input wicket:id="rfid_id" type="number" id="rfid_id" style="width:184px"/><br/>
-						<label>New room</label><select wicket:id="room" style="width:190px"></select><br/>
-						<label>Your name</label><select wicket:id="owner" style="width:190px"></select>
+						<label>New room</label><select wicket:id="roomDropdown" style="width:190px"></select><br/>
+						<label>Your name</label><select wicket:id="ownerDropdown" style="width:190px"></select>
 						<p>
-							<input style="margin-left:150px;" type="submit" name="SubmitButton" value="Submit"/>
+							<input wicket:id="submitButton" style="margin-left:150px;" type="submit" value="Submit"/>
 						</p>
 					</fieldset>
 					<p>

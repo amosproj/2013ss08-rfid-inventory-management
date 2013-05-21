@@ -51,23 +51,6 @@ public class DatabaseAppFormTest
 		new WicketTester(new WicketApplication());
 	}
 
-	/**
-	 * tests the {@link DatabaseAppForm#onSubmit()} function
-	 */
-	@Test
-	public void testOnSubmit() 
-	{
-		DatabaseAppForm databaseAppForm = new DatabaseAppForm("databaseAppForm");
-		
-		try
-		{
-			databaseAppForm.onSubmit();
-		}
-		catch (Exception ex)
-		{
-			Assert.fail("Expected no exception in onSubmit(), but got: " + ex.getMessage());
-		}
-	}
 
 	/**
 	 *	Tests the {@link DatabaseAppForm#DatabaseAppForm(String)} constructor

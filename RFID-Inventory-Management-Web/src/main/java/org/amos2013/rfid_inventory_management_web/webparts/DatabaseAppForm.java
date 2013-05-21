@@ -31,6 +31,7 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,10 +40,12 @@ import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -55,8 +58,10 @@ public class DatabaseAppForm extends Form<Object>
 	private Integer rfid_id; // use Integer instead of int, so the default value is null and not 0. so nothing will be displayed
 	private String statusMessage;
 	
-	private List<String> options_room = Arrays.asList(new String[] {"please select" });
-	private List<String> options_owner = Arrays.asList(new String[] {"please select" });
+	private List<String> roomDropDownCoices = new ArrayList<String>();
+	private List<String> ownerDropDownCoices = new ArrayList<String>();
+	private List<String> locationDropDownCoices = Arrays.asList(new String[] {"Tennenlohe (DE)", "Bothell (US)"});
+	private String selected_location = "Tennenlohe (DE)";
 	private String selected_room = "please select";
 	private String selected_owner = "please select";
 
@@ -69,81 +74,117 @@ public class DatabaseAppForm extends Form<Object>
 	{
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this));	// sets the model to bind to the wicket ids
-		
-		// get all room numbers from room database records as a list of strings
-		List<String> roomDatabaseRecords = null;
-		try
-		{
-			roomDatabaseRecords = RoomDatabaseHandler.getRecordsFromDatabaseByLocation("Tennenlohe (DE)");
-		} 
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		//merge both lists
-		List<String> filled_options_room = new ArrayList<String>();
-		filled_options_room.addAll(options_room);
-		filled_options_room.addAll(roomDatabaseRecords);
-	
-		
-		// get all employee names from employee database records as a list of strings
-		List<String> employeeDatabaseRecords = null;
-		try
-		{
-			employeeDatabaseRecords = EmployeeDatabaseHandler.getRecordsFromDatabaseByLocation("Tennenlohe (DE)");
-		} 
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		// merge both lists
-		List<String> filled_options_owner = new ArrayList<String>();
-		filled_options_owner.addAll(options_owner);
-		filled_options_owner.addAll(employeeDatabaseRecords);
 				
 		// add all forms
-		add(new NumberTextField<Integer>("rfid_id"));
-		add(new DropDownChoice<String>("room", new PropertyModel<String>(this, "selected_room"), filled_options_room));
-		add(new DropDownChoice<String>("owner", new PropertyModel<String>(this, "selected_owner"), filled_options_owner));
+		add(new DropDownChoice<String>("locationDropdown", new PropertyModel<String>(this, "selected_location"), locationDropDownCoices));
+		
 		add(new Label("statusMessage"));
-	}
+		
+		final NumberTextField<Integer> rfidIDTextField = new NumberTextField<Integer>("rfid_id");
+		rfidIDTextField.setEnabled(false);
+		add(rfidIDTextField);
+		
+		final DropDownChoice<String> roomDropdown = new DropDownChoice<String>("roomDropdown", new PropertyModel<String>(this, "selected_room"), roomDropDownCoices);
+		roomDropdown.setEnabled(false);
+		add(roomDropdown);
+		
+		
+		final DropDownChoice<String> ownerDropdown = new DropDownChoice<String>("ownerDropdown", new PropertyModel<String>(this, "selected_owner"), ownerDropDownCoices);
+		ownerDropdown.setEnabled(false);
+		add(ownerDropdown);
+		
+		
+		final Button submitButton = new Button("submitButton")
+		{
+			private static final long serialVersionUID = -5629488022279166778L;
 
-	/**
-	 * This method is called, when the submit button on the homepage it is clicked.
-	 * It will write the entered record into the database
-	 */
-	public final void onSubmit()
-	{
-		// catch invalid input first
-		if (rfid_id == null)
-		{
-			statusMessage = "Please enter an RFID Id into the field.";
-			return;
-		}
+			@Override
+			public void onSubmit()
+			{
+				// catch invalid input first
+				if (rfid_id == null)
+				{
+					statusMessage = "Please enter an RFID Id into the field.";
+					return;
+				}
+				
+				if (selected_room == null || selected_owner == null || selected_room.isEmpty() || selected_owner.isEmpty() || selected_room == "please select" || selected_owner == "please select")
+				{
+					statusMessage = "Please enter a room and an owner.";
+					return;
+				}
+				
+				// write to the database
+				try
+				{
+					DeviceDatabaseHandler.writeRecordToDatabase(rfid_id, selected_room, selected_owner);
+					statusMessage = "Data saved";
+				}
+				catch (IllegalArgumentException e)
+				{
+					
+					statusMessage = e.getMessage();
+				}
+				catch (Exception e)
+				{
+					statusMessage = "An error occured!";
+					e.printStackTrace();
+				}
+			}
+		};
+		submitButton.setEnabled(false);
+		add(submitButton);
 		
-		if (selected_room == null || selected_owner == null || selected_room.isEmpty() || selected_owner.isEmpty() || selected_room == "please select" || selected_owner == "please select")
-		{
-			statusMessage = "Please enter a room and an owner.";
-			return;
-		}
-		
-		// write to the database
-		try
-		{
-			DeviceDatabaseHandler.writeRecordToDatabase(rfid_id, selected_room, selected_owner);
-			statusMessage = "Data saved";
-		}
-		catch (IllegalArgumentException e)
-		{
-			
-			statusMessage = e.getMessage();
-		}
-		catch (Exception e)
-		{
-			statusMessage = "An error occured!";
-			e.printStackTrace();
-		}
+		Button saveLocationButton = new Button("saveLocationButton", new Model("Save location")){
+			private static final long serialVersionUID = -7748276309230758113L;
+
+			/**
+			 * clicking this button, will enable the input fields and dynamically add the choices to the dropdown menu
+			 */
+			@Override
+			public void onSubmit()
+			{
+				roomDropdown.setEnabled(true);
+				ownerDropdown.setEnabled(true);
+				submitButton.setEnabled(true);
+				rfidIDTextField.setEnabled(true);
+				
+				//clear dropdown menu choices
+				roomDropDownCoices.clear();
+				ownerDropDownCoices.clear();
+				
+				//fill room dropdown menu choices
+				List<String> roomDatabaseRecords = null;
+				try
+				{
+					roomDatabaseRecords = RoomDatabaseHandler.getRecordsFromDatabaseByLocation(selected_location);
+				} 
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				
+				roomDropDownCoices.add("please select");
+				roomDropDownCoices.addAll(roomDatabaseRecords);
+				roomDropdown.setChoices(roomDropDownCoices);
+				
+				// fill owner drop down choices
+				List<String> employeeDatabaseRecords = null;
+				try
+				{
+					employeeDatabaseRecords = EmployeeDatabaseHandler.getRecordsFromDatabaseByLocation(selected_location);
+				} 
+				catch (SQLException e)
+				{
+					e.printStackTrace();
+				}
+				
+				ownerDropDownCoices.add("please select");
+				ownerDropDownCoices.addAll(employeeDatabaseRecords);
+				ownerDropdown.setChoices(ownerDropDownCoices);
+			}
+		};
+		add(saveLocationButton);
 	}
 }
+
