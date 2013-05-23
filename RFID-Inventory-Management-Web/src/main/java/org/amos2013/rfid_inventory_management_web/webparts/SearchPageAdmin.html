@@ -37,9 +37,9 @@
 	</head>
 	<body>
 	<wicket:extend>
-	    <h3>RFID-Inventory Management Frontend</h3>
+	    <h3>RFID-Inventory Management Admin Frontend</h3>
 	    <p>Search function is case-sensitive and supports partial matching:</p>
-		<form id="databaseAccessForm" method="get" wicket:id="databaseAccessForm">
+		<form id="databaseAccessAdminForm" method="get" wicket:id="databaseAccessAdminForm">
 			<p>
 				<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
 				<input wicket:id="search_button" style="margin-left:10px;" type="submit" value="Search for"/>	
@@ -48,8 +48,9 @@
 				<select wicket:id="search_dropdown"></select>
 				<input wicket:id="back_button" style="margin-left:10px;" type="submit" value="Back"/>
 			</p>
+			<p>Further searches can be done with the browser search function <bold>[Ctrl]+[F]</bold></p>
 			<fieldset>
-				<legend style="color: #fb3d09; font-weight: bold;">Hardware List</legend>
+				<legend style="color: #fb3d09; font-weight: bold;">Search results</legend>
 				<table>
 					<tbody>
 						<tr>
@@ -63,7 +64,8 @@
 					 			<td><span wicket:id="recordRFIDIdLabel" /></td>	
 						 		<td><span wicket:id="recordRoomLabel" /></td>
 				 				<td><span wicket:id="recordOwnerLabel" /></td>
-				 				<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>
+				 				<td><a href="#" wicket:id="editRecordLink">edit</a></td>
+				 				<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>				 				
 							</tr>
 						</span>
 					</tbody>

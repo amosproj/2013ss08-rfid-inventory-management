@@ -126,8 +126,8 @@ public class DeviceDatabaseHandler
 	
 	/**
 	 * Searches and returns all records that match the search string in the specified column 
-	 * @param 	search_input 	the string fragment that is searched for
-	 * @param 	search_option 	the column of the DB-table where the method should search in
+	 * @param search_input the string fragment that is searched for
+	 * @param search_option the column of the DB-table where the method should search in
 	 * @return a list of the type DeviceDatabaseRecord containing all records, null when nothing was found
 	 * @throws SQLException when error occurs with the database
 	 * @throws IllegalStateException when null or more than one record is returned from the database

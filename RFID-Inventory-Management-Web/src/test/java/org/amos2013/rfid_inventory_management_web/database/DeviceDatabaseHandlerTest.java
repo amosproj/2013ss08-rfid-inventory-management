@@ -87,7 +87,7 @@ public class DeviceDatabaseHandlerTest
 	
 	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsFromDatabaseByPartialStringAndColumn(String, String)}.
-	 * @throws SQLException 
+	 * @throws SQLException can be thrown
 	 * @throws IllegalStateException is expected
 	 */
 	@Test

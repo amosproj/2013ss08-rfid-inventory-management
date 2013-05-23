@@ -20,7 +20,7 @@ body { margin:0;padding:0;background-color:#2B2B2B; }
 	z-index : 0;
 }
 #logo,#bd {
-	width : 650px;
+	width : 800px;
 	margin: 0 auto;
 	padding: 25px 50px 0 50px;
 }
@@ -42,7 +42,7 @@ body { margin-top : 0; padding-top : 0;}
 	top : 75px;
 	bottom : 25px;
 	left : 50%;
-	margin-left : -325px;
+	margin-left : -425px;
 	z-index : 1;
 	overflow: auto;
 	background-color : #fff;

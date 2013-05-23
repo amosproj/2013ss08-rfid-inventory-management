@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2013 by
+ * Copyright (c) 2013 by 
  * AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
  *
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
  *  Kerstin Stern
- *
+ * 
  * SDs:
  *  Andreas Singer
  *  Liping Wang
@@ -31,23 +31,41 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
-import java.io.IOException;
+import junit.framework.Assert;
+
+import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- * This class defines a sub-website from MainPage, which creates a Form to administrate
- * data in the database.
+ * Unit test for {@link DatabaseAccessAdminForm}
  */
-public class AdminPage extends MainPage {
-	
-	private static final long serialVersionUID = 931941446133830339L;
-
+public class DatabaseAccessAdminFormTest 
+{
 	/**
-	 * The constructor creates a website which contains a Form to administrate data in the database.
-	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * Before running the tests, an application is required
 	 */
-	public AdminPage() throws IOException
+	@Before
+	public void setUp()
 	{
-		add(new DatabaseAccessAdminForm("databaseAccessAdminForm", null));
+		new WicketTester(new WicketApplication());
+	}
+
+	
+	/**
+	 *	Tests the {@link DatabaseAccessAdminForm#DatabaseAccessAdminForm(String)} constructor 
+	 */
+	@Test
+	public void testDatabaseAccessAdminForm() 
+	{
+		try
+		{
+			new DatabaseAccessAdminForm("databaseAccessAdminForm", null);
+		}
+		catch (Exception ex)
+		{
+			 Assert.fail("Expected no exception in DatabaseAccessAdminForm(), but got: " + ex.getMessage());
+		}
 	}
 }

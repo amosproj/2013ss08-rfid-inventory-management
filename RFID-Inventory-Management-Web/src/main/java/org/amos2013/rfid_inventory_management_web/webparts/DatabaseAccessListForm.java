@@ -53,7 +53,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 /**
  * Form that is displayed on the website. Used for reading and written data from/ to the database
  */
-public class DatabaseAccessForm extends Form<Object>
+public class DatabaseAccessListForm extends Form<Object>
 {
 	private static final long serialVersionUID = 2948880218956382827L;
 	
@@ -68,7 +68,7 @@ public class DatabaseAccessForm extends Form<Object>
 	 * @param	id 							the name of this form, to use in html
 	 * @param	previousSearchParameters	contains the selected search option and the search string from the previous query
 	 */
-	public DatabaseAccessForm(String id, final PageParameters previousSearchParameters)
+	public DatabaseAccessListForm(String id, final PageParameters previousSearchParameters)
 	{
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this));
@@ -85,7 +85,7 @@ public class DatabaseAccessForm extends Form<Object>
 			String search_string = previousSearchParameters.get("search_string").toString();
 			String search_option = previousSearchParameters.get("search_option").toString();
 			
-			// if /main/search is entered previousSearchParameters is not null! but the toString()s will return null
+			// if /search is entered previousSearchParameters is not null! but the toString()s will return null
 			// then just throw an RestartResponseAtInterceptPageException, which will redirect to /main
 			if ((search_string == null) && (search_option == null))
 			{				
@@ -115,7 +115,6 @@ public class DatabaseAccessForm extends Form<Object>
 			{
 				statusMessage = "No record found, while searching for: " + search_string;		
 			}	
-		
 		}
 		else
 		{
@@ -140,27 +139,6 @@ public class DatabaseAccessForm extends Form<Object>
 				item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));
 				item.add(new Label("recordRoomLabel", record.getRoom()));
 				item.add(new Label("recordOwnerLabel", record.getOwner()));			
-				
-				// adds a link to delete the current record item
-				item.add(new Link<String>("deleteRecordLink")
-			    {
-					private static final long serialVersionUID = 8843977459555507386L;
-
-					public void onClick()
-					{
-						// call to delete the product
-						try
-						{
-							DeviceDatabaseHandler.deleteRecordFromDatabase(record);
-						} 
-						catch (Exception e)
-						{
-							e.printStackTrace();
-						}
-						// refreshes the page
-						setResponsePage(ListPage.class);
-					}
-			    });
 			}
 		});
 		
@@ -169,7 +147,7 @@ public class DatabaseAccessForm extends Form<Object>
 			
 			private static final long serialVersionUID = -1480472797060494747L;
 
-			/**
+			/*
 			 * This is called, when the search button on the homepage is clicked.
 			 * It will give the search parameters to the URL and opens a search page with a new iteration of this
 			 * class which will perform the search.
@@ -206,12 +184,12 @@ public class DatabaseAccessForm extends Form<Object>
 				
 				searchParameters.add("search_string", searchField);
 				searchParameters.add("search_option", searchType);
-				setResponsePage(SearchPage.class, searchParameters); 	 
+				setResponsePage(SearchPageList.class, searchParameters); 	 
 			}
 		};
 		add(searchButton);
 		
-		/**
+		/*
 		 * This will be executed, when the back button on the searchpage is clicked.
 		 * It will go back to the whole list view
 		 */
@@ -219,7 +197,6 @@ public class DatabaseAccessForm extends Form<Object>
 		{
 			Button backButton = new Button("back_button") 
 			{
-
 				private static final long serialVersionUID = 2207995377260273773L;
 
 				public void onSubmit() 

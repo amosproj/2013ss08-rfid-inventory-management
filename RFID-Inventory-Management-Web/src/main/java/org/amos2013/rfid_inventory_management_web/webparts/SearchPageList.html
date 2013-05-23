@@ -46,9 +46,11 @@
 				<input style="margin-left:10px;" wicket:id="searchField" type="text" id="searchField" />
 				&nbsp;&nbsp;in&nbsp;&nbsp;
 				<select wicket:id="search_dropdown"></select>
+				<input wicket:id="back_button" style="margin-left:10px;" type="submit" value="Back"/>
 			</p>
+			<p>Further searches can be done with the browser search function <bold>[Ctrl]+[F]</bold></p>
 			<fieldset>
-				<legend style="color: #fb3d09; font-weight: bold;">Hardware List</legend>
+				<legend style="color: #fb3d09; font-weight: bold;">Search results</legend>
 				<table>
 					<tbody>
 						<tr>
@@ -68,10 +70,6 @@
 				</table>
 			</fieldset>
 		</form>
-		<br/>
-		<p>
-			<a href="/app">Switch to the app.</a>
-		</p>
 	</wicket:extend>
 	</body>
 </html>

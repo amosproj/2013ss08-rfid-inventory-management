@@ -32,7 +32,7 @@
 package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 
@@ -50,9 +50,10 @@ public abstract class MainPage extends WebPage {
 
 	/**
 	 * The constructor creates a parent-website which contains a menu to access several sub-websites and files.
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws FileNotFoundException if the Android app .apk is not found
+	 * @throws UnsupportedEncodingException URLDecoder.decode can throw this
 	 */
-	public MainPage() throws IOException
+	public MainPage() throws FileNotFoundException, UnsupportedEncodingException
 	{
 		add(new BookmarkablePageLink<Object>("listpage", ListPage.class));
 		add(new BookmarkablePageLink<Object>("adminpage", AdminPage.class));
@@ -60,7 +61,7 @@ public abstract class MainPage extends WebPage {
 		// adds a label for downloading a particular resource
 		URL url = getClass().getResource("/RFID-Inventory-Management-App.apk");
 		if (url == null)
-			throw new FileNotFoundException("Resource `RFID-Inventory-Management-App.apk' not found.");
+			throw new FileNotFoundException("Resource 'RFID-Inventory-Management-App.apk' not found.");
 		File file = new File(URLDecoder.decode(url.getFile(), "UTF8"));
 		DownloadLink dl = new DownloadLink("download", file);
 		add(dl);

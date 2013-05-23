@@ -77,6 +77,7 @@ public class RoomDatabaseRecord implements Serializable
 	/**
 	 * Constructor for creating a new database record.
 	 *
+	 * @param id the id
 	 * @param name the name
 	 * @param location the location
 	 */

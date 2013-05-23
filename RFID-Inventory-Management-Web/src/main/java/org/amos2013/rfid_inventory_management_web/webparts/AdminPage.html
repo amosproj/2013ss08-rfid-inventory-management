@@ -37,7 +37,43 @@
 	</head>
 	<body>
 	<wicket:extend>
-	    This is an administrative view yet to be implemented.
+	    <h3>RFID-Inventory Management Admin Frontend</h3>
+	    <p>Search function is case-sensitive and supports partial matching:</p>
+		<form id="databaseAccessAdminForm" method="get" wicket:id="databaseAccessAdminForm">
+			<p>
+				<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
+				<input wicket:id="search_button" style="margin-left:10px;" type="submit" value="Search for"/>	
+				<input style="margin-left:10px;" wicket:id="searchField" type="text" id="searchField" />
+				&nbsp;&nbsp;in&nbsp;&nbsp;
+				<select wicket:id="search_dropdown"></select>
+			</p>
+			<fieldset>
+				<legend style="color: #fb3d09; font-weight: bold;">Hardware List</legend>
+				<table>
+					<tbody>
+						<tr>
+							<th>RFID-Id</th>
+							<th>Room</th>
+							<th>Owner</th>
+							<th></th>
+						</tr>
+						<span wicket:id="recordsReadListView">  								
+					 		<tr>
+					 			<td><span wicket:id="recordRFIDIdLabel" /></td>	
+						 		<td><span wicket:id="recordRoomLabel" /></td>
+				 				<td><span wicket:id="recordOwnerLabel" /></td>
+				 				<td><a href="#" wicket:id="editRecordLink">edit</a></td>
+				 				<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>
+							</tr>
+						</span>
+					</tbody>
+				</table>
+			</fieldset>
+		</form>
+		<br/>
+		<p>
+			<a href="/app">Switch to the app.</a>
+		</p>
 	</wicket:extend>
 	</body>
 </html>
