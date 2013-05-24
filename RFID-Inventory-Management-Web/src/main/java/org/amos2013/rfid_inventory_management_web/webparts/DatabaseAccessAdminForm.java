@@ -138,7 +138,18 @@ public class DatabaseAccessAdminForm extends Form<Object>
 				final DeviceDatabaseRecord record = (DeviceDatabaseRecord) item.getModelObject();
 				item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));
 				item.add(new Label("recordRoomLabel", record.getRoom()));
-				item.add(new Label("recordOwnerLabel", record.getOwner()));			
+				item.add(new Label("recordHolderLabel", record.getHolder()));
+				item.add(new Label("recordPartNumberLabel", record.getPart_number()));
+				
+				item.add(new Label("recordTypeLabel", record.getType()));
+				item.add(new Label("recordCategoryLabel", record.getCategory()));
+				item.add(new Label("recordManufacturerLabel", record.getManufacturer()));
+				item.add(new Label("recordPlatformLabel", record.getPlatform()));
+				
+				item.add(new Label("recordSerialNumberLabel", record.getSerial_number()));
+				item.add(new Label("recordInventoryNumberLabel", record.getInventory_number()));
+				item.add(new Label("recordOwnerLabel", record.getOwner()));
+				item.add(new Label("recordCommentLabel", record.getComment()));			
 				
 				// adds a link to delete the current record item
 				item.add(new Link<String>("deleteRecordLink")

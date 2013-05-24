@@ -43,6 +43,8 @@ import org.junit.runners.Suite.SuiteClasses;
 		{	// add all test classes here
 			org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandlerTest.class,
 			org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecordTest.class,
+			org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandlerTest.class,
+			org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseRecordTest.class,
 			org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandlerTest.class,
 			org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseRecordTest.class,
 			org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandlerTest.class,

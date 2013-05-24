@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2013 by 
+ * Copyright (c) 2013 by
  * AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
  *
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
  *  Kerstin Stern
- * 
+ *
  * SDs:
  *  Andreas Singer
  *  Liping Wang
@@ -36,30 +36,30 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * Tests the {@link DeviceDatabaseRecord} class
+ * Tests the {@link MetaDeviceDatabaseRecord} class
  */
-public class DeviceDatabaseRecordTest
+public class MetaDeviceDatabaseRecordTest
 {
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord#DeviceDatabaseRecord(int, String, String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseRecord#MetaDeviceDatabaseRecord(String, String, String, String, String)}.
 	 */
 	@Test
-	public final void testDeviceDatabaseRecordConstructor()
+	public final void testMetaDeviceDatabaseRecordConstructor()
 	{
-		String room = "42.42";
-		String holder = "Musterfrau";
-		int id = 42;
+		String category = "test";
+		String type = "test";
+		String part_number = "test";
+		String manufacturer = "test";
+		String platform = "test";
 
-		DeviceDatabaseRecord testRecord = new DeviceDatabaseRecord(id, room, holder);
-		
-		assertEquals(room, testRecord.getRoom());
-		assertEquals(holder, testRecord.getHolder());
-		assertEquals(id, testRecord.getRFIDId());	
-		
-		assertEquals(null, testRecord.getType());
-		assertEquals(null, testRecord.getCategory());
-		assertEquals(null, testRecord.getManufacturer());
-		assertEquals(null, testRecord.getPlatform());
+		MetaDeviceDatabaseRecord testRecord = new MetaDeviceDatabaseRecord(category, type, part_number, manufacturer, platform);
+
+		assertEquals(category, testRecord.getCategory());
+		assertEquals(type, testRecord.getType());
+		assertEquals(part_number, testRecord.getPart_number());
+		assertEquals(manufacturer, testRecord.getManufacturer());
+		assertEquals(platform, testRecord.getPlatform());
+
 	}
 
 }

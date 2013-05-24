@@ -85,8 +85,11 @@ public class MetaDeviceDatabaseHandler
 
 	/**
 	 * Writes the given strings to the database
-	 * @param TODO
-	 * 
+	 * @param category 		the category of the hardware e.g. phone
+	 * @param type			the type of the hardware e.g. Lumia 900
+	 * @param part_number	the part number e.g. EXG-1278-L900
+	 * @param manufacturer	the manufacturer e.g. Nokia
+	 * @param platform 		the platform/OS running on the hardware e.g. Windows Phone 8
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when room or owner is null
 	 * @throws Exception when database setup fails
@@ -133,7 +136,8 @@ public class MetaDeviceDatabaseHandler
 	public static MetaDeviceDatabaseRecord getRecordFromDatabaseByPartNumber(String part_number) throws IllegalStateException, SQLException
 	{
 		ConnectionSource connectionSource = null;
-		List<MetaDeviceDatabaseRecord> record = null;
+		List<MetaDeviceDatabaseRecord> recordList = null;
+		MetaDeviceDatabaseRecord nullRecord = null;
 
 		try
 		{
@@ -142,8 +146,10 @@ public class MetaDeviceDatabaseHandler
 			// setup our database and DAOs
 			databaseHandlerDao = DaoManager.createDao(connectionSource, MetaDeviceDatabaseRecord.class);
 
-
-			record = databaseHandlerDao.queryForEq("part_number", part_number);
+			if (part_number != null)
+			{
+			recordList = databaseHandlerDao.queryForEq("part_number", part_number);
+			}
 
 		}
 		finally
@@ -155,12 +161,18 @@ public class MetaDeviceDatabaseHandler
 			}
 		}
 
-		// if empty database, return empty
-		if (record == null)
+		// if there is no meta data for this unique device
+		if (part_number == null)
+		{
+			return nullRecord;
+		}
+		
+		// if empty database, return null
+		if (recordList == null || recordList.toString().equals("[]"))
 		{
 			throw new IllegalStateException("Error while serarching for " + part_number + ": no object was returned!");
 		}
 
-		return record.get(0);
+		return recordList.get(0);
 	}
 }

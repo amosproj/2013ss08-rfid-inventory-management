@@ -105,16 +105,15 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public DeviceDatabaseRecord()
 	{
+		// gets the corresponding meta data record from the other table in order to be able to access them in this class via the getters and setters
 		try
 		{
 			record = MetaDeviceDatabaseHandler.getRecordFromDatabaseByPartNumber(part_number);
 		} catch (IllegalStateException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -132,16 +131,15 @@ public class DeviceDatabaseRecord implements Serializable
 		this.room = room;
 		this.holder = holder;
 		
+		// gets the corresponding meta data record from the other table in order to be able to access them in this class via the getters and setters
 		try
 		{
 			record = MetaDeviceDatabaseHandler.getRecordFromDatabaseByPartNumber(part_number);
 		} catch (IllegalStateException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
