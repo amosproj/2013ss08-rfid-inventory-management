@@ -37,7 +37,18 @@
 	</head>
 	<body>
 	<wicket:extend>
-	    <h3>RFID-Inventory Management Admin Frontend</h3>
+	    <h3>Main List Administration</h3>
+	    <p>
+	    	<table>
+	    		<tr>
+	    			<td><form action="/admin"><input type="submit" value="Main List"></form></td>
+	    			<td><form action="/employeeAdmin"><input type="submit" value="Employee List"></form></td>
+	   				<td><form action="/roomAdmin"><input type="submit" value="Room List"></form></td>
+	   			 </tr>
+	   		 </table>
+	   		 <hr />
+	    </p>
+	    
 	    <p>Search function is case-sensitive and supports partial matching:</p>
 		<form id="databaseAccessAdminForm" method="get" wicket:id="databaseAccessAdminForm">
 			<p>
@@ -96,6 +107,7 @@
 		<p>
 			<a href="/app">Switch to the app.</a>
 		</p>
+		<p>&nbsp;</p>
 	</wicket:extend>
 	</body>
 </html>
