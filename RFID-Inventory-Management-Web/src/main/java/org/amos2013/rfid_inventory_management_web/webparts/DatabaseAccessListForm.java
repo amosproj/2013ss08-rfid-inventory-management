@@ -31,7 +31,6 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,7 +42,6 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -60,8 +58,8 @@ public class DatabaseAccessListForm extends Form<Object>
 	private String searchField;
 	private String statusMessage;
 	
-	private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"RFID ID", "Room", "Owner" });
-	private String selectedSearchOption = "RFID ID";
+	private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"Employee", "Inventory Number", "Manufacturer", "Platform", "Room", "Type" });
+	private String selectedSearchOption = "Employee";
 	
 	/**
 	 * Creates a Form Object.
@@ -73,7 +71,8 @@ public class DatabaseAccessListForm extends Form<Object>
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this));
 		List<DeviceDatabaseRecord> databaseRecords = null;
-
+		
+		DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
 		
 		// add search field
 		add(new TextField<String>("searchField"));
@@ -86,7 +85,7 @@ public class DatabaseAccessListForm extends Form<Object>
 			String search_option = previousSearchParameters.get("search_option").toString();
 			
 			// if /search is entered previousSearchParameters is not null! but the toString()s will return null
-			// then just throw an RestartResponseAtInterceptPageException, which will redirect to /main
+			// then just throw an RestartResponseAtInterceptPageException, which will redirect to /
 			if ((search_string == null) && (search_option == null))
 			{				
 				throw new RestartResponseAtInterceptPageException(ListPage.class);
@@ -95,23 +94,15 @@ public class DatabaseAccessListForm extends Form<Object>
 			// search for the string in the specified column
 			try
 			{
-				databaseRecords = DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn(search_string, search_option);
+				databaseRecords = deviceDatabaseHandler.getRecordsByPartialStringAndColumn(search_string, search_option);
 			} 
 			catch (IllegalArgumentException e)
 			{
 				statusMessage = e.getMessage();
 			}
-			catch (IllegalStateException e)
-			{
-				statusMessage = e.getMessage();
-			}
-			catch (SQLException e)
-			{
-				statusMessage = e.getMessage();
-			}
 			
 			// found nothing and returns a status message
-			if (databaseRecords == null || databaseRecords.toString() == "[]")
+			if (databaseRecords.isEmpty() || databaseRecords == null || databaseRecords.toString() == "[]")
 			{
 				statusMessage = "No record found, while searching for: " + search_string;		
 			}	
@@ -121,7 +112,7 @@ public class DatabaseAccessListForm extends Form<Object>
 			// get all database records and display in a listview
 			try
 			{
-				databaseRecords = DeviceDatabaseHandler.getRecordsFromDatabase();
+				databaseRecords = deviceDatabaseHandler.getDatabaseRecordList();
 			} 
 			catch (Exception e)
 			{
@@ -138,7 +129,7 @@ public class DatabaseAccessListForm extends Form<Object>
 				final DeviceDatabaseRecord record = (DeviceDatabaseRecord) item.getModelObject();
 				item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));
 				item.add(new Label("recordRoomLabel", record.getRoom()));
-				item.add(new Label("recordHolderLabel", record.getHolder()));
+				item.add(new Label("recordEmployeeLabel", record.getEmployee()));
 				item.add(new Label("recordPartNumberLabel", record.getPart_number()));
 				
 				item.add(new Label("recordTypeLabel", record.getType()));
@@ -175,17 +166,29 @@ public class DatabaseAccessListForm extends Form<Object>
 				
 				// get search type
 				String searchType;
-				if (selectedSearchOption.equals("RFID ID"))
+				if (selectedSearchOption.equals("Inventory Number"))
 				{
-					searchType = "rfid_id";
+					searchType = "inventory_number";
+				}
+				else if (selectedSearchOption.equals("Manufacturer"))
+				{
+					searchType = "manufacturer";
+				}
+				else if (selectedSearchOption.equals("Type"))
+				{
+					searchType = "type";
+				}
+				else if (selectedSearchOption.equals("Platform"))
+				{
+					searchType = "platform";
 				}
 				else if (selectedSearchOption.equals("Room"))
 				{
 					searchType = "room";
 				}
-				else if (selectedSearchOption.equals("Owner"))
+				else if (selectedSearchOption.equals("Employee"))
 				{
-					searchType = "owner";
+					searchType = "employee";
 				}
 				else
 				{

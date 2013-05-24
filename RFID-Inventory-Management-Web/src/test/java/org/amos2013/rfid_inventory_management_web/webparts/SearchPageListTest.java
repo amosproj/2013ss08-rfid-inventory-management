@@ -67,7 +67,7 @@ public class SearchPageListTest
 		// now test with search parameters
 		PageParameters searchParameters = new PageParameters();
 		searchParameters.add("search_string", "test");
-		searchParameters.add("search_option", "test");
+		searchParameters.add("search_option", "inventory_number");
 		wicketTester.startPage(SearchPageList.class, searchParameters);
 		//assert rendered page class is AdminPage, because no search parameters are entered
 		wicketTester.assertRenderedPage(SearchPageList.class);

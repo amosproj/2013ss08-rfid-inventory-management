@@ -59,12 +59,12 @@ public class DatabaseAppForm extends Form<Object>
 	private String statusMessage;
 	
 	private List<String> roomDropDownCoices = new ArrayList<String>();
-	private List<String> ownerDropDownCoices = new ArrayList<String>();
+	private List<String> employeeDropDownCoices = new ArrayList<String>();
 	// TODO later on we should probably get the contents for the following string from the database
 	private List<String> locationDropDownCoices = Arrays.asList(new String[] {"Tennenlohe (DE)", "Bothell (US)"});
 	private String selected_location = "Tennenlohe (DE)";
 	private String selected_room = "please select";
-	private String selected_owner = "please select";
+	private String selected_employee = "please select";
 
 
 	/**
@@ -90,7 +90,7 @@ public class DatabaseAppForm extends Form<Object>
 		add(roomDropdown);
 		
 		
-		final DropDownChoice<String> ownerDropdown = new DropDownChoice<String>("ownerDropdown", new PropertyModel<String>(this, "selected_owner"), ownerDropDownCoices);
+		final DropDownChoice<String> ownerDropdown = new DropDownChoice<String>("employeeDropdown", new PropertyModel<String>(this, "selected_employee"), employeeDropDownCoices);
 		ownerDropdown.setEnabled(false);
 		add(ownerDropdown);
 		
@@ -109,16 +109,17 @@ public class DatabaseAppForm extends Form<Object>
 					return;
 				}
 				
-				if (selected_room == null || selected_owner == null || selected_room.isEmpty() || selected_owner.isEmpty() || selected_room == "please select" || selected_owner == "please select")
+				if (selected_room == null || selected_employee == null || selected_room.isEmpty() || selected_employee.isEmpty() || selected_room == "please select" || selected_employee == "please select")
 				{
-					statusMessage = "Please enter a room and an owner.";
+					statusMessage = "Please enter a room and an employee.";
 					return;
 				}
 				
 				// write to the database
 				try
 				{
-					DeviceDatabaseHandler.writeRecordToDatabase(rfid_id, selected_room, selected_owner);
+					DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
+					deviceDatabaseHandler.updateRecordFromAppInDatabase(rfid_id, selected_room, selected_employee);
 					statusMessage = "Data saved";
 				}
 				catch (IllegalArgumentException e)
@@ -152,7 +153,7 @@ public class DatabaseAppForm extends Form<Object>
 				
 				//clear dropdown menu choices
 				roomDropDownCoices.clear();
-				ownerDropDownCoices.clear();
+				employeeDropDownCoices.clear();
 				
 				//fill room dropdown menu choices
 				List<String> roomDatabaseRecords = null;
@@ -180,9 +181,9 @@ public class DatabaseAppForm extends Form<Object>
 					e.printStackTrace();
 				}
 				
-				ownerDropDownCoices.add("please select");
-				ownerDropDownCoices.addAll(employeeDatabaseRecords);
-				ownerDropdown.setChoices(ownerDropDownCoices);
+				employeeDropDownCoices.add("please select");
+				employeeDropDownCoices.addAll(employeeDatabaseRecords);
+				ownerDropdown.setChoices(employeeDropDownCoices);
 			}
 		};
 		add(saveLocationButton);

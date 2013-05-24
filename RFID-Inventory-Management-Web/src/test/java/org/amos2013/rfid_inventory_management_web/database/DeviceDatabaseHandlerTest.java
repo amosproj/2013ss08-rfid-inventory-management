@@ -52,29 +52,30 @@ public class DeviceDatabaseHandlerTest
 	@Rule 
 	public ExpectedException exception = ExpectedException.none();
 	
+	private DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#writeRecordToDatabase(int, java.lang.String, java.lang.String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#updateRecordFromAppInDatabase(int, java.lang.String, java.lang.String)}.
 	 * @throws Exception not testing for this one
 	 */
 	@Test
 	public final void testWriteRecordToDatabase() throws Exception
 	{
 		exception.expect(IllegalArgumentException.class);	// asserts that a IllegalArgumentException is thrown
-		DeviceDatabaseHandler.writeRecordToDatabase(123, null, null);
+		deviceDatabaseHandler.updateRecordFromAppInDatabase(123, null, null);
 	}
 
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsFromDatabase()}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getDatabaseRecordList()}.
 	 */
 	@Test
-	public final void testGetRecordsFromDatabase()
+	public final void testGetDatabaseRecordList()
 	{	
 		List<DeviceDatabaseRecord> resultList = null;
 		try
 		{
-			resultList = DeviceDatabaseHandler.getRecordsFromDatabase();
+			resultList = deviceDatabaseHandler.getDatabaseRecordList();
 		}
 		catch (Exception ex)
 		{
@@ -84,7 +85,7 @@ public class DeviceDatabaseHandlerTest
 		assertNotNull(resultList);
 	}
 	
-	
+
 	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsFromDatabaseByPartialStringAndColumn(String, String)}.
 	 * @throws SQLException can be thrown
@@ -96,11 +97,11 @@ public class DeviceDatabaseHandlerTest
 		List<DeviceDatabaseRecord> resultList = null;
 
 		exception.expect(IllegalArgumentException.class);
-		DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn("search", "option123456");
+		deviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn("search", "option123456");
 	    
 		try
 	    {
-	    	DeviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn("search", "owner");
+	    	deviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn("search", "employee");
 	    }
 	    catch (Exception ex)
 	    {
@@ -109,7 +110,7 @@ public class DeviceDatabaseHandlerTest
 	    
 		assertNotNull(resultList);
 	}
-	
+
 	
 	
 	/**
@@ -122,7 +123,7 @@ public class DeviceDatabaseHandlerTest
 			exception.expect(IllegalArgumentException.class);
 			try
 			{
-				DeviceDatabaseHandler.deleteRecordFromDatabase(null);
+				deviceDatabaseHandler.deleteRecordFromDatabase(null);
 			}
 			catch (SQLException ex)
 			{

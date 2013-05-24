@@ -42,7 +42,6 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "metaDeviceTable")
 public class MetaDeviceDatabaseRecord implements Serializable
 {
-	
 	private static final long serialVersionUID = -5864531965004415818L;
 
 	// for QueryBuilder to be able to find the columns
@@ -65,7 +64,7 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	public static final String PLATFORM_COLUMN = "platform";
 
 	// Columns definition:
-	@DatabaseField(columnName = ID_COLUMN, canBeNull = false, id = true)	// primary key
+	@DatabaseField(columnName = ID_COLUMN, canBeNull = false, id = true)	// primary key // TODO auto generate the id!
 	private int id;
 
 	@DatabaseField(columnName = TYPE_COLUMN)
@@ -230,6 +229,6 @@ public class MetaDeviceDatabaseRecord implements Serializable
 		{
 			return false;
 		}
-		return type.equals(((MetaDeviceDatabaseRecord) other).type);
+		return id == ((MetaDeviceDatabaseRecord) other).id;
 	}
 }

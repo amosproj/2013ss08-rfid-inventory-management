@@ -31,23 +31,23 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
+import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 /**
  * This class is used, to access the database
  */
-public class MetaDeviceDatabaseHandler
+public class MetaDeviceDatabaseHandler implements Serializable
 {
+	private static final long serialVersionUID = -5697951344924079115L;
+
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 
 	// the class ConfigLoader.java which loads the db-password, is not committed to git
@@ -84,21 +84,18 @@ public class MetaDeviceDatabaseHandler
 
 
 	/**
-	 * Writes the given strings to the database
-	 * @param category 		the category of the hardware e.g. phone
-	 * @param type			the type of the hardware e.g. Lumia 900
-	 * @param part_number	the part number e.g. EXG-1278-L900
-	 * @param manufacturer	the manufacturer e.g. Nokia
-	 * @param platform 		the platform/OS running on the hardware e.g. Windows Phone 8
-	 * @throws SQLException when database connection close() fails
-	 * @throws IllegalArgumentException when room or owner is null
-	 * @throws Exception when database setup fails
+	 * Update record in database.
+	 *
+	 * @param metaDeviceDatabaseRecord the meta device database record
+	 * @throws SQLException the sQL exception
+	 * @throws Exception the exception
 	 */
-	public static void writeRecordToDatabase(String category, String type, String part_number, String manufacturer, String platform) throws SQLException, IllegalArgumentException, Exception
+	public static void updateRecordInDatabase(MetaDeviceDatabaseRecord metaDeviceDatabaseRecord) throws SQLException, Exception
 	{
-		if (part_number == null)
+		// if parameter is null, don't write to database;
+		if (metaDeviceDatabaseRecord == null)
 		{
-			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is invalid");
+			return;
 		}
 
 		ConnectionSource connectionSource = null;
@@ -108,12 +105,8 @@ public class MetaDeviceDatabaseHandler
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// create a database, if non existing
 			setupDatabase(connectionSource);
-
-			// write the given Strings
-			MetaDeviceDatabaseRecord record = new MetaDeviceDatabaseRecord(category, type, part_number, manufacturer, platform);
-
-			// writes to the database: create if new id, or update if existing
-			databaseHandlerDao.createOrUpdate(record);
+			// writes to the database
+			databaseHandlerDao.createOrUpdate(metaDeviceDatabaseRecord);
 		}
 		finally
 		{
@@ -137,8 +130,12 @@ public class MetaDeviceDatabaseHandler
 	{
 		ConnectionSource connectionSource = null;
 		List<MetaDeviceDatabaseRecord> recordList = null;
-		MetaDeviceDatabaseRecord nullRecord = null;
 
+		if (part_number == null || part_number == "")
+		{
+			return null;
+		}
+		
 		try
 		{
 			// create our data-source for the database (url, user, pwd)
@@ -148,7 +145,7 @@ public class MetaDeviceDatabaseHandler
 
 			if (part_number != null)
 			{
-			recordList = databaseHandlerDao.queryForEq("part_number", part_number);
+				recordList = databaseHandlerDao.queryForEq("part_number", part_number);
 			}
 
 		}
@@ -159,12 +156,6 @@ public class MetaDeviceDatabaseHandler
 			{
 				connectionSource.close();
 			}
-		}
-
-		// if there is no meta data for this unique device
-		if (part_number == null)
-		{
-			return nullRecord;
 		}
 		
 		// if empty database, return null

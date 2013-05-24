@@ -31,10 +31,9 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import junit.framework.Assert;
 
@@ -54,14 +53,20 @@ public class MetaDeviceDatabaseHandlerTest
 
 
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#writeRecordToDatabase(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#updateRecordInDatabase(MetaDeviceDatabaseRecord)}.
 	 * @throws Exception not testing for this one
 	 */
 	@Test
 	public final void testWriteRecordToDatabase() throws Exception
 	{
-		exception.expect(IllegalArgumentException.class);	// asserts that a IllegalArgumentException is thrown
-		MetaDeviceDatabaseHandler.writeRecordToDatabase(null, null, null, null, null);
+		try
+		{
+			MetaDeviceDatabaseHandler.updateRecordInDatabase(null);			
+		}
+		catch(Exception ex)
+		{
+			Assert.fail("No exception excpected, but caught: " + ex.getMessage());
+		}
 	}
 
 

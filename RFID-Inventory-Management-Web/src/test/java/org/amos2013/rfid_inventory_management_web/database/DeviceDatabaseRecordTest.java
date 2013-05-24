@@ -47,19 +47,19 @@ public class DeviceDatabaseRecordTest
 	public final void testDeviceDatabaseRecordConstructor()
 	{
 		String room = "42.42";
-		String holder = "Musterfrau";
+		String employee = "Musterfrau";
 		int id = 42;
 
-		DeviceDatabaseRecord testRecord = new DeviceDatabaseRecord(id, room, holder);
+		DeviceDatabaseRecord testRecord = new DeviceDatabaseRecord(id, room, employee);
 		
 		assertEquals(room, testRecord.getRoom());
-		assertEquals(holder, testRecord.getHolder());
+		assertEquals(employee, testRecord.getEmployee());
 		assertEquals(id, testRecord.getRFIDId());	
 		
-		assertEquals(null, testRecord.getType());
-		assertEquals(null, testRecord.getCategory());
-		assertEquals(null, testRecord.getManufacturer());
-		assertEquals(null, testRecord.getPlatform());
+		assertEquals("", testRecord.getType());
+		assertEquals("", testRecord.getCategory());
+		assertEquals("", testRecord.getManufacturer());
+		assertEquals("", testRecord.getPlatform());
 	}
 
 }

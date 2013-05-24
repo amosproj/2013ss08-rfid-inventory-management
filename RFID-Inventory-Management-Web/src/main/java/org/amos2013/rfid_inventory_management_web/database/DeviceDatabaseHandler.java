@@ -31,10 +31,10 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -46,23 +46,51 @@ import com.j256.ormlite.table.TableUtils;
 /**
  * This class is used, to access the database
  */
-public class DeviceDatabaseHandler
+public class DeviceDatabaseHandler implements Serializable
 {
+	private static final long serialVersionUID = 160180659812508857L;
+
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 
 	// the class ConfigLoader.java which loads the db-password, is not committed to git
 	private final static String DATABASE_PW = ConfigLoader.getDatabasePassword();
 
 	// Database Access Object, is a handler for reading and writing
-	private static Dao<DeviceDatabaseRecord, Integer> databaseHandlerDao;
+	private Dao<DeviceDatabaseRecord, Integer> databaseHandlerDao;
 
+	private static DeviceDatabaseHandler instance = null;
+	
+	private List<DeviceDatabaseRecord> databaseRecordList = null;
+	
+	/**
+	 * Instantiates a new device database handler. Cannot be called from outside of this class
+	 */
+	private DeviceDatabaseHandler() 
+	{ 
+		databaseRecordList = getDatabaseRecordList();
+	}
+	
+	
+    /**
+     * Gets the single instance of DeviceDatabaseHandler.
+     *
+     * @return single instance of DeviceDatabaseHandler
+     */
+    public static DeviceDatabaseHandler getInstance() 
+    {
+        if (instance == null) 
+        {
+            instance = new DeviceDatabaseHandler();
+        }
+        return instance;
+    }
 	
 	/**
 	 * Creates a database if there is no one existing
 	 * @param connectionSource required for setting up db
 	 * @throws Exception
 	 */
-	private static void setupDatabase(ConnectionSource connectionSource) throws Exception
+	private void setupDatabase(ConnectionSource connectionSource) throws Exception
 	{
 		databaseHandlerDao = DaoManager.createDao(connectionSource, DeviceDatabaseRecord.class);
 	
@@ -87,14 +115,53 @@ public class DeviceDatabaseHandler
 	 * Writes the given strings to the database
 	 * @param rfid_id int to set
 	 * @param room string to set
-	 * @param owner string to set
+	 * @param employee string to set
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when room or owner is null
 	 * @throws Exception when database setup fails
 	 */
-	public static void writeRecordToDatabase(int rfid_id, String room, String owner) throws SQLException, IllegalArgumentException, Exception
+	public void updateCompleteRecordInDatabase(DeviceDatabaseRecord record) throws SQLException, IllegalArgumentException, Exception
 	{
-		if (room == null || owner == null || rfid_id < 0)
+		if (record == null)
+		{
+			throw new IllegalArgumentException("The DeviceDatabaseRecord is null");
+		}
+		
+		ConnectionSource connectionSource = null;
+		try
+		{
+			// create data-source for the database
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// create a database, if non existing
+			setupDatabase(connectionSource);
+			// writes to the database: create if new id, or update if existing
+			databaseHandlerDao.createOrUpdate(record);
+			
+			// also update meta data (MetaDeviceDatabaseRecord)
+			MetaDeviceDatabaseHandler.updateRecordInDatabase(record.getMetaDeviceDatabaseRecord());
+		} 
+		finally
+		{
+			// destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
+	}
+	
+	/**
+	 * Writes the given strings to the database
+	 * @param rfid_id int to set
+	 * @param room string to set
+	 * @param employee string to set
+	 * @throws SQLException when database connection close() fails
+	 * @throws IllegalArgumentException when room or owner is null
+	 * @throws Exception when database setup fails
+	 */
+	public void updateRecordFromAppInDatabase(int rfid_id, String room, String employee) throws SQLException, IllegalArgumentException, Exception
+	{
+		if (room == null || employee == null || rfid_id < 0)
 		{
 			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is invalid (null or below 0)");
 		}
@@ -108,7 +175,7 @@ public class DeviceDatabaseHandler
 			setupDatabase(connectionSource);
 
 			// write the given Strings
-			DeviceDatabaseRecord record = new DeviceDatabaseRecord(rfid_id, room, owner);
+			DeviceDatabaseRecord record = new DeviceDatabaseRecord(rfid_id, room, employee);
 
 			// writes to the database: create if new id, or update if existing
 			databaseHandlerDao.createOrUpdate(record);
@@ -125,6 +192,79 @@ public class DeviceDatabaseHandler
 
 	
 	/**
+	 * Searches and returns all records that match the search string in the specified column.
+	 *
+	 * @param search_input the string fragment that is searched for
+	 * @param search_option the column of the DB-table where the method should search in
+	 * @return a list of the type DeviceDatabaseRecord containing all records, an empty list when nothing was found
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
+	public List<DeviceDatabaseRecord> getRecordsByPartialStringAndColumn(String search_input, String search_option) throws IllegalArgumentException
+	{
+		List<DeviceDatabaseRecord> resultDatabaseRecords = new ArrayList<DeviceDatabaseRecord>();
+		
+		if (search_input == null || search_option == null)
+		{
+			throw new IllegalArgumentException("Search string or option are null");
+		}
+		
+		// loop through all records
+		
+		for (DeviceDatabaseRecord record : databaseRecordList)
+		{
+			if (search_option.equals("type"))
+			{
+				if (record.getType().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("manufacturer"))
+			{
+				if (record.getManufacturer().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("platform"))
+			{
+				if (record.getPlatform().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("room"))
+			{
+				if (record.getRoom().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("inventory_number"))
+			{
+				if (record.getInventory_number().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("employee"))
+			{
+				if (record.getEmployee().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else 
+			{
+				throw new IllegalArgumentException("Invalid search option: " + search_option);
+			}
+		}
+		
+		return resultDatabaseRecords;
+	}
+	
+	
+	/**
 	 * Searches and returns all records that match the search string in the specified column 
 	 * @param search_input the string fragment that is searched for
 	 * @param search_option the column of the DB-table where the method should search in
@@ -132,7 +272,7 @@ public class DeviceDatabaseHandler
 	 * @throws SQLException when error occurs with the database
 	 * @throws IllegalStateException when null or more than one record is returned from the database
 	 */
-	public static List<DeviceDatabaseRecord> getRecordsFromDatabaseByPartialStringAndColumn(String search_input, String search_option) throws IllegalStateException, SQLException
+	public List<DeviceDatabaseRecord> getRecordsFromDatabaseByPartialStringAndColumn(String search_input, String search_option) throws IllegalStateException, SQLException
 	{
 		ConnectionSource connectionSource = null;
 		List<DeviceDatabaseRecord> databaseRecords = null;
@@ -182,12 +322,11 @@ public class DeviceDatabaseHandler
 	 * @return a string containing all records
 	 * @throws SQLException when database connection close fails
 	 */
-	public static List<DeviceDatabaseRecord> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
+	private List<DeviceDatabaseRecord> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		List<DeviceDatabaseRecord> databaseRecords = null;
 		ArrayList<DeviceDatabaseRecord> resultList = new ArrayList<DeviceDatabaseRecord>(); 
-		DeviceDatabaseRecord recordString = null;
 		
 		try
 		{
@@ -201,7 +340,6 @@ public class DeviceDatabaseHandler
 		} 
 		catch (Exception e)
 		{
-			resultList.add(recordString);
 			return resultList;
 		} 
 		finally
@@ -213,20 +351,19 @@ public class DeviceDatabaseHandler
 			}
 		}
 
-		// if empty database, add 'empty' and return
+		// if empty database, and return empty list
 		if (databaseRecords == null)
 		{
-			resultList.add(recordString);
 			return resultList;
 		}
 
-		// add string for record to result list
+		// connect with meta data
 		for (DeviceDatabaseRecord record : databaseRecords)
 		{
-			resultList.add(record);
+			record.setMetaDeviceDatabaseRecord();
 		}
 		
-		return resultList;
+		return databaseRecords;
 	}
 	
 	
@@ -237,7 +374,7 @@ public class DeviceDatabaseHandler
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when null is passed as argument
 	 */
-	public static void deleteRecordFromDatabase(DeviceDatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
+	public void deleteRecordFromDatabase(DeviceDatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		
@@ -268,5 +405,24 @@ public class DeviceDatabaseHandler
 				connectionSource.close();
 			}
 		}
+	}
+
+
+	/**
+	 * Pulls and returns the database record list.
+	 *
+	 * @return the database record list
+	 */
+	public List<DeviceDatabaseRecord> getDatabaseRecordList()
+	{
+		try
+		{
+			databaseRecordList = getRecordsFromDatabase();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return databaseRecordList;
 	}
 }

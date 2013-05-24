@@ -42,8 +42,8 @@
 	    	<table>
 	    		<tr>
 	    			<td><form action="/admin"><input type="submit" value="Main List"></form></td>
-	    			<td><form action="/employeeAdmin"><input type="submit" value="Employee List"></form></td>
-	   				<td><form action="/roomAdmin"><input type="submit" value="Room List"></form></td>
+	    			<td><form action="/admin/employee"><input type="submit" value="Employee List"></form></td>
+	   				<td><form action="/admin/room"><input type="submit" value="Room List"></form></td>
 	   			 </tr>
 	   		 </table>
 	   		 <hr />
@@ -65,7 +65,7 @@
 						<tr>
 							<th>RFID-Id</th>
 							<th>Room</th>
-							<th>Holder</th>
+							<th>Employee</th>
 							<th>Part Number</th>
 							<th>Type</th>
 							<th>Category</th>
@@ -82,7 +82,7 @@
 					 		<tr>
 					 			<td><span wicket:id="recordRFIDIdLabel" /></td>	
 						 		<td><span wicket:id="recordRoomLabel" /></td>
-				 				<td><span wicket:id="recordHolderLabel" /></td>
+				 				<td><span wicket:id="recordEmployeeLabel" /></td>
 				 				<td><span wicket:id="recordPartNumberLabel" /></td>
 				 				
 				 				<td><span wicket:id="recordTypeLabel" /></td>

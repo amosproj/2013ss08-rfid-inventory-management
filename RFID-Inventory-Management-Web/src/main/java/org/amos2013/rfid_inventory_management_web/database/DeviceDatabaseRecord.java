@@ -39,21 +39,23 @@ import com.j256.ormlite.table.DatabaseTable;
 import org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler;
 
 /**
- * This class defines the structure (the columns) of the database
+ * This class defines the structure (the columns) of the database.
  */
 @DatabaseTable(tableName = "deviceTable")
 public class DeviceDatabaseRecord implements Serializable
 {
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 3718871095899325629L;
 	
-	MetaDeviceDatabaseRecord record = null;
+	/** The meta device database record. */
+	private MetaDeviceDatabaseRecord metaDeviceDatabaseRecord = null;
 
 	// for QueryBuilder to be able to find the columns
 	/** The Constant ROOM_COLUMN. */
 	public static final String ROOM_COLUMN = "room";
 	
-	/** The Constant HOLDER_COLUMN. */
-	public static final String HOLDER_COLUMN = "holder";
+	/** The Constant EMPLOYEE_COLUMN. */
+	public static final String EMPLOYEE_COLUMN = "employee";
 	
 	/** The Constant RFID_ID_COLUMN. */
 	public static final String RFID_ID_COLUMN = "rfid_id";
@@ -75,73 +77,127 @@ public class DeviceDatabaseRecord implements Serializable
 
 	
 	// Columns definition:
+	/** The rfid_id. */
 	@DatabaseField(columnName = RFID_ID_COLUMN, canBeNull = false, id = true)	// primary key
 	private int rfid_id;
 
+	/** The room. */
 	@DatabaseField(columnName = ROOM_COLUMN, canBeNull = false)
 	private String room;
 
-	@DatabaseField(columnName = HOLDER_COLUMN)
-	private String holder;
+	/** The employee. */
+	@DatabaseField(columnName = EMPLOYEE_COLUMN)
+	private String employee;
 	
+	/** The part_number. */
 	@DatabaseField(columnName = PART_NUMBER_COLUMN)
 	private String part_number;
 	
+	/** The serial_number. */
 	@DatabaseField(columnName = SERIAL_NUMBER_COLUMN)
 	private String serial_number;
 	
+	/** The inventory_number. */
 	@DatabaseField(columnName = INVENTORY_NUMBER_COLUMN)
 	private String inventory_number;
 	
+	/** The owner. */
 	@DatabaseField(columnName = OWNER_COLUMN)
 	private String owner;
 	
+	/** The comment. */
 	@DatabaseField(columnName = COMMENT_COLUMN)
 	private String comment;
 	
 	/**
-	 * Default constructor (empty)
-	 *
+	 * Default constructor (empty).
 	 */
 	public DeviceDatabaseRecord()
 	{
 		// gets the corresponding meta data record from the other table in order to be able to access them in this class via the getters and setters
-		try
-		{
-			record = MetaDeviceDatabaseHandler.getRecordFromDatabaseByPartNumber(part_number);
-		} catch (IllegalStateException e)
-		{
-			e.printStackTrace();
-		} catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+		setMetaDeviceDatabaseRecord();
 	}
-
+	
 	/**
 	 * Constructor for creating a new database record.
 	 *
 	 * @param rfid_id the rfid_id
 	 * @param room the room
-	 * @param holder the holder
+	 * @param employee the holder
 	 */
-	public DeviceDatabaseRecord(int rfid_id, String room, String holder)
+	public DeviceDatabaseRecord(int rfid_id, String room, String employee)
 	{
 		this.rfid_id = rfid_id;
 		this.room = room;
-		this.holder = holder;
+		this.employee = employee;
+		this.part_number = "";
+		this.serial_number = "";
+		this.inventory_number = "";
+		this.owner = "";
+		this.comment = "";
 		
 		// gets the corresponding meta data record from the other table in order to be able to access them in this class via the getters and setters
+		setMetaDeviceDatabaseRecord();
+	}
+
+
+	/**
+	 * Instantiates a new device database record.
+	 *
+	 * @param rfid_id the rfid_id
+	 * @param room the room
+	 * @param employee the employee
+	 * @param part_number the part_number
+	 * @param serial_number the serial_number
+	 * @param inventory_number the inventory_number
+	 * @param owner the owner
+	 * @param comment the comment
+	 */
+	public DeviceDatabaseRecord(int rfid_id, String room, String employee, String part_number, String serial_number, String inventory_number, String owner, String comment)
+	{
+		this.rfid_id = rfid_id;
+		this.room = room;
+		this.employee = employee;
+		this.part_number = part_number;
+		this.serial_number = serial_number;
+		this.inventory_number = inventory_number;
+		this.owner = owner;
+		this.comment = comment;
+		
+		// gets the corresponding meta data record from the other table in order to be able to access them in this class via the getters and setters
+		setMetaDeviceDatabaseRecord();
+	}
+	
+	public void setMetaDeviceDatabaseRecord()
+	{
+		if (part_number.isEmpty())
+		{
+			System.out.println("partnumber is empty");
+			return;
+		}
+		
 		try
 		{
-			record = MetaDeviceDatabaseHandler.getRecordFromDatabaseByPartNumber(part_number);
-		} catch (IllegalStateException e)
-		{
-			e.printStackTrace();
-		} catch (SQLException e)
+			metaDeviceDatabaseRecord = MetaDeviceDatabaseHandler.getRecordFromDatabaseByPartNumber(part_number);
+		}
+		catch (IllegalStateException e)
 		{
 			e.printStackTrace();
 		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Gets the meta device database record.
+	 *
+	 * @return the meta device database record
+	 */
+	public MetaDeviceDatabaseRecord getMetaDeviceDatabaseRecord()
+	{
+		return metaDeviceDatabaseRecord;
 	}
 	
 	/**
@@ -150,20 +206,21 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getType()
 	{
-		if (record == null)
+		if (metaDeviceDatabaseRecord == null)
 		{
-			return null;
+			return "";
 		} 
-		else return record.getType();
+		else return metaDeviceDatabaseRecord.getType();
 	}
 
 	/**
-	 * Sets the type
+	 * Sets the type.
+	 *
 	 * @param type Type to be set
 	 */
 	public void setType(String type)
 	{
-		record.setType(type);
+		metaDeviceDatabaseRecord.setType(type);
 	}
 	
 	/**
@@ -172,20 +229,21 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getCategory()
 	{
-		if (record == null)
+		if (metaDeviceDatabaseRecord == null)
 		{
-			return null;
+			return "";
 		} 
-		else return record.getCategory();
+		else return metaDeviceDatabaseRecord.getCategory();
 	}
 
 	/**
-	 * Sets the category
+	 * Sets the category.
+	 *
 	 * @param category Category to be set
 	 */
 	public void setCategory(String category)
 	{
-		record.setCategory(category);
+		metaDeviceDatabaseRecord.setCategory(category);
 	}
 	
 	/**
@@ -194,20 +252,21 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getManufacturer()
 	{
-		if (record == null)
+		if (metaDeviceDatabaseRecord == null)
 		{
-			return null;
+			return "";
 		} 
-		else return record.getManufacturer();
+		else return metaDeviceDatabaseRecord.getManufacturer();
 	}
 
 	/**
-	 * Sets the manufacturer
+	 * Sets the manufacturer.
+	 *
 	 * @param manufacturer Manufacturer to be set
 	 */
 	public void setManufacturer(String manufacturer)
 	{
-		record.setManufacturer(manufacturer);
+		metaDeviceDatabaseRecord.setManufacturer(manufacturer);
 	}
 	
 	/**
@@ -216,20 +275,21 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getPlatform()
 	{
-		if (record == null)
+		if (metaDeviceDatabaseRecord == null)
 		{
-			return null;
+			return "";
 		} 
-		else return record.getPlatform();
+		else return metaDeviceDatabaseRecord.getPlatform();
 	}
 
 	/**
-	 * Sets the platform
+	 * Sets the platform.
+	 *
 	 * @param platform Platform to be set
 	 */
 	public void setPlatform(String platform)
 	{
-		record.setPlatform(platform);
+		metaDeviceDatabaseRecord.setPlatform(platform);
 	}
 	
 	/**
@@ -242,7 +302,8 @@ public class DeviceDatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Sets the part number
+	 * Sets the part number.
+	 *
 	 * @param part_number Part number to be set
 	 */
 	public void setPart_number(String part_number)
@@ -260,7 +321,8 @@ public class DeviceDatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Sets the serial number
+	 * Sets the serial number.
+	 *
 	 * @param serial_number Serial number to be set
 	 */
 	public void setSerial_number(String serial_number)
@@ -278,7 +340,8 @@ public class DeviceDatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Sets the inventory number
+	 * Sets the inventory number.
+	 *
 	 * @param inventory_number Inventory number to be set
 	 */
 	public void setInventory_number(String inventory_number)
@@ -296,7 +359,8 @@ public class DeviceDatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Sets the owner
+	 * Sets the owner.
+	 *
 	 * @param owner Owner to be set
 	 */
 	public void setOwner(String owner)
@@ -314,7 +378,8 @@ public class DeviceDatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Sets the comment
+	 * Sets the comment.
+	 *
 	 * @param comment Comment to be set
 	 */
 	public void setComment(String comment)
@@ -332,7 +397,8 @@ public class DeviceDatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Sets the RFID Id
+	 * Sets the RFID Id.
+	 *
 	 * @param rfid_id Id to be set
 	 */
 	public void setRFIDId(int rfid_id)
@@ -350,7 +416,8 @@ public class DeviceDatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Sets the room
+	 * Sets the room.
+	 *
 	 * @param room Room to be set
 	 */
 	public void setRoom(String room)
@@ -359,25 +426,28 @@ public class DeviceDatabaseRecord implements Serializable
 	}
 
 	/**
-	 * Gets the current holder of the device.
-	 * @return the holder
+	 * Gets the current employee of the device.
+	 * @return the employee
 	 */
-	public String getHolder()
+	public String getEmployee()
 	{
-		return holder;
+		return employee;
 	}
 
 	/**
-	 * Sets the current holder of the device
-	 * @param holder Holder to be set
+	 * Sets the current employee of the device.
+	 *
+	 * @param employee Employee to be set
 	 */
-	public void setHolder(String holder)
+	public void setEmployee(String employee)
 	{
-		this.holder = holder;
+		this.employee = employee;
 	}
 
 	/**
-	 * Compares two Objects
+	 * Compares two Objects.
+	 *
+	 * @param other the other
 	 * @return true if equal, false else
 	 */
 	@Override
@@ -387,6 +457,6 @@ public class DeviceDatabaseRecord implements Serializable
 		{
 			return false;
 		}
-		return room.equals(((DeviceDatabaseRecord) other).room);
+		return rfid_id == ((DeviceDatabaseRecord) other).rfid_id;
 	}
 }
