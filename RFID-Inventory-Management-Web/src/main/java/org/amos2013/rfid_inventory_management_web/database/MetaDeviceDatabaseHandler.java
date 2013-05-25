@@ -131,7 +131,7 @@ public class MetaDeviceDatabaseHandler implements Serializable
 		ConnectionSource connectionSource = null;
 		List<MetaDeviceDatabaseRecord> recordList = null;
 
-		if (part_number == null || part_number == "")
+		if (part_number == null || part_number.equals("") || part_number.isEmpty())
 		{
 			return null;
 		}

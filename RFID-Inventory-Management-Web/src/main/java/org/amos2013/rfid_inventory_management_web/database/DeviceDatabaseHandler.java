@@ -340,6 +340,7 @@ public class DeviceDatabaseHandler implements Serializable
 		} 
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			return resultList;
 		} 
 		finally

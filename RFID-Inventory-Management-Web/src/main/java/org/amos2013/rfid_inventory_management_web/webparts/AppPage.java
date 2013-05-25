@@ -31,7 +31,6 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
-
 import org.apache.wicket.markup.html.WebPage;
 
 /**

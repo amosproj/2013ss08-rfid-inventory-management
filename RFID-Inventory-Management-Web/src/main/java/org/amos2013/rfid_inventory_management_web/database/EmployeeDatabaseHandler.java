@@ -31,6 +31,7 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,10 @@ import com.j256.ormlite.table.TableUtils;
 /**
  * This class is used, to access the database
  */
-public class EmployeeDatabaseHandler
+public class EmployeeDatabaseHandler implements Serializable
 {
+	private static final long serialVersionUID = -3925844787079790106L;
+
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 
 	// the class ConfigLoader.java which loads the db-password, is not committed to git

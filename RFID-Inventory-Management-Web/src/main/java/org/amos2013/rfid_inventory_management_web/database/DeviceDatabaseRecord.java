@@ -114,7 +114,8 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public DeviceDatabaseRecord()
 	{
-		// gets the corresponding meta data record from the other table in order to be able to access them in this class via the getters and setters
+		// gets the corresponding meta data record from the other table in order to be able to access them 
+		// in this class via the getters and setters
 		setMetaDeviceDatabaseRecord();
 	}
 	
@@ -136,7 +137,8 @@ public class DeviceDatabaseRecord implements Serializable
 		this.owner = "";
 		this.comment = "";
 		
-		// gets the corresponding meta data record from the other table in order to be able to access them in this class via the getters and setters
+		// gets the corresponding meta data record from the other table in order to be able to access them 
+		// in this class via the getters and setters
 		setMetaDeviceDatabaseRecord();
 	}
 
@@ -164,18 +166,18 @@ public class DeviceDatabaseRecord implements Serializable
 		this.owner = owner;
 		this.comment = comment;
 		
-		// gets the corresponding meta data record from the other table in order to be able to access them in this class via the getters and setters
+		// gets the corresponding meta data record from the other table in order to be able to access them 
+		// in this class via the getters and setters
 		setMetaDeviceDatabaseRecord();
 	}
 	
-	public void setMetaDeviceDatabaseRecord()
+	
+	/**
+	 * Sets the meta device database record after getting it from the database.
+	 */
+	public void setMetaDeviceDatabaseRecord() 
 	{
-		if (part_number.isEmpty())
-		{
-			System.out.println("partnumber is empty");
-			return;
-		}
-		
+		// TODO save MetaDeviceDatabaseHandler objects in local list. don not connect to database for every DeviceDatabaseRecord
 		try
 		{
 			metaDeviceDatabaseRecord = MetaDeviceDatabaseHandler.getRecordFromDatabaseByPartNumber(part_number);

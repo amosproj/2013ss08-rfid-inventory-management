@@ -37,8 +37,8 @@ import java.io.IOException;
  * This class defines a sub-website from MainPage, which creates a Form to administrate
  * data in the database.
  */
-public class AdminPage extends MainPage {
-	
+public class AdminPage extends MainPage 
+{	
 	private static final long serialVersionUID = 931941446133830339L;
 
 	/**
