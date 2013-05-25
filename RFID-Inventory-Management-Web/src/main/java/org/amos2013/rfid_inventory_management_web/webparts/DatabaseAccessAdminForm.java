@@ -92,6 +92,29 @@ public class DatabaseAccessAdminForm extends Form<Object>
 				throw new RestartResponseAtInterceptPageException(AdminPage.class);
 			}
 		
+			// keep the dropdown menu choice selected
+			// get search type
+			if (search_option.equals("inventory_number"))
+			{
+				selectedSearchOption = "Inventory Number";
+			}
+			else if (search_option.equals("manufacturer"))
+			{
+				selectedSearchOption = "Manufacturer";
+			}
+			else if (search_option.equals("type"))
+			{
+				selectedSearchOption = "Type";
+			}
+			else if (search_option.equals("platform"))
+			{
+				selectedSearchOption = "Platform";
+			}
+			else if (search_option.equals("room"))
+			{
+				selectedSearchOption = "Room";
+			}
+			
 			// search for the string in the specified column
 			try
 			{
@@ -131,15 +154,15 @@ public class DatabaseAccessAdminForm extends Form<Object>
 				item.add(new Label("recordRFIDIdLabel", record.getRFIDId()));
 				item.add(new Label("recordRoomLabel", record.getRoom()));
 				item.add(new Label("recordEmployeeLabel", record.getEmployee()));
-				item.add(new Label("recordPartNumberLabel", record.getPart_number()));
+				item.add(new Label("recordPartNumberLabel", record.getPartNumber()));
 				
 				item.add(new Label("recordTypeLabel", record.getType()));
 				item.add(new Label("recordCategoryLabel", record.getCategory()));
 				item.add(new Label("recordManufacturerLabel", record.getManufacturer()));
 				item.add(new Label("recordPlatformLabel", record.getPlatform()));
 				
-				item.add(new Label("recordSerialNumberLabel", record.getSerial_number()));
-				item.add(new Label("recordInventoryNumberLabel", record.getInventory_number()));
+				item.add(new Label("recordSerialNumberLabel", record.getSerialNumber()));
+				item.add(new Label("recordInventoryNumberLabel", record.getInventoryNumber()));
 				item.add(new Label("recordOwnerLabel", record.getOwner()));
 				item.add(new Label("recordCommentLabel", record.getComment()));			
 				
@@ -153,6 +176,8 @@ public class DatabaseAccessAdminForm extends Form<Object>
 						// call to delete the product
 						try
 						{
+							DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
+							// getInstance() has to be called here again, to avoid NotSerializableExceptions 
 							deviceDatabaseHandler.deleteRecordFromDatabase(record);
 						} 
 						catch (Exception e)

@@ -32,26 +32,17 @@
 package org.amos2013.rfid_inventory_management_web.database;
 
 import static org.junit.Assert.assertNull;
-
-import java.sql.SQLException;
-
 import junit.framework.Assert;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  * Unit test for {@link MetaDeviceDatabaseHandler} class
  */
 public class MetaDeviceDatabaseHandlerTest
 {
-
-	/** The expected exception. */
-	@Rule
-	public ExpectedException exception = ExpectedException.none();
-
-
+	private MetaDeviceDatabaseHandler metaDeviceDatabaseHandler = MetaDeviceDatabaseHandler.getInstance();
+	
 	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#updateRecordInDatabase(MetaDeviceDatabaseRecord)}.
 	 * @throws Exception not testing for this one
@@ -61,7 +52,7 @@ public class MetaDeviceDatabaseHandlerTest
 	{
 		try
 		{
-			MetaDeviceDatabaseHandler.updateRecordInDatabase(null);			
+			metaDeviceDatabaseHandler.updateRecordInDatabase(null);			
 		}
 		catch(Exception ex)
 		{
@@ -70,21 +61,18 @@ public class MetaDeviceDatabaseHandlerTest
 	}
 
 
-
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#getRecordFromDatabaseByPartNumber(java.lang.String)}.
-	 * @throws SQLException can be thrown
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#getRecordByPartNumber(java.lang.String)}.
 	 * @throws IllegalStateException is expected
 	 */
 	@Test
-	public final void testgetRecordFromDatabaseByPartNumber() throws IllegalStateException, SQLException
+	public final void testgetRecordByPartNumber() throws IllegalStateException
 	{
-		MetaDeviceDatabaseRecord resultList = null;
+		MetaDeviceDatabaseRecord resultRecord = null;
 
-		exception.expect(IllegalStateException.class);
-		resultList = MetaDeviceDatabaseHandler.getRecordFromDatabaseByPartNumber("-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+		resultRecord = metaDeviceDatabaseHandler.getRecordByPartNumber("");
 
-		assertNull(resultList);
+		assertNull(resultRecord);
 	}
 
 }

@@ -32,11 +32,9 @@
 package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler;
 
 /**
  * This class defines the structure (the columns) of the database.
@@ -173,20 +171,16 @@ public class DeviceDatabaseRecord implements Serializable
 	
 	
 	/**
-	 * Sets the meta device database record after getting it from the database.
+	 * Sets the meta device database record from the local list
 	 */
 	public void setMetaDeviceDatabaseRecord() 
 	{
-		// TODO save MetaDeviceDatabaseHandler objects in local list. don not connect to database for every DeviceDatabaseRecord
 		try
 		{
-			metaDeviceDatabaseRecord = MetaDeviceDatabaseHandler.getRecordFromDatabaseByPartNumber(part_number);
+			MetaDeviceDatabaseHandler metaDeviceDatabaseHandler = MetaDeviceDatabaseHandler.getInstance();
+			metaDeviceDatabaseRecord = metaDeviceDatabaseHandler.getRecordByPartNumber(part_number);
 		}
 		catch (IllegalStateException e)
-		{
-			e.printStackTrace();
-		}
-		catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
@@ -298,7 +292,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 * Gets the part number.
 	 * @return the part number
 	 */
-	public String getPart_number()
+	public String getPartNumber()
 	{
 		return part_number;
 	}
@@ -308,7 +302,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 *
 	 * @param part_number Part number to be set
 	 */
-	public void setPart_number(String part_number)
+	public void setPartNumber(String part_number)
 	{
 		this.part_number = part_number;
 	}
@@ -317,7 +311,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 * Gets the serial number.
 	 * @return the serial number
 	 */
-	public String getSerial_number()
+	public String getSerialNumber()
 	{
 		return serial_number;
 	}
@@ -327,7 +321,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 *
 	 * @param serial_number Serial number to be set
 	 */
-	public void setSerial_number(String serial_number)
+	public void setSerialNumber(String serial_number)
 	{
 		this.serial_number = serial_number;
 	}
@@ -336,7 +330,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 * Gets the inventory number.
 	 * @return the inventory number
 	 */
-	public String getInventory_number()
+	public String getInventoryNumber()
 	{
 		return inventory_number;
 	}
@@ -346,7 +340,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 *
 	 * @param inventory_number Inventory number to be set
 	 */
-	public void setInventory_number(String inventory_number)
+	public void setInventoryNumber(String inventory_number)
 	{
 		this.inventory_number = inventory_number;
 	}

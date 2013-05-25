@@ -87,23 +87,22 @@ public class DeviceDatabaseHandlerTest
 	
 
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsFromDatabaseByPartialStringAndColumn(String, String)}.
-	 * @throws SQLException can be thrown
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsByPartialStringAndColumn(String, String)}.
 	 * @throws IllegalStateException is expected
 	 */
 	@Test
-	public final void testGetRecordsFromDatabaseByPartialStringAndColumn() throws IllegalStateException, SQLException
+	public final void testGetRecordsByPartialStringAndColumn() throws IllegalStateException
 	{	
 		List<DeviceDatabaseRecord> resultList = null;
 
 		exception.expect(IllegalArgumentException.class);
-		deviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn("search", "option123456");
+		deviceDatabaseHandler.getRecordsByPartialStringAndColumn("search", "option123456");
 	    
 		try
 	    {
-	    	deviceDatabaseHandler.getRecordsFromDatabaseByPartialStringAndColumn("search", "employee");
+	    	deviceDatabaseHandler.getRecordsByPartialStringAndColumn("search", "employee");
 	    }
-	    catch (Exception ex)
+	    catch (IllegalArgumentException ex)
 	    {
 	        Assert.fail("Expected no exception, but got: " + ex.getMessage());
 	    }

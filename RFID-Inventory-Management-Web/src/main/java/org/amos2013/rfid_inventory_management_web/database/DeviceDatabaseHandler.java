@@ -39,7 +39,6 @@ import java.util.List;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -62,6 +61,9 @@ public class DeviceDatabaseHandler implements Serializable
 	
 	private List<DeviceDatabaseRecord> databaseRecordList = null;
 	
+	private MetaDeviceDatabaseHandler metaDeviceDatabaseHandler = MetaDeviceDatabaseHandler.getInstance();
+	
+	
 	/**
 	 * Instantiates a new device database handler. Cannot be called from outside of this class
 	 */
@@ -82,6 +84,7 @@ public class DeviceDatabaseHandler implements Serializable
         {
             instance = new DeviceDatabaseHandler();
         }
+        
         return instance;
     }
 	
@@ -138,7 +141,7 @@ public class DeviceDatabaseHandler implements Serializable
 			databaseHandlerDao.createOrUpdate(record);
 			
 			// also update meta data (MetaDeviceDatabaseRecord)
-			MetaDeviceDatabaseHandler.updateRecordInDatabase(record.getMetaDeviceDatabaseRecord());
+			metaDeviceDatabaseHandler.updateRecordInDatabase(record.getMetaDeviceDatabaseRecord());
 		} 
 		finally
 		{
@@ -242,7 +245,7 @@ public class DeviceDatabaseHandler implements Serializable
 			}
 			else if (search_option.equals("inventory_number"))
 			{
-				if (record.getInventory_number().contains(search_input) == true)
+				if (record.getInventoryNumber().contains(search_input) == true)
 				{
 					resultDatabaseRecords.add(record);
 				}
@@ -272,7 +275,7 @@ public class DeviceDatabaseHandler implements Serializable
 	 * @throws SQLException when error occurs with the database
 	 * @throws IllegalStateException when null or more than one record is returned from the database
 	 */
-	public List<DeviceDatabaseRecord> getRecordsFromDatabaseByPartialStringAndColumn(String search_input, String search_option) throws IllegalStateException, SQLException
+	/*public List<DeviceDatabaseRecord> getRecordsFromDatabaseByPartialStringAndColumn(String search_input, String search_option) throws IllegalStateException, SQLException
 	{
 		ConnectionSource connectionSource = null;
 		List<DeviceDatabaseRecord> databaseRecords = null;
@@ -315,7 +318,7 @@ public class DeviceDatabaseHandler implements Serializable
 				
 		return databaseRecords;
 	}
-	
+	*/
 	
 	/**
 	 * Loops through one table of the database and reads the content 
@@ -424,6 +427,7 @@ public class DeviceDatabaseHandler implements Serializable
 		{
 			e.printStackTrace();
 		}
+		
 		return databaseRecordList;
 	}
 }

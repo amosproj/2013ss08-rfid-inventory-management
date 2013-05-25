@@ -37,7 +37,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * This class defines the structure (the columns) of the database
+ * This class defines the structure (the columns) of the database of the device meta data
  */
 @DatabaseTable(tableName = "metaDeviceTable")
 public class MetaDeviceDatabaseRecord implements Serializable
@@ -114,7 +114,7 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 * Gets the part number.
 	 * @return the part number
 	 */
-	public String getPart_number()
+	public String getPartNumber()
 	{
 		return part_number;
 	}
@@ -123,7 +123,7 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 * Sets the part number
 	 * @param part_number Part number to be set
 	 */
-	public void setPart_number(String part_number)
+	public void setPartNumber(String part_number)
 	{
 		this.part_number = part_number;
 	}

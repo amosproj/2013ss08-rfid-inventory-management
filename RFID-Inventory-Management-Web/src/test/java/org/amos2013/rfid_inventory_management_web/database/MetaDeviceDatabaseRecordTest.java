@@ -56,7 +56,7 @@ public class MetaDeviceDatabaseRecordTest
 
 		assertEquals(category, testRecord.getCategory());
 		assertEquals(type, testRecord.getType());
-		assertEquals(part_number, testRecord.getPart_number());
+		assertEquals(part_number, testRecord.getPartNumber());
 		assertEquals(manufacturer, testRecord.getManufacturer());
 		assertEquals(platform, testRecord.getPlatform());
 
