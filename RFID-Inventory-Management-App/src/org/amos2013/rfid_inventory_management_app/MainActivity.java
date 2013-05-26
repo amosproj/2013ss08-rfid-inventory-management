@@ -63,7 +63,7 @@ public class MainActivity extends Activity
 	    // clicked links will be opened inside the WebView (default: default browser)
 	    proj8WebView.setWebViewClient(new WebViewClient());
 	    
-	    proj8WebView.loadUrl("http://proj8.ss13.osramos.de/");
+	    proj8WebView.loadUrl("http://proj8.ss13.osramos.de/app/");
 	}
 
 	@Override
