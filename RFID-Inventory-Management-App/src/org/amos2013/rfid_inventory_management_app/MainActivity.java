@@ -34,6 +34,7 @@ package org.amos2013.rfid_inventory_management_app;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.Window;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -52,13 +53,13 @@ public class MainActivity extends Activity
 		
 		WebView proj8WebView = (WebView) findViewById(R.id.webView);
 		WebSettings webSettings = proj8WebView.getSettings();
-		webSettings.setJavaScriptEnabled(true);
+		webSettings.setJavaScriptEnabled(false);
 	    webSettings.setSupportZoom(true);
 	    webSettings.setBuiltInZoomControls(true);
-	    webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
-	    webSettings.setLoadWithOverviewMode(true);
-	    webSettings.setUseWideViewPort(true);
-	    
+	    webSettings.setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+	    webSettings.setLoadWithOverviewMode(false);
+	    webSettings.setUseWideViewPort(false);
+	    	    
 	    // clicked links will be opened inside the WebView (default: default browser)
 	    proj8WebView.setWebViewClient(new WebViewClient());
 	    
