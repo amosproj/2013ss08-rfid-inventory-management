@@ -42,7 +42,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "roomTable")
 public class RoomDatabaseRecord implements Serializable
 {
-	private static final long serialVersionUID = 3718871095899325629L;
+	private static final long serialVersionUID = 5166471722564952682L;
 
 	// for QueryBuilder to be able to find the columns
 	/** The Constant NAME_COLUMN. */

@@ -80,7 +80,6 @@ public class RoomDatabaseHandler
 		}
 	}
 
-
 	/**
 	 * Loops through one table of the database and reads the content
 	 * @param	location	a string which filters the results after their location
@@ -122,6 +121,97 @@ public class RoomDatabaseHandler
 		}
 
 		return resultList;
+	}
+	
+	/**
+	 * Loops through one table of the database and reads the content 
+	 * @return a string containing all records of roomTable
+	 * @throws SQLException when database connection close fails
+	 */
+	private List<String> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
+	{
+		ConnectionSource connectionSource = null;
+		List<RoomDatabaseRecord> databaseRecords = null;
+		ArrayList<String> resultList = new ArrayList<String>(); 
+		
+		try
+		{
+			// create our data-source for the database (url, user, pwd)
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// setup our database and DAOs
+			databaseHandlerDao = DaoManager.createDao(connectionSource, RoomDatabaseRecord.class);
+
+			// read database records
+			databaseRecords = databaseHandlerDao.queryForAll();
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return resultList;
+		} 
+		finally
+		{
+			// always destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
+
+		// if empty database, and return empty list
+		if (databaseRecords == null)
+		{
+			return resultList;
+		}
+
+		// connect with meta data
+		for (RoomDatabaseRecord record : databaseRecords)
+		{
+			resultList.add(record.getName());
+			resultList.add(record.getLocation());
+		}
+		
+		return resultList;
+	}
+	
+	/**
+	 * Deletes a given row of the RoomTable.
+	 *
+	 * @param record the record
+	 * @throws SQLException when database connection close() fails
+	 * @throws IllegalArgumentException when null is passed as argument
+	 */
+	public void deleteRecordFromDatabase(RoomDatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
+	{
+		ConnectionSource connectionSource = null;
+		
+		if (record == null)
+		{
+			throw new IllegalArgumentException("Parameter for deleteRecordFromDatabase is null.");
+		}
+		
+		try
+		{
+			// create our data-source for the database (url, user, pwd)
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// setup our database and DAOs
+			databaseHandlerDao = DaoManager.createDao(connectionSource, RoomDatabaseRecord.class);
+
+			// delete given database record
+			databaseHandlerDao.delete(record);
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		} 
+		finally
+		{
+			// always destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
 	}
 }
 

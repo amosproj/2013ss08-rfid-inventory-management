@@ -42,7 +42,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "employeeTable")
 public class EmployeeDatabaseRecord implements Serializable
 {
-	private static final long serialVersionUID = 3718871095899325629L;
+	private static final long serialVersionUID = -870148513121806225L;
 
 	// for QueryBuilder to be able to find the columns
 	/** The Constant NAME_COLUMN. */

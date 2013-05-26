@@ -50,7 +50,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
- * Form that is displayed on the website. Used for reading and written data from/ to the database
+ * Form that is displayed on the website. Used for reading and writing data from/ to the database
  */
 public class DatabaseAccessAdminForm extends Form<Object>
 {
