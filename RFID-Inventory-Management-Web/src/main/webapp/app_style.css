@@ -1,13 +1,13 @@
 body, p, li, a { font-family: georgia, times, serif;font-size:13pt;}
 h1, h2, h3 { font-family: Verdana, arial, serif; }
-body { margin:0;padding:0;background-color:#fff; zoom: 125%;}
+body { margin:0;padding:0;background-color:#fff;}
 #bd {
 	width : 350px;
 	height: auto;
 	margin: 0 auto;
 	padding: 25px 50px 0 50px;
 }
-body { margin-top : 0; padding-top : 0; zoom: 125%;}
+body { margin-top : 0; padding-top : 0;}
 #bd {
 	position : absolute;
 	top : 50%;
