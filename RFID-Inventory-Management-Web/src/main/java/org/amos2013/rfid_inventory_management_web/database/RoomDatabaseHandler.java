@@ -128,11 +128,13 @@ public class RoomDatabaseHandler
 	 * @return a string containing all records of roomTable
 	 * @throws SQLException when database connection close fails
 	 */
-	private List<String> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
+//	public static List<String> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
+	public static List<RoomDatabaseRecord> getRecordsFromDatabase() throws SQLException
 	{
 		ConnectionSource connectionSource = null;
 		List<RoomDatabaseRecord> databaseRecords = null;
-		ArrayList<String> resultList = new ArrayList<String>(); 
+//		ArrayList<String> resultList = new ArrayList<String>(); 
+		ArrayList<RoomDatabaseRecord> resultList = new ArrayList<RoomDatabaseRecord>(); 
 		
 		try
 		{
@@ -165,13 +167,15 @@ public class RoomDatabaseHandler
 		}
 
 		// connect with meta data
-		for (RoomDatabaseRecord record : databaseRecords)
-		{
-			resultList.add(record.getName());
-			resultList.add(record.getLocation());
-		}
+//		for (RoomDatabaseRecord record : databaseRecords)
+//		{
+//			resultList.add(record.getName());
+//			resultList.add(record.getLocation());
+//		}
 		
-		return resultList;
+		//return resultList;
+		return databaseRecords; 
+		
 	}
 	
 	/**
@@ -181,7 +185,7 @@ public class RoomDatabaseHandler
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when null is passed as argument
 	 */
-	public void deleteRecordFromDatabase(RoomDatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
+	public static void deleteRecordFromDatabase(RoomDatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		
