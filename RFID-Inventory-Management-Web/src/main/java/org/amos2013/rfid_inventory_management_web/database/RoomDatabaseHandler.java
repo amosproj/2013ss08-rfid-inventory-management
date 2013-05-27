@@ -217,5 +217,39 @@ public class RoomDatabaseHandler
 			}
 		}
 	}
+	
+	/**
+	 * Writes the given strings to the database
+	 * @param record the target record
+	 * @throws SQLException when database connection close() fails
+	 * @throws IllegalArgumentException when room or owner is null
+	 * @throws Exception when database setup fails
+	 */
+	public static void updateRecordInDatabase(RoomDatabaseRecord record) throws SQLException, IllegalArgumentException, Exception
+	{
+		if (record == null)
+		{
+			throw new IllegalArgumentException("The RoomDatabaseRecord is null");
+		}
+		
+		ConnectionSource connectionSource = null;
+		try
+		{
+			// create data-source for the database
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// create a database, if non existing
+			setupDatabase(connectionSource);
+			// writes to the database: create if new id, or update if existing
+			databaseHandlerDao.createOrUpdate(record);
+		} 
+		finally
+		{
+			// destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
+	}
 }
 

@@ -113,7 +113,7 @@ public class DatabaseAccessRoomForm extends Form<Object>
 								e.printStackTrace();
 							}
 							// refreshes the page
-							setResponsePage(RoomPageAdmin.class);
+							setResponsePage(AdminRoomPage.class);
 						}
 					});
 					

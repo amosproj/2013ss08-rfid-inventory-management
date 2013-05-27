@@ -37,7 +37,7 @@ import java.io.IOException;
  * This class defines a sub-website from AdminPage, which creates a Form of RoomTable to administrate
  * data in the RoomTable.
  */
-public class RoomPageAdmin extends MainPage
+public class AdminRoomPage extends MainPage
 {
 	private static final long serialVersionUID = -934740505002405866L;
 
@@ -46,7 +46,7 @@ public class RoomPageAdmin extends MainPage
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public RoomPageAdmin() throws IOException
+	public AdminRoomPage() throws IOException
 	{
 		add(new DatabaseAccessRoomForm("databaseAccessRoomForm"));
 	}
