@@ -36,7 +36,9 @@ import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
+import org.amos2013.rfid_inventory_management_web.main.ConfirmationClickLink;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -167,11 +169,13 @@ public class DatabaseAccessAdminForm extends Form<Object>
 				item.add(new Label("recordCommentLabel", record.getComment()));			
 				
 				// adds a link to delete the current record item
-				item.add(new Link<String>("deleteRecordLink")
+				
+				item.add(new ConfirmationClickLink<String>("deleteRecordLink", "Do you want to delete this record?")
 				{
 					private static final long serialVersionUID = 8843977459555507386L;
-					
-					public void onClick()
+
+					@Override
+					public void onClick(AjaxRequestTarget arg0)
 					{
 						// call to delete the product
 						try
@@ -185,7 +189,7 @@ public class DatabaseAccessAdminForm extends Form<Object>
 							e.printStackTrace();
 						}
 						// refreshes the page
-						setResponsePage(AdminPage.class);
+						setResponsePage(AdminPage.class);						
 					}
 				});
 				
