@@ -115,10 +115,9 @@ public class DeviceDatabaseHandler implements Serializable
 	
 	
 	/**
-	 * Writes the given strings to the database
-	 * @param rfid_id int to set
-	 * @param room string to set
-	 * @param employee string to set
+	 * Writes the given strings to the database.
+	 *
+	 * @param record the record
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when room or owner is null
 	 * @throws Exception when database setup fails

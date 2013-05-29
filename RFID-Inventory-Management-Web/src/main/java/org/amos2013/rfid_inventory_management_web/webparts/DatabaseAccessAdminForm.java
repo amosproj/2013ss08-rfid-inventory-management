@@ -128,7 +128,7 @@ public class DatabaseAccessAdminForm extends Form<Object>
 			}
 			
 			// found nothing and returns a status message
-			if (databaseRecords.isEmpty() || databaseRecords == null || databaseRecords.toString() == "[]")
+			if (databaseRecords == null || databaseRecords.isEmpty() || databaseRecords.toString().equals("[]"))
 			{
 				statusMessage = "No record found, while searching for: " + search_string;		
 			}	

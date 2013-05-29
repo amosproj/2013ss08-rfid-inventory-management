@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2013 by 
+ * Copyright (c) 2013 by
  * AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
  *
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
  *  Kerstin Stern
- * 
+ *
  * SDs:
  *  Andreas Singer
  *  Liping Wang
@@ -29,32 +29,39 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package org.amos2013.rfid_inventory_management_web.database;
+package org.amos2013.rfid_inventory_management_web.webparts;
 
-import static org.junit.Assert.*;
-
+import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests the {@link EmployeeDatabaseRecord} class
+ * UnitTest for the {@link AdminRoomPage} using the WicketTester
  */
-public class EmployeeDatabaseRecordTest
+public class AdminRoomPageTest
 {
-	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseRecord#EmployeeDatabaseRecord(int, String, String)}.
-	 */
-	@Test
-	public final void testEmployeeDatabaseRecordConstructor()
-	{
-		String employee = "Gerd Müller";
-		String location = "Erlangen";
-		int id = 100;
+	private WicketTester wicketTester;
 
-		RoomDatabaseRecord testRecord = new RoomDatabaseRecord(id, employee, location);
-		
-		assertEquals(employee, testRecord.getName());
-		assertEquals(location, testRecord.getLocation());
-		assertEquals(id, testRecord.getID());
+	/**
+	 * create a WicketApplication for testing
+	 */
+	@Before
+	public void setUp()
+	{
+		wicketTester = new WicketTester(new WicketApplication());
 	}
 
+	/**
+	 * tests if the homepage renders
+	 */
+	@Test
+	public void homepageRendersSuccessfully()
+	{
+		//start and render the test page
+		wicketTester.startPage(AdminRoomPage.class);
+
+		//assert rendered page class
+		wicketTester.assertRenderedPage(AdminRoomPage.class);
+	}
 }

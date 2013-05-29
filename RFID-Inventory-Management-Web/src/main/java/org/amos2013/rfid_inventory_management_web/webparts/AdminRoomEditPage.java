@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2013 by 
+ * Copyright (c) 2013 by
  * AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
  *
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
  *  Kerstin Stern
- * 
+ *
  * SDs:
  *  Andreas Singer
  *  Liping Wang
@@ -29,32 +29,26 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-package org.amos2013.rfid_inventory_management_web.database;
+package org.amos2013.rfid_inventory_management_web.webparts;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
+import java.io.IOException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 /**
- * Tests the {@link EmployeeDatabaseRecord} class
+ * This class defines a sub-website from /admin/room, which creates a Form to update the
+ * record in RoomTable.
  */
-public class EmployeeDatabaseRecordTest
+public class AdminRoomEditPage extends MainPage
 {
+	private static final long serialVersionUID = -6068261772020491369L;
+
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseRecord#EmployeeDatabaseRecord(int, String, String)}.
+	 * The constructor creates a website which contains a Form to update the record in RoomTable.
+	 *
+	 * @param editParameter the edit parameter
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	@Test
-	public final void testEmployeeDatabaseRecordConstructor()
+	public AdminRoomEditPage(final PageParameters editParameter) throws IOException
 	{
-		String employee = "Gerd Müller";
-		String location = "Erlangen";
-		int id = 100;
-
-		RoomDatabaseRecord testRecord = new RoomDatabaseRecord(id, employee, location);
-		
-		assertEquals(employee, testRecord.getName());
-		assertEquals(location, testRecord.getLocation());
-		assertEquals(id, testRecord.getID());
+		add(new DatabaseAccessRoomEditForm("databaseAccessRoomEditForm",editParameter));
 	}
-
 }

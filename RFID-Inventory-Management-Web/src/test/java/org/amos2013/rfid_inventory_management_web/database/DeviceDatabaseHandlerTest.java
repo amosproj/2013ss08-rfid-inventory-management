@@ -47,7 +47,6 @@ import org.junit.rules.ExpectedException;
  */
 public class DeviceDatabaseHandlerTest
 {
-	
 	/** The expected exception. */
 	@Rule 
 	public ExpectedException exception = ExpectedException.none();
@@ -55,16 +54,22 @@ public class DeviceDatabaseHandlerTest
 	private DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#updateRecordFromAppInDatabase(int, java.lang.String, java.lang.String)}.
-	 * @throws Exception not testing for this one
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#deleteRecordFromDatabase()}.
+	 * @throws IllegalArgumentException excepting this exception here 
 	 */
 	@Test
-	public final void testWriteRecordToDatabase() throws Exception
+	public final void testDeleteRecordFromDatabase() throws IllegalArgumentException
 	{
-		exception.expect(IllegalArgumentException.class);	// asserts that a IllegalArgumentException is thrown
-		deviceDatabaseHandler.updateRecordFromAppInDatabase(123, null, null);
+		exception.expect(IllegalArgumentException.class);
+		try
+		{
+			deviceDatabaseHandler.deleteRecordFromDatabase(null);
+		}
+		catch (SQLException ex)
+		{
+			Assert.fail("Expected no exception, but got: " + ex.getMessage());	
+		}
 	}
-
 	
 	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getDatabaseRecordList()}.
@@ -85,7 +90,6 @@ public class DeviceDatabaseHandlerTest
 		assertNotNull(resultList);
 	}
 	
-
 	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsByPartialStringAndColumn(String, String)}.
 	 * @throws IllegalStateException is expected
@@ -109,24 +113,26 @@ public class DeviceDatabaseHandlerTest
 	    
 		assertNotNull(resultList);
 	}
-
-	
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#deleteRecordFromDatabase()}.
-	 * @throws IllegalArgumentException excepting this exception here 
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#updateCompleteRecordInDatabase(DeviceDatabaseRecord)}.
+	 * @throws Exception not testing for this one
 	 */
 	@Test
-	public final void testDeleteRecordFromDatabase() throws IllegalArgumentException
+	public final void testUpdateCompleteRecordInDatabase() throws Exception
 	{
-			exception.expect(IllegalArgumentException.class);
-			try
-			{
-				deviceDatabaseHandler.deleteRecordFromDatabase(null);
-			}
-			catch (SQLException ex)
-			{
-				Assert.fail("Expected no exception, but got: " + ex.getMessage());	
-			}
+		exception.expect(IllegalArgumentException.class);	// asserts that a IllegalArgumentException is thrown
+		deviceDatabaseHandler.updateCompleteRecordInDatabase(null);
+	}
+	
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#updateRecordFromAppInDatabase(int, String, String)}.
+	 * @throws Exception not testing for this one
+	 */
+	@Test
+	public final void testUpdateRecordFromAppInDatabase() throws Exception
+	{
+		exception.expect(IllegalArgumentException.class);	// asserts that a IllegalArgumentException is thrown
+		deviceDatabaseHandler.updateRecordFromAppInDatabase(123, null, null);
 	}
 }

@@ -94,12 +94,11 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	/**
 	 * Constructor for creating a new database record.
 	 *
-	 * @param id 			the id
 	 * @param category 		the category
 	 * @param type 			the type
 	 * @param part_number 	the part_number
-	 * @param manufacturer	the manufacturer
-	 * @param platform		the platform
+	 * @param manufacturer the manufacturer
+	 * @param platform 	the platform
 	 */
 	public MetaDeviceDatabaseRecord(String category, String type, String part_number, String manufacturer, String platform)
 	{

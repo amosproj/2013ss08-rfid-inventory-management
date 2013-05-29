@@ -33,16 +33,23 @@ package org.amos2013.rfid_inventory_management_web.database;
 
 import static org.junit.Assert.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Junit test for class {@link RoomDatabaseHandler}
  */
 public class RoomDatabaseHandlerTest
 {
+	/** The expected exception. */
+	@Rule 
+	public ExpectedException exception = ExpectedException.none();
+	
 	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#getRecordsFromDatabaseByLocation(String)}.
 	 */
@@ -58,8 +65,70 @@ public class RoomDatabaseHandlerTest
 		{
 			Assert.fail("Expected no exception, but got: " + ex.getMessage());
 		}
-	
+		
 		assertNotNull(resultList);
 	}
+	
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#getRecordFromDatabaseByID(int)}.
+	 */
+	@Test
+	public void testGetRecordFromDatabaseByID()
+	{
+		RoomDatabaseRecord resultRecord = null;
+		try
+		{
+			resultRecord = RoomDatabaseHandler.getRecordFromDatabaseByID(-1111111);
+		}
+		catch (Exception ex)
+		{
+			Assert.fail("Expected no exception, but got: " + ex.getMessage());
+		}
+		
+		assertNull(resultRecord);
+	}
+	
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#getRecordsFromDatabase()}.
+	 */
+	@Test
+	public void testGetRecordsFromDatabase()
+	{
+		List<RoomDatabaseRecord> resultList = null;
+		try
+		{
+			resultList = RoomDatabaseHandler.getRecordsFromDatabase();
+		}
+		catch (Exception ex)
+		{
+			Assert.fail("Expected no exception, but got: " + ex.getMessage());
+		}
+		
+		assertNotNull(resultList);
+	}
+	
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#deleteRecordFromDatabase(RoomDatabaseRecord)}.
+	 * @throws SQLException will not be expected
+	 * @throws IllegalArgumentException will be expected
+	 */
+	@Test
+	public void testDeleteRecordFromDatabase() throws IllegalArgumentException, SQLException
+	{
+		exception.expect(IllegalArgumentException.class);
+		RoomDatabaseHandler.deleteRecordFromDatabase(null);
+	}
 
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#updateRecordInDatabase(RoomDatabaseRecord)}.
+	 * @throws Exception will not be expected
+	 * @throws SQLException will not be expected
+	 * @throws IllegalArgumentException will be expected
+	 */
+	@Test
+	public void testUpdateRecordInDatabase() throws IllegalArgumentException, SQLException, Exception
+	{
+		exception.expect(IllegalArgumentException.class);
+		RoomDatabaseHandler.updateRecordInDatabase(null);
+	}
 }

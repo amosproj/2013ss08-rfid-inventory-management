@@ -44,35 +44,50 @@ public class MetaDeviceDatabaseHandlerTest
 	private MetaDeviceDatabaseHandler metaDeviceDatabaseHandler = MetaDeviceDatabaseHandler.getInstance();
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#updateRecordInDatabase(MetaDeviceDatabaseRecord)}.
-	 * @throws Exception not testing for this one
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#getDatabaseRecordList()}.
 	 */
 	@Test
-	public final void testWriteRecordToDatabase() throws Exception
+	public final void testGetDatabaseRecordList()
+	{
+		try
+		{
+			metaDeviceDatabaseHandler.getDatabaseRecordList();			
+		}
+		catch (Exception e)
+		{
+			Assert.fail("No exception excpected, but caught: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#getRecordByPartNumber(String)}.
+	 * @throws IllegalStateException is not expected
+	 */
+	@Test
+	public final void testGetRecordByPartNumber() throws IllegalStateException
+	{
+		MetaDeviceDatabaseRecord resultRecord = null;
+		
+		resultRecord = metaDeviceDatabaseHandler.getRecordByPartNumber("");
+		
+		assertNull(resultRecord);
+	}
+	
+	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#updateRecordInDatabase(MetaDeviceDatabaseRecord)}.
+	 *
+	 * @throws Exception the exception
+	 */
+	@Test
+	public final void testUpdateRecordInDatabase() throws Exception
 	{
 		try
 		{
 			metaDeviceDatabaseHandler.updateRecordInDatabase(null);			
 		}
-		catch(Exception ex)
+		catch (Exception ex)
 		{
 			Assert.fail("No exception excpected, but caught: " + ex.getMessage());
 		}
 	}
-
-
-	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler#getRecordByPartNumber(java.lang.String)}.
-	 * @throws IllegalStateException is expected
-	 */
-	@Test
-	public final void testgetRecordByPartNumber() throws IllegalStateException
-	{
-		MetaDeviceDatabaseRecord resultRecord = null;
-
-		resultRecord = metaDeviceDatabaseHandler.getRecordByPartNumber("");
-
-		assertNull(resultRecord);
-	}
-
 }

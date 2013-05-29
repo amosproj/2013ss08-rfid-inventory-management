@@ -43,6 +43,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * Form that is displayed on the website. Used for reading and writing rooms from/ to the database
@@ -115,8 +116,11 @@ public class DatabaseAccessRoomForm extends Form<Object>
 
 					public void onClick()
 					{
-						// TODO new site to edit
-
+						// pass record id as parameter
+						PageParameters editParameter = new PageParameters();
+						editParameter.add("recordID", record.getID());
+				
+                        setResponsePage(AdminRoomEditPage.class, editParameter);
 					}
 			    });
 			}

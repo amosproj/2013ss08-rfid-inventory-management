@@ -137,7 +137,8 @@ public class DatabaseAppForm extends Form<Object>
 		submitButton.setEnabled(false);
 		add(submitButton);
 		
-		Button saveLocationButton = new Button("saveLocationButton", new Model("Save location")){
+		Button saveLocationButton = new Button("saveLocationButton", new Model<String>("Save location"))
+		{
 			private static final long serialVersionUID = -7748276309230758113L;
 
 			/**

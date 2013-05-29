@@ -113,7 +113,6 @@ public class DatabaseAccessListForm extends Form<Object>
 			{
 				selectedSearchOption = "Room";
 			}
-
 			
 			// search for the string in the specified column
 			try
@@ -126,7 +125,7 @@ public class DatabaseAccessListForm extends Form<Object>
 			}
 			
 			// found nothing and returns a status message
-			if (databaseRecords.isEmpty() || databaseRecords == null || databaseRecords.toString() == "[]")
+			if (databaseRecords == null || databaseRecords.isEmpty() || databaseRecords.toString().equals("[]"))
 			{
 				statusMessage = "No record found, while searching for: " + search_string;
 			}	
@@ -224,6 +223,7 @@ public class DatabaseAccessListForm extends Form<Object>
 				setResponsePage(SearchPageList.class, searchParameters); 	 
 			}
 		};
+		
 		add(searchButton);
 		
 		/*
@@ -241,6 +241,7 @@ public class DatabaseAccessListForm extends Form<Object>
 					setResponsePage(ListPage.class);
 				}
 			};
+			
 			add(backButton);
 		}
 	}

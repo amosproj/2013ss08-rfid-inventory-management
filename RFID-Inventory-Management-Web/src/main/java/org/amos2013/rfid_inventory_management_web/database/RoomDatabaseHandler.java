@@ -41,24 +41,30 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- * This class is used, to access the database
+ * This class is used, to access the database.
  */
 public class RoomDatabaseHandler
 {
+	
+	/** The Constant DATABASE_URL. */
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 
 	// the class ConfigLoader.java which loads the db-password, is not committed to git
+	/** The Constant DATABASE_PW. */
 	private final static String DATABASE_PW = ConfigLoader.getDatabasePassword();
 
 	// Database Access Object, is a handler for reading and writing
+	/** The database handler dao. */
 	private static Dao<RoomDatabaseRecord, String> databaseHandlerDao;
 
 
 	/**
-	 * Creates a database if there is no one existing
+	 * Creates a database if there is no one existing.
+	 *
 	 * @param connectionSource required for setting up db
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	private static void setupDatabase(ConnectionSource connectionSource) throws Exception
 	{
@@ -79,10 +85,11 @@ public class RoomDatabaseHandler
 			}
 		}
 	}
-
+	
 	/**
-	 * Loops through one table of the database and reads the content
-	 * @param	location	a string which filters the results after their location
+	 * Loops through one table of the database and reads the content.
+	 *
+	 * @param location a string which filters the results after their location
 	 * @return a list of Strings with all room numbers
 	 * @throws SQLException when database connection close fails
 	 */
@@ -91,14 +98,14 @@ public class RoomDatabaseHandler
 		ConnectionSource connectionSource = null;
 		List<RoomDatabaseRecord> databaseRecords = null;
 		ArrayList<String> resultList = new ArrayList<String>();
-
+		
 		try
 		{
 			// create our data-source for the database (url, user, pwd)
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
 			databaseHandlerDao = DaoManager.createDao(connectionSource, RoomDatabaseRecord.class);
-
+			
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForAll();
 		}
@@ -110,7 +117,7 @@ public class RoomDatabaseHandler
 				connectionSource.close();
 			}
 		}
-
+		
 		// add string for record to result list
 		for (RoomDatabaseRecord record : databaseRecords)
 		{
@@ -119,22 +126,60 @@ public class RoomDatabaseHandler
 				resultList.add(record.getName());
 			}
 		}
-
+		
 		return resultList;
+	}
+
+
+	/**
+	 * Gets the record from database by id.
+	 *
+	 * @param recordID the record id
+	 * @return the record from database by id
+	 * @throws SQLException the sQL exception
+	 */
+	public static RoomDatabaseRecord getRecordFromDatabaseByID(int recordID) throws SQLException  // connection.close() can throw
+	{
+		ConnectionSource connectionSource = null;
+		List<RoomDatabaseRecord> databaseRecords = null;
+
+		try
+		{
+			// create our data-source for the database (url, user, pwd)
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// setup our database and DAOs
+			databaseHandlerDao = DaoManager.createDao(connectionSource, RoomDatabaseRecord.class);
+
+			// read database records
+			databaseRecords = databaseHandlerDao.queryForEq("id", recordID);
+		}
+		finally
+		{
+			// always destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
+
+		if (databaseRecords.isEmpty())
+		{
+			return null;
+		}
+		
+		return databaseRecords.get(0);
 	}
 	
 	/**
-	 * Loops through one table of the database and reads the content 
+	 * Loops through one table of the database and reads the content.
+	 *
 	 * @return a string containing all records of roomTable
 	 * @throws SQLException when database connection close fails
 	 */
-//	public static List<String> getRecordsFromDatabase() throws SQLException  // connection.close() can throw
 	public static List<RoomDatabaseRecord> getRecordsFromDatabase() throws SQLException
 	{
 		ConnectionSource connectionSource = null;
 		List<RoomDatabaseRecord> databaseRecords = null;
-//		ArrayList<String> resultList = new ArrayList<String>(); 
-		ArrayList<RoomDatabaseRecord> resultList = new ArrayList<RoomDatabaseRecord>(); 
 		
 		try
 		{
@@ -149,7 +194,7 @@ public class RoomDatabaseHandler
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return resultList;
+			return null;
 		} 
 		finally
 		{
@@ -160,20 +205,6 @@ public class RoomDatabaseHandler
 			}
 		}
 
-		// if empty database, and return empty list
-		if (databaseRecords == null)
-		{
-			return resultList;
-		}
-
-		// connect with meta data
-//		for (RoomDatabaseRecord record : databaseRecords)
-//		{
-//			resultList.add(record.getName());
-//			resultList.add(record.getLocation());
-//		}
-		
-		//return resultList;
 		return databaseRecords; 
 		
 	}
@@ -219,7 +250,8 @@ public class RoomDatabaseHandler
 	}
 	
 	/**
-	 * Writes the given strings to the database
+	 * Writes the given strings to the database.
+	 *
 	 * @param record the target record
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when room or owner is null

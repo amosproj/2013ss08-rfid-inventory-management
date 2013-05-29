@@ -49,6 +49,8 @@ import org.junit.runners.Suite.SuiteClasses;
 			org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseRecordTest.class,
 			org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandlerTest.class,
 			org.amos2013.rfid_inventory_management_web.database.RoomDatabaseRecordTest.class,
+			org.amos2013.rfid_inventory_management_web.webparts.AdminRoomPageTest.class,
+			org.amos2013.rfid_inventory_management_web.webparts.AdminRoomEditPageTest.class,
 			org.amos2013.rfid_inventory_management_web.webparts.AdminPageTest.class,
 			org.amos2013.rfid_inventory_management_web.webparts.AppPageTest.class,
 			org.amos2013.rfid_inventory_management_web.webparts.DatabaseAccessAdminFormTest.class,
