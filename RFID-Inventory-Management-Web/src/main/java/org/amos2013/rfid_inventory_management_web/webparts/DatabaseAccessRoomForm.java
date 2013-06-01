@@ -36,6 +36,7 @@ import java.util.List;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.main.ConfirmationClickLink;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -58,14 +59,19 @@ public class DatabaseAccessRoomForm extends Form<Object>
 	 * Creates a Form Object.
 	 * @param id the name of this form, to use in html
 	 */
-	public DatabaseAccessRoomForm(String id)
+	public DatabaseAccessRoomForm(String id, final PageParameters pageParameter)
 	{
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this)); // sets the model to bind to the wicket ids
 		List<RoomDatabaseRecord> databaseRecords = null;
 		
 		add(new Label("statusMessage"));
-
+		
+		if (pageParameter.get("message").isNull() == false)
+		{
+			statusMessage = pageParameter.get("message").toString();
+		}
+		
 		// get all database records and display in a listview
 		try
 		{
@@ -119,8 +125,7 @@ public class DatabaseAccessRoomForm extends Form<Object>
 						// pass record id as parameter
 						PageParameters editParameter = new PageParameters();
 						editParameter.add("recordID", record.getID());
-				
-                        setResponsePage(AdminRoomEditPage.class, editParameter);
+				        setResponsePage(AdminRoomEditPage.class, editParameter);
 					}
 			    });
 			}

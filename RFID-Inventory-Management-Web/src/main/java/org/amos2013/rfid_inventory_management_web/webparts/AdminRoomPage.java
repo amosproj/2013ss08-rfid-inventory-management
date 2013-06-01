@@ -33,6 +33,8 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.io.IOException;
 
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 /**
  * This class defines a sub-website from AdminPage, which creates a Form of RoomTable to administrate
  * data in the RoomTable.
@@ -46,8 +48,9 @@ public class AdminRoomPage extends MainPage
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public AdminRoomPage() throws IOException
+	public AdminRoomPage(final PageParameters messsageParameter) throws IOException
 	{
-		add(new DatabaseAccessRoomForm("databaseAccessRoomForm"));
+	
+		add(new DatabaseAccessRoomForm("databaseAccessRoomForm",messsageParameter));
 	}
 }

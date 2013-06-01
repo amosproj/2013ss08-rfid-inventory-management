@@ -38,7 +38,9 @@ import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseRecord;
+import org.amos2013.rfid_inventory_management_web.main.ConfirmationClickLink;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -82,7 +84,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 			// if /admin/room/edit is entered, go back
 			if (pageParameter.get("recordID").isNull() == true)
 			{
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class);				
+				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class,null);				
 			}
 			
 			// get the record
@@ -95,13 +97,13 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 			{
 				e.printStackTrace();
 				// TODO Fehlermeldung mitgeben und anzeigen
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class);								
+				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class,null);								
 			}
 	
 			if (roomRecord == null)
 			{
 				// TODO Fehlermeldung mitgeben und anzeigen				
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class);		
+				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class,null);		
 			}
 			
 			roomName = roomRecord.getName();
@@ -118,7 +120,6 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 			{
 				private static final long serialVersionUID = 4437949395448567237L;
 				
-				@Override
 				public void onSubmit()
 				{
 					// catch invalid input first
@@ -133,8 +134,11 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 					{
 						RoomDatabaseRecord record = new RoomDatabaseRecord(roomID, roomName, selectedLocation);
 						RoomDatabaseHandler.updateRecordInDatabase(record);
-						statusMessage = "Data saved";
 						// TODO zurueck gehen zur AdminRoomPage und den status dort ausgeben
+						String message;
+						PageParameters messageParameter = new PageParameters();
+						messageParameter.add("message", "The edited data is saved"); 
+						setResponsePage(AdminRoomPage.class, messageParameter);
 					}
 					catch (IllegalArgumentException e)
 					{
@@ -156,7 +160,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 				@Override
 				public void onSubmit()
 				{
-					setResponsePage(AdminRoomPage.class);
+					setResponsePage(AdminRoomPage.class,null);
 				}
 			};
 			add(roomCancelButton);
@@ -164,7 +168,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 		else
 		{
 			// no page parameter: go back
-			setResponsePage(AdminRoomPage.class);
+			setResponsePage(AdminRoomPage.class,null);
 		}
 	}
 

@@ -61,7 +61,7 @@ public class DatabaseAccessRoomFormTest
 	{
 		try
 		{
-			new DatabaseAccessRoomForm("databaseAccessRoomForm");
+			new DatabaseAccessRoomForm("databaseAccessRoomForm",null);
 		}
 		catch (Exception ex)
 		{
