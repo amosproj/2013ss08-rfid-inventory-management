@@ -38,9 +38,7 @@ import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseRecord;
-import org.amos2013.rfid_inventory_management_web.main.ConfirmationClickLink;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -49,6 +47,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValueConversionException;
 
 /**
  * Form that is displayed on /admin/room/edit. Used to update the record in RoomTable
@@ -82,28 +81,38 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 		if (pageParameter != null)
 		{
 			// if /admin/room/edit is entered, go back
-			if (pageParameter.get("recordID").isNull() == true)
+			if ((pageParameter.get("recordID").isNull() == true))
 			{
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class,null);				
+				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);				
 			}
 			
-			// get the record
-			roomID = pageParameter.get("recordID").toInteger();
+			try
+			{
+				// get the record
+				roomID = pageParameter.get("recordID").toInteger();
+			}
+			catch (StringValueConversionException e)
+			{
+				// is thrown if no integer is entered after the /edit?recordID=
+				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);			
+			}
+			
 			try
 			{
 				roomRecord = RoomDatabaseHandler.getRecordFromDatabaseByID(roomID);
 			}
 			catch (SQLException e)
 			{
-				e.printStackTrace();
-				// TODO Fehlermeldung mitgeben und anzeigen
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class,null);								
+				PageParameters statusPageParameter = new PageParameters();
+				statusPageParameter.add("message", "Error with the database connection"); 
+				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);								
 			}
-	
+
 			if (roomRecord == null)
 			{
-				// TODO Fehlermeldung mitgeben und anzeigen				
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class,null);		
+				PageParameters statusPageParameter = new PageParameters();
+				statusPageParameter.add("message", "Error: the record is not found"); 
+				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);		
 			}
 			
 			roomName = roomRecord.getName();
@@ -134,11 +143,10 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 					{
 						RoomDatabaseRecord record = new RoomDatabaseRecord(roomID, roomName, selectedLocation);
 						RoomDatabaseHandler.updateRecordInDatabase(record);
-						// TODO zurueck gehen zur AdminRoomPage und den status dort ausgeben
-						String message;
-						PageParameters messageParameter = new PageParameters();
-						messageParameter.add("message", "The edited data is saved"); 
-						setResponsePage(AdminRoomPage.class, messageParameter);
+						
+						PageParameters statusPageParameter = new PageParameters();
+						statusPageParameter.add("message", "The edited data was saved."); 
+						setResponsePage(AdminRoomPage.class, statusPageParameter);
 					}
 					catch (IllegalArgumentException e)
 					{
@@ -160,7 +168,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 				@Override
 				public void onSubmit()
 				{
-					setResponsePage(AdminRoomPage.class,null);
+					setResponsePage(AdminRoomPage.class, null);
 				}
 			};
 			add(roomCancelButton);
@@ -168,7 +176,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 		else
 		{
 			// no page parameter: go back
-			setResponsePage(AdminRoomPage.class,null);
+			setResponsePage(AdminRoomPage.class, null);
 		}
 	}
 

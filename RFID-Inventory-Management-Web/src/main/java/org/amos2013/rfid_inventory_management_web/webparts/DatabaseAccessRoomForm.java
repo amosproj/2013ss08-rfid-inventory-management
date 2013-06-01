@@ -36,7 +36,6 @@ import java.util.List;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.main.ConfirmationClickLink;
-import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -67,7 +66,7 @@ public class DatabaseAccessRoomForm extends Form<Object>
 		
 		add(new Label("statusMessage"));
 		
-		if (pageParameter.get("message").isNull() == false)
+		if (pageParameter != null && pageParameter.get("message").isNull() == false)
 		{
 			statusMessage = pageParameter.get("message").toString();
 		}
@@ -111,7 +110,7 @@ public class DatabaseAccessRoomForm extends Form<Object>
 						}
 						
 						// refreshes the page
-						setResponsePage(AdminRoomPage.class);
+						setResponsePage(AdminRoomPage.class, null);
 					}
 				});
 				

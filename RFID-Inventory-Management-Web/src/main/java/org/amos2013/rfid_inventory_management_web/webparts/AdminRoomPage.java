@@ -48,9 +48,8 @@ public class AdminRoomPage extends MainPage
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public AdminRoomPage(final PageParameters messsageParameter) throws IOException
+	public AdminRoomPage(final PageParameters pageParameter) throws IOException
 	{
-	
-		add(new DatabaseAccessRoomForm("databaseAccessRoomForm",messsageParameter));
+		add(new DatabaseAccessRoomForm("databaseAccessRoomForm", pageParameter));
 	}
 }
