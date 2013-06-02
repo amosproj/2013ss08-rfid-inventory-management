@@ -259,18 +259,23 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 
 			// meta data components
 			final TextField<String> metaPartNumberTextField = new TextField<String>("metaPartNumberInputField");
+			metaPartNumberTextField.setOutputMarkupId(true); // needed, to add this component to the AjaxRequestTarget, in order to chance the value dynamically			
 			add(metaPartNumberTextField);
 			
 			final TextField<String> typeTextField = new TextField<String>("typeInputField");
+			typeTextField.setOutputMarkupId(true); // needed, to add this component to the AjaxRequestTarget, in order to chance the value dynamically
 			add(typeTextField);
 			
 			final TextField<String> categoryTextField = new TextField<String>("categoryInputField");
+			categoryTextField.setOutputMarkupId(true); // needed, to add this component to the AjaxRequestTarget, in order to chance the value dynamically			
 			add(categoryTextField);
 			
 			final TextField<String> manufacturerTextField = new TextField<String>("manufacturerInputField");
+			manufacturerTextField.setOutputMarkupId(true); // needed, to add this component to the AjaxRequestTarget, in order to chance the value dynamically
 			add(manufacturerTextField);
 			
 			final TextField<String> platformTextField = new TextField<String>("platformInputField");
+			platformTextField.setOutputMarkupId(true); // needed, to add this component to the AjaxRequestTarget, in order to chance the value dynamically
 			add(platformTextField);			
 			
 			
@@ -278,42 +283,33 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			partNumberTextField.add(new OnChangeAjaxBehavior()
 			{
 				private static final long serialVersionUID = -5057519909275714633L;
-
+				
+				/*
+				 * is called, when the part number is changed, to fill in the meta data 
+				 * @see org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior#onUpdate(org.apache.wicket.ajax.AjaxRequestTarget)
+				 */
 				@Override
 				protected void onUpdate(AjaxRequestTarget arg0)
 				{
 					MetaDeviceDatabaseHandler metaDeviceDatabaseHandler = MetaDeviceDatabaseHandler.getInstance();
 					MetaDeviceDatabaseRecord record = metaDeviceDatabaseHandler.getRecordByPartNumber(partNumberInputField);
 					
+					// if a valid part number was entered
 					if (record != null)
 					{
+						// add components to AjaxRequestTarget to be changed dynamically
+						arg0.add(typeTextField);
+						arg0.add(categoryTextField);
+						arg0.add(manufacturerTextField);
+						arg0.add(platformTextField);
+						arg0.add(metaPartNumberTextField);
+						
+						// set new values
 						typeInputField = record.getType();
 						categoryInputField = record.getCategory();
 						manufacturerInputField = record.getManufacturer();
 						platformInputField = record.getPlatform();
 						metaPartNumberInputField = partNumberInputField;
-						
-						categoryTextField.setEnabled(false);
-						typeTextField.setEnabled(false);
-						manufacturerTextField.setEnabled(false);
-						platformTextField.setEnabled(false);
-						
-						// TODO update! this is reached here, but the fields only get updated wit setEnabled(false)
-//						categoryTextField.setEnabled(true);
-						
-						
-//						manufacturerTextField.setDefaultModelObject(getDefaultModelObject());
-//						add(manufacturerTextField);
-//						categoryTextField.processInput();
-//						manufacturerTextField.setDefaultModel(new Model<String>());
-//						typeTextField.inputChanged();
-//						categoryTextField.clearInput();
-//						manufacturerTextField.clearInput();
-//						
-//						platformTextField.modelChanged();
-//						add(platformTextField);
-//						add(typeTextField);
-//						add(categoryTextField);
 					}
 				}
 			});
