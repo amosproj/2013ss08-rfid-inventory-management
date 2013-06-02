@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2013 by 
+ * Copyright (c) 2013 by
  * AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
  *
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
  *  Kerstin Stern
- * 
+ *
  * SDs:
  *  Andreas Singer
  *  Liping Wang
@@ -31,41 +31,45 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
-import junit.framework.Assert;
-
 import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for {@link DatabaseAccessAdminForm}
+ * Unit test for {@link SearchPageAdminList} using the WicketTester
  */
-public class DatabaseAccessAdminFormTest 
+public class SearchPageAdminListTest
 {
+	private WicketTester wicketTester;
+
 	/**
-	 * Before running the tests, an application is required
+	 * create a WicketApplication for testing
 	 */
 	@Before
 	public void setUp()
 	{
-		new WicketTester(new WicketApplication());
+		wicketTester = new WicketTester(new WicketApplication());
 	}
 
-	
 	/**
-	 *	Tests the {@link DatabaseAccessAdminForm#DatabaseAccessAdminForm(String)} constructor 
+	 * tests if the homepage renders
 	 */
 	@Test
-	public void testDatabaseAccessAdminForm() 
+	public void homepageRendersSuccessfully()
 	{
-		try
-		{
-			new DatabaseAccessAdminForm("databaseAccessAdminForm", null);
-		}
-		catch (Exception ex)
-		{
-			 Assert.fail("Expected no exception in DatabaseAccessAdminForm(), but got: " + ex.getMessage());
-		}
+		//start and render the test page without search parameters
+		wicketTester.startPage(SearchPageAdminList.class);
+		//assert rendered page class is AdminPage, because no search parameters are entered
+		wicketTester.assertRenderedPage(AdminListPage.class);
+		
+		// now test with search parameters
+		PageParameters searchParameters = new PageParameters();
+		searchParameters.add("search_string", "test");
+		searchParameters.add("search_option", "inventory_number");
+		wicketTester.startPage(SearchPageAdminList.class, searchParameters);
+		//assert rendered page class is AdminPage, because no search parameters are entered
+		wicketTester.assertRenderedPage(SearchPageAdminList.class);
 	}
 }

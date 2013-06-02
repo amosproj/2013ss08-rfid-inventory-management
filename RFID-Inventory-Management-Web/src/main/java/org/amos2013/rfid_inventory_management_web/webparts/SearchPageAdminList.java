@@ -39,7 +39,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * This class defines a sub-website from MainPage, which contains a From listing all
  * data from the database
  */
-public class SearchPageAdmin extends MainPage {
+public class SearchPageAdminList extends MainPage {
 
 	private static final long serialVersionUID = 7449232746846404264L;
 
@@ -49,8 +49,8 @@ public class SearchPageAdmin extends MainPage {
 	 * @param previousSearchParameters the previous search parameters
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public SearchPageAdmin(final PageParameters previousSearchParameters) throws IOException
+	public SearchPageAdminList(final PageParameters previousSearchParameters) throws IOException
 	{
-		add(new DatabaseAccessAdminForm("databaseAccessAdminForm", previousSearchParameters));
+		add(new DatabaseAccessAdminListForm("databaseAccessAdminListForm", previousSearchParameters));
 	}
 }

@@ -32,15 +32,14 @@
 package org.amos2013.rfid_inventory_management_web.webparts;
 
 import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Unit test for {@link SearchPageAdmin} using the WicketTester
+ * UnitTest for the {@link AdminListPage} using the WicketTester
  */
-public class SearchPageAdminTest
+public class AdminListPageTest
 {
 	private WicketTester wicketTester;
 
@@ -59,17 +58,10 @@ public class SearchPageAdminTest
 	@Test
 	public void homepageRendersSuccessfully()
 	{
-		//start and render the test page without search parameters
-		wicketTester.startPage(SearchPageAdmin.class);
-		//assert rendered page class is AdminPage, because no search parameters are entered
-		wicketTester.assertRenderedPage(AdminPage.class);
-		
-		// now test with search parameters
-		PageParameters searchParameters = new PageParameters();
-		searchParameters.add("search_string", "test");
-		searchParameters.add("search_option", "inventory_number");
-		wicketTester.startPage(SearchPageAdmin.class, searchParameters);
-		//assert rendered page class is AdminPage, because no search parameters are entered
-		wicketTester.assertRenderedPage(SearchPageAdmin.class);
+		//start and render the test page
+		wicketTester.startPage(AdminListPage.class);
+
+		//assert rendered page class
+		wicketTester.assertRenderedPage(AdminListPage.class);
 	}
 }

@@ -31,12 +31,13 @@
 
 package org.amos2013.rfid_inventory_management_web.main;
 
+import org.amos2013.rfid_inventory_management_web.webparts.AdminListEditPage;
 import org.amos2013.rfid_inventory_management_web.webparts.AdminRoomEditPage;
 import org.amos2013.rfid_inventory_management_web.webparts.AppPage;
 import org.amos2013.rfid_inventory_management_web.webparts.ListPage;
-import org.amos2013.rfid_inventory_management_web.webparts.AdminPage;
+import org.amos2013.rfid_inventory_management_web.webparts.AdminListPage;
 import org.amos2013.rfid_inventory_management_web.webparts.AdminRoomPage;
-import org.amos2013.rfid_inventory_management_web.webparts.SearchPageAdmin;
+import org.amos2013.rfid_inventory_management_web.webparts.SearchPageAdminList;
 import org.amos2013.rfid_inventory_management_web.webparts.SearchPageList;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -75,10 +76,11 @@ public class WicketApplication extends WebApplication
 		super.init();
 		// mount homepage and pages without the PageComponentInfo being displayed
 		mount(new HidePageComponentInfoMounter("/app", AppPage.class));
-		mount(new HidePageComponentInfoMounter("/admin", AdminPage.class));
+		mount(new HidePageComponentInfoMounter("/admin", AdminListPage.class));
+		mount(new HidePageComponentInfoMounter("/admin/edit", AdminListEditPage.class));
 		mount(new HidePageComponentInfoMounter("/admin/room", AdminRoomPage.class));
 		mount(new HidePageComponentInfoMounter("/admin/room/edit", AdminRoomEditPage.class));
-		mount(new HidePageComponentInfoMounter("/admin/search", SearchPageAdmin.class));
+		mount(new HidePageComponentInfoMounter("/admin/search", SearchPageAdminList.class));
 		mount(new HidePageComponentInfoMounter("/search", SearchPageList.class));
 		mount(new HideHomePageComponentInfoMounter(ListPage.class));
 	}

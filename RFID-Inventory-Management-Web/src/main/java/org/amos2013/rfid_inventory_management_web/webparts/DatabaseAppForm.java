@@ -124,13 +124,11 @@ public class DatabaseAppForm extends Form<Object>
 				}
 				catch (IllegalArgumentException e)
 				{
-					
 					statusMessage = e.getMessage();
 				}
 				catch (Exception e)
 				{
-					statusMessage = "An error occured!";
-					e.printStackTrace();
+					statusMessage = e.getMessage();
 				}
 			}
 		};
@@ -164,7 +162,7 @@ public class DatabaseAppForm extends Form<Object>
 				} 
 				catch (Exception e)
 				{
-					e.printStackTrace();
+					statusMessage = e.getMessage();
 				}
 				
 				roomDropDownCoices.add("please select");
@@ -179,7 +177,7 @@ public class DatabaseAppForm extends Form<Object>
 				} 
 				catch (SQLException e)
 				{
-					e.printStackTrace();
+					statusMessage = e.getMessage();
 				}
 				
 				employeeDropDownCoices.add("please select");

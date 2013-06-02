@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2013 by
+ * Copyright (c) 2013 by 
  * AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
  *
  * POs:
  *  Andreas Lutz
  *  Jana Riechert
  *  Kerstin Stern
- *
+ * 
  * SDs:
  *  Andreas Singer
  *  Liping Wang
@@ -31,37 +31,41 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
+import junit.framework.Assert;
+
 import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * UnitTest for the {@link AdminPage} using the WicketTester
+ * Unit test for {@link DatabaseAccessAdminListForm}
  */
-public class AdminPageTest
+public class DatabaseAccessAdminListFormTest 
 {
-	private WicketTester wicketTester;
-
 	/**
-	 * create a WicketApplication for testing
+	 * Before running the tests, an application is required
 	 */
 	@Before
 	public void setUp()
 	{
-		wicketTester = new WicketTester(new WicketApplication());
+		new WicketTester(new WicketApplication());
 	}
 
+	
 	/**
-	 * tests if the homepage renders
+	 *	Tests the {@link DatabaseAccessAdminListForm#DatabaseAccessAdminForm(String)} constructor 
 	 */
 	@Test
-	public void homepageRendersSuccessfully()
+	public void testDatabaseAccessAdminForm() 
 	{
-		//start and render the test page
-		wicketTester.startPage(AdminPage.class);
-
-		//assert rendered page class
-		wicketTester.assertRenderedPage(AdminPage.class);
+		try
+		{
+			new DatabaseAccessAdminListForm("databaseAccessAdminForm", null);
+		}
+		catch (Exception ex)
+		{
+			 Assert.fail("Expected no exception in DatabaseAccessAdminForm(), but got: " + ex.getMessage());
+		}
 	}
 }

@@ -1,0 +1,103 @@
+<!--
+ - Copyright (c) 2013 by
+ - AMOS 2013 Group 8: RFID Inventory Management (Elektrobit)
+ -
+ - POs:
+ -  Andreas Lutz
+ -  Jana Riechert
+ -  Kerstin Stern
+ -
+ - SDs:
+ -  Andreas Singer
+ -  Liping Wang
+ -  David Lehmeier
+ -
+ - This file is part of the RFID Inventory Management application.
+ -
+ - This program is free software: you can redistribute it and/or modify
+ - it under the terms of the GNU Affero General Public License as
+ - published by the Free Software Foundation, either version 3 of the
+ - License, or (at your option) any later version.
+ -
+ - This program is distributed in the hope that it will be useful,
+ - but WITHOUT ANY WARRANTY; without even the implied warranty of
+ - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ - GNU Affero General Public License for more details.
+ -
+ - You should have received a copy of the GNU Affero General Public
+ - License along with this program. If not, see
+ - <http://www.gnu.org/licenses/>.
+ -->
+
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
+	</head>
+	<body>
+	<wicket:extend>
+		<form id="databaseAccessAdminListEditForm" method="get" wicket:id="databaseAccessAdminListEditForm">
+			<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
+			<fieldset>
+				<legend style="color: #fb3d09; font-weight: bold;">Device to update:</legend>
+				<br/>
+				<label style="width:190px">Select the location first:</label><select wicket:id="locationDropDown" style="width:190px"></select><br/><br/>
+				<h3>Device data:</h3>
+				<table>
+					<tbody>
+						<tr>
+							<th>RFID ID</th>
+							<th>Room</th>
+							<th>Employee</th>
+							<th>Inventory number</th>
+							<th>Serial number</th>
+							<th>Part number</th>
+							<th>Owner</th>
+							<th>Comment</th>
+						</tr>	
+						<tr>
+							<td><input wicket:id="rfidIDInputField" type="text" id="rfidIDInputField" style="width:184px"/></td>
+							<td><select wicket:id="roomDropDown" style="width:190px"></select></td>
+							<td><select wicket:id="employeeDropDown" style="width:190px"></select></td>
+							<td><input wicket:id="inventoryNumberInputField" type="text" id="inventoryNumberInputField" style="width:184px"/></td>
+							<td><input wicket:id="serialNumberInputField" type="text" id="serialNumberInputField" style="width:184px"/></td>
+							<td><input wicket:id="partNumberInputField" type="text" id="partNumberInputField" style="width:184px; background-color:#FA8258;"/></td>
+							<td><input wicket:id="ownerInputField" type="text" id="ownerInputField" style="width:184px"/></td>
+							<td><input wicket:id="commentInputField" type="text" id="commentInputField" style="width:184px"/></td>
+						</tr>
+					</tbody>
+				</table>
+				<br/>
+				<h3>Meta device data:</h3>
+				<br/>
+				<label style="color:#fb3d09; width:1000px; font-weight: bold; margin-left:-150px;">Notice: changing below will change the meta data for all records with the same part numbers!</label><br/>
+				<table>
+					<tbody>
+						<tr>
+							<th>Part number</th>
+							<th>Type</th>
+							<th>Category</th>
+							<th>Manufacturer</th>
+							<th>Platform</th>
+						</tr>	
+						<tr>
+							<td><input wicket:id="metaPartNumberInputField" type="text" id="metaPartNumberInputField" style="width:184px; background-color:#FA8258;"/></td>
+							<td><input wicket:id="typeInputField" type="text" id="typeInputField" style="width:184px"/></td>
+							<td><input wicket:id="categoryInputField" type="text" id="categoryInputField" style="width:184px"/></td>
+							<td><input wicket:id="manufacturerInputField" type="text" id="manufacturerInputField" style="width:184px;"/></td>
+							<td><input wicket:id="platformInputField" type="text" id="platformInputField" style="width:184px"/></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<p style="margin-left:150px;">
+					<input wicket:id="submitButton" type="submit" value="Save"/>
+					<input wicket:id="cancelButton" type="submit" value="Cancel"/>
+				</p>
+			</fieldset>
+		</form>
+		<br/>
+	</wicket:extend>
+	</body>
+</html>

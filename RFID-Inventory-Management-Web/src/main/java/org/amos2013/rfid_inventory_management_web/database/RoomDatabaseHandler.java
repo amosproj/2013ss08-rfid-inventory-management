@@ -261,12 +261,11 @@ public class RoomDatabaseHandler
 	{
 		ConnectionSource connectionSource = null;
 		List<RoomDatabaseRecord> databaseRecords = null;
-		
 		String name;
 		String location;
 		Integer id;
 		Integer idMax = 0;
-		
+
 		if (record == null)
 		{
 			throw new IllegalArgumentException("The RoomDatabaseRecord is null");
@@ -274,7 +273,7 @@ public class RoomDatabaseHandler
 		
 		name = record.getName();
 		location = record.getLocation();
-
+		
 		try
 		{
 			// create data-source for the database
@@ -284,7 +283,6 @@ public class RoomDatabaseHandler
 			
 			//read all the records in the table in order to check check whether this input record has already in the table.
 			databaseRecords = databaseHandlerDao.queryForAll();
-			
 			//if now is the edit command
 			if (record.getID() != null)
 			{
@@ -294,10 +292,11 @@ public class RoomDatabaseHandler
 					if (roomRecord.getLocation().equals(location) & roomRecord.getName().equals(name))
 					{
 						connectionSource.close();
-						throw new IllegalArgumentException("The edited record is already in the database"); 
+						throw new IllegalArgumentException("The edited record is already in the database");
 					}
 				}
 			}
+			
 			// if now is the add command
 			if (record.getID() == null)
 			{
@@ -309,13 +308,15 @@ public class RoomDatabaseHandler
 					{
 						idMax = id;
 					}
+					
 					//check whether this input record, including "name" and "location", has already in the table.
 					if (roomRecord.getLocation().equals(location) & roomRecord.getName().equals(name))
 					{
 						connectionSource.close();
-						throw new IllegalArgumentException("The added record is already in the database"); 
+						throw new IllegalArgumentException("The added record is already in the database");
 					}
 				}
+				
 				//set the ID of input record to the current ID (max +1)
 				record.setID(idMax+1);
 			}

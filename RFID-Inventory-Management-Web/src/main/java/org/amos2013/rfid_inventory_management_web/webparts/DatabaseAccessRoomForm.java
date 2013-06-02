@@ -55,8 +55,6 @@ public class DatabaseAccessRoomForm extends Form<Object>
 	
 	private String statusMessage;
 	
-	private PageParameters editParameter = new PageParameters();
-	
 	/**
 	 * Creates a Form Object.
 	 * @param id the name of this form, to use in html
@@ -69,7 +67,7 @@ public class DatabaseAccessRoomForm extends Form<Object>
 		
 		add(new Label("statusMessage"));
 		
-		//if this page shows the edited record, it will show "The edited record was saved."  
+		//if this page shows the edited record, it will show "The edited record was saved."
 		if (pageParameter != null && pageParameter.get("message").isNull() == false)
 		{
 			statusMessage = pageParameter.get("message").toString();
@@ -79,15 +77,15 @@ public class DatabaseAccessRoomForm extends Form<Object>
 		final Button roomAddButton = new Button("roomAddButton")
 		{
 			private static final long serialVersionUID = 5362847094125103725L;
-
 			@Override
 			public void onSubmit()
 			{
+				PageParameters editParameter = new PageParameters();
 				editParameter.add("function","add");
-				setResponsePage(AdminRoomEditPage.class,editParameter);
+				setResponsePage(AdminRoomEditPage.class, editParameter);
 			}
 		};
-		add(roomAddButton);
+		add(roomAddButton); 
 		
 		// get all database records and display in a listview
 		try
@@ -96,7 +94,7 @@ public class DatabaseAccessRoomForm extends Form<Object>
 		} 
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			statusMessage = e.getMessage();
 		}
 		
 		add(new ListView<RoomDatabaseRecord>("roomRecordsReadListView", databaseRecords)
@@ -140,7 +138,8 @@ public class DatabaseAccessRoomForm extends Form<Object>
 					public void onClick()
 					{
 						// pass record id as parameter
-						editParameter.add("function","update");
+						PageParameters editParameter = new PageParameters();
+						editParameter.add("function", "update");
 						editParameter.add("recordID", record.getID());
 				        setResponsePage(AdminRoomEditPage.class, editParameter);
 					}

@@ -265,16 +265,12 @@ public class DeviceDatabaseHandler implements Serializable
 		return resultDatabaseRecords;
 	}
 	
-	
 	/**
-	 * Searches and returns all records that match the search string in the specified column 
-	 * @param search_input the string fragment that is searched for
-	 * @param search_option the column of the DB-table where the method should search in
-	 * @return a list of the type DeviceDatabaseRecord containing all records, null when nothing was found
-	 * @throws SQLException when error occurs with the database
-	 * @throws IllegalStateException when null or more than one record is returned from the database
+	 * Gets the record with the rfid id from the database 
+	 * @return the device record
+	 * @throws SQLException when database connection close fails
 	 */
-	/*public List<DeviceDatabaseRecord> getRecordsFromDatabaseByPartialStringAndColumn(String search_input, String search_option) throws IllegalStateException, SQLException
+	public DeviceDatabaseRecord getRecordFromDatabaseById(String rfidID) throws SQLException  // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		List<DeviceDatabaseRecord> databaseRecords = null;
@@ -286,19 +282,13 @@ public class DeviceDatabaseHandler implements Serializable
 			// setup our database and DAOs
 			databaseHandlerDao = DaoManager.createDao(connectionSource, DeviceDatabaseRecord.class);
 			
-			// TODO this "if" is necessary because SQL-LIKE doesn't work on Integer
-			// possible solution: change the column rfid_id to a String type
-			if (search_option.equals("rfid_id"))
-			{
-				databaseRecords = databaseHandlerDao.queryForEq(search_option, search_input);
-			}
-			else
-			{
-				QueryBuilder<DeviceDatabaseRecord, Integer> queryBuilder = databaseHandlerDao.queryBuilder();
-				// list all DeviceDatabaseRecords that include the search string in the specified column
-				queryBuilder.where().like(search_option, "%"+search_input+"%");
-				databaseRecords = queryBuilder.query();
-			}
+			// read database records
+			databaseRecords = databaseHandlerDao.queryForEq("rfid_id", rfidID);
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
 		} 
 		finally
 		{
@@ -309,15 +299,17 @@ public class DeviceDatabaseHandler implements Serializable
 			}
 		}
 		
-		// if empty database, return empty
-		if (databaseRecords == null)
+		// if empty database, and return empty list
+		if (databaseRecords == null || databaseRecords.isEmpty() || databaseRecords.size() > 1)
 		{
-			throw new IllegalStateException("Error while serarching for " + search_input + ": no list was returned!");
+			return null;
 		}
-				
-		return databaseRecords;
+		
+		//get meta device data
+		databaseRecords.get(0).setMetaDeviceDatabaseRecord();
+		
+		return databaseRecords.get(0);
 	}
-	*/
 	
 	/**
 	 * Loops through one table of the database and reads the content 
@@ -409,7 +401,6 @@ public class DeviceDatabaseHandler implements Serializable
 			}
 		}
 	}
-
 
 	/**
 	 * Pulls and returns the database record list.

@@ -81,16 +81,16 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 		
 		if (pageParameter != null)
 		{
-			function = pageParameter.get("function").toString();
-			
-			if (function.equals("update"))
+			// if /admin/room/edit is entered, go back
+			if ((pageParameter.get("recordID").isNull() == true) || (pageParameter.get("function").isNull() == true))
 			{
-				// if /admin/room/edit is entered, go back
-				if ((pageParameter.get("recordID").isNull() == true))
-				{
-					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);				
-				}
+				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);				
+			}
 			
+			function = pageParameter.get("function").toString();
+			if (function.equals("update"))
+			{ 
+				
 				try
 				{
 					// get the record
@@ -101,6 +101,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 					// is thrown if no integer is entered after the /edit?recordID=
 					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);			
 				}
+				
 				try
 				{
 					roomRecord = RoomDatabaseHandler.getRecordFromDatabaseByID(roomID);
@@ -111,14 +112,14 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 					statusPageParameter.add("message", "Error with the database connection"); 
 					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);								
 				}
-
+	
 				if (roomRecord == null)
 				{
 					PageParameters statusPageParameter = new PageParameters();
 					statusPageParameter.add("message", "Error: the record is not found"); 
 					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);		
 				}
-			
+				
 				roomName = roomRecord.getName();
 				selectedLocation = roomRecord.getLocation();
 			}
@@ -153,12 +154,12 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 						
 						if (function.equals("update"))
 						{
-						    statusPageParameter.add("message", "The edited data was saved."); 
+							statusPageParameter.add("message", "The edited data was saved.");
 						}
-						else if (function.equals("add"))
+						else
 						{
-							statusPageParameter.add("message", "The added data was saved."); 						
-						}
+							statusPageParameter.add("message", "The added data was saved.");
+						} 
 						
 						setResponsePage(AdminRoomPage.class, statusPageParameter);
 					}

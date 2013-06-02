@@ -56,7 +56,7 @@ public abstract class MainPage extends WebPage {
 	public MainPage() throws FileNotFoundException, UnsupportedEncodingException
 	{
 		add(new BookmarkablePageLink<Object>("listPage", ListPage.class));
-		add(new BookmarkablePageLink<Object>("adminPage", AdminPage.class));
+		add(new BookmarkablePageLink<Object>("adminPage", AdminListPage.class));
 		
 		// adds a label for downloading a particular resource
 		URL url = getClass().getResource("/RFID-Inventory-Management-App.apk");

@@ -91,6 +91,25 @@ public class DeviceDatabaseHandlerTest
 	}
 	
 	/**
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordFromDatabaseById(String)}.
+	 */
+	@Test
+	public final void getRecordFromDatabaseById()
+	{	
+		DeviceDatabaseRecord resultRecord = null;
+		try
+		{
+			resultRecord = deviceDatabaseHandler.getRecordFromDatabaseById("-123456");
+		}
+		catch (Exception ex)
+		{
+			Assert.fail("Expected no exception, but got: " + ex.getMessage());
+		}
+		
+		assertNull(resultRecord);
+	}
+	
+	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsByPartialStringAndColumn(String, String)}.
 	 * @throws IllegalStateException is expected
 	 */

@@ -139,7 +139,7 @@ public class DatabaseAccessListForm extends Form<Object>
 			} 
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				statusMessage = e.getMessage();
 			}
 		}
 		
@@ -241,7 +241,6 @@ public class DatabaseAccessListForm extends Form<Object>
 					setResponsePage(ListPage.class);
 				}
 			};
-			
 			add(backButton);
 		}
 	}

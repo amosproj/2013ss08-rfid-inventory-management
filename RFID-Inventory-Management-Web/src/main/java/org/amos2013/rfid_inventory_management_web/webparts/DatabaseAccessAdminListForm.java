@@ -54,7 +54,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 /**
  * Form that is displayed on the website. Used for reading and writing data from/ to the database
  */
-public class DatabaseAccessAdminForm extends Form<Object>
+public class DatabaseAccessAdminListForm extends Form<Object>
 {
 	private static final long serialVersionUID = 2948880218956382827L;
 	
@@ -69,7 +69,7 @@ public class DatabaseAccessAdminForm extends Form<Object>
 	 * @param	id 							the name of this form, to use in html
 	 * @param	previousSearchParameters	contains the selected search option and the search string from the previous query
 	 */
-	public DatabaseAccessAdminForm(String id, final PageParameters previousSearchParameters)
+	public DatabaseAccessAdminListForm(String id, final PageParameters previousSearchParameters)
 	{
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this));
@@ -82,16 +82,19 @@ public class DatabaseAccessAdminForm extends Form<Object>
 		add(new DropDownChoice<String>("search_dropdown", new PropertyModel<String>(this, "selectedSearchOption"), SEARCH_OPTIONS));
 		add(new Label("statusMessage"));
 		
-		if (previousSearchParameters != null)
+		if (previousSearchParameters != null 
+				&& (previousSearchParameters.get("search_string").toString() != null && previousSearchParameters.get("search_option").toString() != null
+				    && previousSearchParameters.get("message").toString() == null)
+				    )
 		{
 			String search_string = previousSearchParameters.get("search_string").toString();
 			String search_option = previousSearchParameters.get("search_option").toString();
 			
 			// if /search is entered previousSearchParameters is not null! but the toString()s will return null
 			// then just throw an RestartResponseAtInterceptPageException, which will redirect to /admin
-			if ((search_string == null) && (search_option == null))
+			if ((search_string == null) || (search_option == null))
 			{				
-				throw new RestartResponseAtInterceptPageException(AdminPage.class);
+				throw new RestartResponseAtInterceptPageException(AdminListPage.class, null);
 			}
 		
 			// keep the dropdown menu choice selected
@@ -135,6 +138,11 @@ public class DatabaseAccessAdminForm extends Form<Object>
 		}
 		else
 		{
+			if (previousSearchParameters != null && previousSearchParameters.isEmpty() == false)
+			{
+				statusMessage = previousSearchParameters.get("message").toString();
+			}
+			
 			// get all database records and display in a listview
 			try
 			{
@@ -142,7 +150,7 @@ public class DatabaseAccessAdminForm extends Form<Object>
 			} 
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				statusMessage = e.getMessage();
 			}
 		}
 		
@@ -189,7 +197,7 @@ public class DatabaseAccessAdminForm extends Form<Object>
 							e.printStackTrace();
 						}
 						// refreshes the page
-						setResponsePage(AdminPage.class);						
+						setResponsePage(AdminListPage.class, null);						
 					}
 				});
 				
@@ -200,8 +208,9 @@ public class DatabaseAccessAdminForm extends Form<Object>
 
 					public void onClick()
 					{
-						// TODO new site to edit
-
+						PageParameters editParameter = new PageParameters();
+						editParameter.add("rfidID", record.getRFIDId());
+				        setResponsePage(AdminListEditPage.class, editParameter);
 					}
 			    });
 			}
@@ -260,16 +269,19 @@ public class DatabaseAccessAdminForm extends Form<Object>
 				
 				searchParameters.add("search_string", searchField);
 				searchParameters.add("search_option", searchType);
-				setResponsePage(SearchPageAdmin.class, searchParameters); 	 
+				setResponsePage(SearchPageAdminList.class, searchParameters); 	 
 			}
 		};
 		add(searchButton);
 		
 		/*
-		 * This will be executed, when the back button on the searchpage is clicked.
+		 * This will be executed, when the back button on the search page is clicked.
 		 * It will go back to the whole list view
 		 */
-		if (previousSearchParameters != null)
+		if (previousSearchParameters != null 
+				&& (previousSearchParameters.get("search_string").toString() != null && previousSearchParameters.get("search_option").toString() != null
+			    	&& previousSearchParameters.get("message").toString() == null)
+				)
 		{
 			Button backButton = new Button("back_button") 
 			{
@@ -277,7 +289,7 @@ public class DatabaseAccessAdminForm extends Form<Object>
 
 				public void onSubmit() 
 				{
-					setResponsePage(AdminPage.class);
+					setResponsePage(AdminListPage.class, null);
 				}
 			};
 			add(backButton);
