@@ -38,6 +38,7 @@ import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.main.ConfirmationClickLink;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -54,6 +55,8 @@ public class DatabaseAccessRoomForm extends Form<Object>
 	
 	private String statusMessage;
 	
+	private PageParameters editParameter = new PageParameters();
+	
 	/**
 	 * Creates a Form Object.
 	 * @param id the name of this form, to use in html
@@ -66,10 +69,25 @@ public class DatabaseAccessRoomForm extends Form<Object>
 		
 		add(new Label("statusMessage"));
 		
+		//if this page shows the edited record, it will show "The edited record was saved."  
 		if (pageParameter != null && pageParameter.get("message").isNull() == false)
 		{
 			statusMessage = pageParameter.get("message").toString();
 		}
+		
+		//add button, can add new records to roomTable
+		final Button roomAddButton = new Button("roomAddButton")
+		{
+			private static final long serialVersionUID = 5362847094125103725L;
+
+			@Override
+			public void onSubmit()
+			{
+				editParameter.add("function","add");
+				setResponsePage(AdminRoomEditPage.class,editParameter);
+			}
+		};
+		add(roomAddButton);
 		
 		// get all database records and display in a listview
 		try
@@ -122,7 +140,7 @@ public class DatabaseAccessRoomForm extends Form<Object>
 					public void onClick()
 					{
 						// pass record id as parameter
-						PageParameters editParameter = new PageParameters();
+						editParameter.add("function","update");
 						editParameter.add("recordID", record.getID());
 				        setResponsePage(AdminRoomEditPage.class, editParameter);
 					}

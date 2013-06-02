@@ -259,18 +259,67 @@ public class RoomDatabaseHandler
 	 */
 	public static void updateRecordInDatabase(RoomDatabaseRecord record) throws SQLException, IllegalArgumentException, Exception
 	{
+		ConnectionSource connectionSource = null;
+		List<RoomDatabaseRecord> databaseRecords = null;
+		
+		String name;
+		String location;
+		Integer id;
+		Integer idMax = 0;
+		
 		if (record == null)
 		{
 			throw new IllegalArgumentException("The RoomDatabaseRecord is null");
 		}
 		
-		ConnectionSource connectionSource = null;
+		name = record.getName();
+		location = record.getLocation();
+
 		try
 		{
 			// create data-source for the database
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// create a database, if non existing
 			setupDatabase(connectionSource);
+			
+			//read all the records in the table in order to check check whether this input record has already in the table.
+			databaseRecords = databaseHandlerDao.queryForAll();
+			
+			//if now is the edit command
+			if (record.getID() != null)
+			{
+				//firstly check whether this input record, including "name" and "location", has already in the table.
+				for (RoomDatabaseRecord roomRecord : databaseRecords)
+				{
+					if (roomRecord.getLocation().equals(location) & roomRecord.getName().equals(name))
+					{
+						connectionSource.close();
+						throw new IllegalArgumentException("The edited record is already in the database"); 
+					}
+				}
+			}
+			// if now is the add command
+			if (record.getID() == null)
+			{
+				for (RoomDatabaseRecord roomRecord : databaseRecords)
+				{
+					//find the max record ID in the current table
+					id = roomRecord.getID();
+					if (id > idMax)
+					{
+						idMax = id;
+					}
+					//check whether this input record, including "name" and "location", has already in the table.
+					if (roomRecord.getLocation().equals(location) & roomRecord.getName().equals(name))
+					{
+						connectionSource.close();
+						throw new IllegalArgumentException("The added record is already in the database"); 
+					}
+				}
+				//set the ID of input record to the current ID (max +1)
+				record.setID(idMax+1);
+			}
+			
 			// writes to the database: create if new id, or update if existing
 			databaseHandlerDao.createOrUpdate(record);
 		} 

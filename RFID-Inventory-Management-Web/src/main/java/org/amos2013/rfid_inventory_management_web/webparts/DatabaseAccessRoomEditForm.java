@@ -66,6 +66,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 	private String selectedLocation = "Tennenlohe (DE)";
 
 	private RoomDatabaseRecord roomRecord;
+	String function;
 
 	/**
 	 * Creates a Form Object to submit updates to the database.
@@ -80,43 +81,47 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 		
 		if (pageParameter != null)
 		{
-			// if /admin/room/edit is entered, go back
-			if ((pageParameter.get("recordID").isNull() == true))
-			{
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);				
-			}
+			function = pageParameter.get("function").toString();
 			
-			try
+			if (function.equals("update"))
 			{
-				// get the record
-				roomID = pageParameter.get("recordID").toInteger();
-			}
-			catch (StringValueConversionException e)
-			{
-				// is thrown if no integer is entered after the /edit?recordID=
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);			
-			}
+				// if /admin/room/edit is entered, go back
+				if ((pageParameter.get("recordID").isNull() == true))
+				{
+					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);				
+				}
 			
-			try
-			{
-				roomRecord = RoomDatabaseHandler.getRecordFromDatabaseByID(roomID);
-			}
-			catch (SQLException e)
-			{
-				PageParameters statusPageParameter = new PageParameters();
-				statusPageParameter.add("message", "Error with the database connection"); 
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);								
-			}
+				try
+				{
+					// get the record
+					roomID = pageParameter.get("recordID").toInteger();
+				}
+				catch (StringValueConversionException e)
+				{
+					// is thrown if no integer is entered after the /edit?recordID=
+					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);			
+				}
+				try
+				{
+					roomRecord = RoomDatabaseHandler.getRecordFromDatabaseByID(roomID);
+				}
+				catch (SQLException e)
+				{
+					PageParameters statusPageParameter = new PageParameters();
+					statusPageParameter.add("message", "Error with the database connection"); 
+					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);								
+				}
 
-			if (roomRecord == null)
-			{
-				PageParameters statusPageParameter = new PageParameters();
-				statusPageParameter.add("message", "Error: the record is not found"); 
-				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);		
-			}
+				if (roomRecord == null)
+				{
+					PageParameters statusPageParameter = new PageParameters();
+					statusPageParameter.add("message", "Error: the record is not found"); 
+					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);		
+				}
 			
-			roomName = roomRecord.getName();
-			selectedLocation = roomRecord.getLocation();
+				roomName = roomRecord.getName();
+				selectedLocation = roomRecord.getLocation();
+			}
 			
 			add(new Label("statusMessage"));
 			
@@ -145,7 +150,16 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 						RoomDatabaseHandler.updateRecordInDatabase(record);
 						
 						PageParameters statusPageParameter = new PageParameters();
-						statusPageParameter.add("message", "The edited data was saved."); 
+						
+						if (function.equals("update"))
+						{
+						    statusPageParameter.add("message", "The edited data was saved."); 
+						}
+						else if (function.equals("add"))
+						{
+							statusPageParameter.add("message", "The added data was saved."); 						
+						}
+						
 						setResponsePage(AdminRoomPage.class, statusPageParameter);
 					}
 					catch (IllegalArgumentException e)

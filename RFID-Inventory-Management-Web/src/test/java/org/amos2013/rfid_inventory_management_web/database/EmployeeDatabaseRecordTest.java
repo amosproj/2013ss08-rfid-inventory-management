@@ -50,7 +50,7 @@ public class EmployeeDatabaseRecordTest
 		String location = "Erlangen";
 		int id = 100;
 
-		RoomDatabaseRecord testRecord = new RoomDatabaseRecord(id, employee, location);
+		EmployeeDatabaseRecord testRecord = new EmployeeDatabaseRecord(id, employee, location);
 		
 		assertEquals(employee, testRecord.getName());
 		assertEquals(location, testRecord.getLocation());

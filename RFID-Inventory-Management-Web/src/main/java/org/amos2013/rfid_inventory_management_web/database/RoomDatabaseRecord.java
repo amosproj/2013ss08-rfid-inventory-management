@@ -63,7 +63,7 @@ public class RoomDatabaseRecord implements Serializable
 	private String location;
 	
 	@DatabaseField(columnName = ID_COLUMN, canBeNull = false, id = true)	// primary key
-	private int id;
+	private Integer id;
 
 	/**
 	 * Default constructor (empty)
@@ -81,7 +81,7 @@ public class RoomDatabaseRecord implements Serializable
 	 * @param name the name
 	 * @param location the location
 	 */
-	public RoomDatabaseRecord(int id, String name, String location)
+	public RoomDatabaseRecord(Integer id, String name, String location)
 	{
 		this.id = id;
 		this.name = name;
@@ -128,7 +128,7 @@ public class RoomDatabaseRecord implements Serializable
 	 * Gets the ID.
 	 * @return the ID
 	 */
-	public int getID()
+	public Integer getID()
 	{
 		return id;
 	}
@@ -137,7 +137,7 @@ public class RoomDatabaseRecord implements Serializable
 	 * Sets the ID
 	 * @param id ID to be set
 	 */
-	public void setID(int id)
+	public void setID(Integer id)
 	{
 		this.id = id;
 	}

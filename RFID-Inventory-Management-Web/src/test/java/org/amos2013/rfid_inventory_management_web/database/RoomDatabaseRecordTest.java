@@ -48,7 +48,7 @@ public class RoomDatabaseRecordTest
 	{
 		String room = "42.42";
 		String location = "Erlangen";
-		int id = 43;
+		Integer id = 43;
 
 		RoomDatabaseRecord testRecord = new RoomDatabaseRecord(id, room, location);
 		
