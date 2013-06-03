@@ -34,6 +34,7 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 import junit.framework.Assert;
 
 import org.amos2013.rfid_inventory_management_web.main.WicketApplication;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,11 +62,11 @@ public class DatabaseAccessAdminListFormTest
 	{
 		try
 		{
-			new DatabaseAccessAdminListForm("databaseAccessAdminForm", null);
+			new DatabaseAccessAdminListForm("databaseAccessAdminForm", new PageParameters());
 		}
 		catch (Exception ex)
 		{
-			 Assert.fail("Expected no exception in DatabaseAccessAdminForm(), but got: " + ex.getMessage());
+			 Assert.fail("Expected no exception in DatabaseAccessAdminListForm(), but got: " + ex.getMessage());
 		}
 	}
 }

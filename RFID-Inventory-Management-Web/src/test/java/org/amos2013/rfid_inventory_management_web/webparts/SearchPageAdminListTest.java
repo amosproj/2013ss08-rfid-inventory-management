@@ -59,17 +59,30 @@ public class SearchPageAdminListTest
 	@Test
 	public void homepageRendersSuccessfully()
 	{
-		//start and render the test page without search parameters
+		/*//start and render the test page without search parameters
 		wicketTester.startPage(SearchPageAdminList.class);
-		//assert rendered page class is AdminPage, because no search parameters are entered
-		wicketTester.assertRenderedPage(AdminListPage.class);
+		//assert rendered page class is AdminListPage, because no search parameters are entered
+		wicketTester.assertRenderedPage(AdminListPage.class);*/
 		
 		// now test with search parameters
 		PageParameters searchParameters = new PageParameters();
 		searchParameters.add("search_string", "test");
 		searchParameters.add("search_option", "inventory_number");
 		wicketTester.startPage(SearchPageAdminList.class, searchParameters);
-		//assert rendered page class is AdminPage, because no search parameters are entered
 		wicketTester.assertRenderedPage(SearchPageAdminList.class);
+		
+		/*// now test with one search parameters
+		PageParameters searchParametersA = new PageParameters();
+		searchParametersA.add("search_string", "test");
+		wicketTester.startPage(SearchPageAdminList.class, searchParametersA);
+		//assert rendered page class is AdminListPage, because only one search parameter is entered
+		wicketTester.assertRenderedPage(AdminListPage.class);
+		
+		// now test with the other search parameters
+		PageParameters searchParametersB = new PageParameters();
+		searchParametersB.add("search_string", "test");
+		wicketTester.startPage(SearchPageAdminList.class, searchParametersB);
+		//assert rendered page class is AdminListPage, because only one search parameter is entered
+		wicketTester.assertRenderedPage(AdminListPage.class);*/
 	}
 }

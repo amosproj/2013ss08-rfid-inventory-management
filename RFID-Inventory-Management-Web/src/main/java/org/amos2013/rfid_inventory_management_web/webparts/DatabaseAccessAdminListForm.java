@@ -49,6 +49,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
@@ -74,7 +76,23 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this));
 		List<DeviceDatabaseRecord> databaseRecords = null;
-
+		
+		// if /search is entered previousSearchParameters is not null! but the toString()s will return null
+		// then just throw an RestartResponseAtInterceptPageException, which will redirect to /admin
+		if (previousSearchParameters != null 
+					// if /admin/search or /admin/search/ (in the second case pageParameters.isEmpty() is false, because the last "/" is a parameter)
+				&& ((previousSearchParameters.get("message").isNull() && previousSearchParameters.get("search_string").isNull() 
+							&& previousSearchParameters.get("search_option").isNull() && getRequest().getUrl().getPath().startsWith("admin/search"))
+						// if /admin/search?search_option=a
+						|| (previousSearchParameters.get("search_string").isNull() && previousSearchParameters.get("search_option").isNull() == false)
+						// if /admin/search?search_string=a
+						|| (previousSearchParameters.get("search_option").isNull() && previousSearchParameters.get("search_string").isNull() == false)
+						// if /admin/search?message=a
+						|| (previousSearchParameters.get("message").isNull() == false && getRequest().getUrl().getPath().startsWith("admin/search"))))
+		{
+			throw new RestartResponseAtInterceptPageException(AdminListPage.class, null);
+		}
+			
 		final DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
 		
 		// add search field
@@ -83,20 +101,11 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 		add(new Label("statusMessage"));
 		
 		if (previousSearchParameters != null 
-				&& (previousSearchParameters.get("search_string").toString() != null && previousSearchParameters.get("search_option").toString() != null
-				    && previousSearchParameters.get("message").toString() == null)
-				    )
+				&& (previousSearchParameters.get("search_string").isNull() == false && previousSearchParameters.get("search_option").isNull() == false))
 		{
 			String search_string = previousSearchParameters.get("search_string").toString();
 			String search_option = previousSearchParameters.get("search_option").toString();
 			
-			// if /search is entered previousSearchParameters is not null! but the toString()s will return null
-			// then just throw an RestartResponseAtInterceptPageException, which will redirect to /admin
-			if ((search_string == null) || (search_option == null))
-			{				
-				throw new RestartResponseAtInterceptPageException(AdminListPage.class, null);
-			}
-		
 			// keep the dropdown menu choice selected
 			// get search type
 			if (search_option.equals("inventory_number"))
@@ -138,7 +147,7 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 		}
 		else
 		{
-			if (previousSearchParameters != null && previousSearchParameters.isEmpty() == false)
+			if (previousSearchParameters.get("message").isNull() == false)
 			{
 				statusMessage = previousSearchParameters.get("message").toString();
 			}
@@ -278,10 +287,9 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 		 * This will be executed, when the back button on the search page is clicked.
 		 * It will go back to the whole list view
 		 */
+		
 		if (previousSearchParameters != null 
-				&& (previousSearchParameters.get("search_string").toString() != null && previousSearchParameters.get("search_option").toString() != null
-			    	&& previousSearchParameters.get("message").toString() == null)
-				)
+				&& (previousSearchParameters.get("search_string").isNull() == false && previousSearchParameters.get("search_option").isNull() == false))
 		{
 			Button backButton = new Button("back_button") 
 			{
