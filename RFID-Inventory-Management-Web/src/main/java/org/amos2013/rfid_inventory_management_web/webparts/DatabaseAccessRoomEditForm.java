@@ -81,8 +81,9 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 		
 		if (pageParameter != null)
 		{
-			// if /admin/room/edit is entered, go back
-			if ((pageParameter.get("recordID").isNull() == true) || (pageParameter.get("function").isNull() == true))
+			// if /admin/room/edit or only /admin/room/edit&recordID= is entered, go back
+			if ((pageParameter.get("recordID").isNull() == true && pageParameter.get("function").isNull() == true)
+					|| (pageParameter.get("recordID").isNull() == false && pageParameter.get("function").isNull() == true))
 			{
 				throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, null);				
 			}

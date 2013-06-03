@@ -260,6 +260,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			// meta data components
 			final TextField<String> metaPartNumberTextField = new TextField<String>("metaPartNumberInputField");
 			metaPartNumberTextField.setOutputMarkupId(true); // needed, to add this component to the AjaxRequestTarget, in order to chance the value dynamically			
+			metaPartNumberTextField.setEnabled(false);
 			add(metaPartNumberTextField);
 			
 			final TextField<String> typeTextField = new TextField<String>("typeInputField");
