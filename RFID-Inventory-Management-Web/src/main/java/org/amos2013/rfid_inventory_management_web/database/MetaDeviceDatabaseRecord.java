@@ -64,7 +64,7 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	public static final String PLATFORM_COLUMN = "platform";
 
 	// Columns definition:
-	@DatabaseField(columnName = ID_COLUMN, canBeNull = false, id = true)	// primary key // TODO auto generate the id!
+	@DatabaseField(columnName = ID_COLUMN, canBeNull = false, id = true)	// primary key
 	private int id;
 
 	@DatabaseField(columnName = TYPE_COLUMN)

@@ -58,7 +58,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 	
 	private String statusMessage;
 
-	private Integer roomID;
+	private Integer roomID = null;
 	private String roomName;
 
 	// TODO later on we should probably get the contents for the following string from the database
@@ -90,8 +90,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 			
 			function = pageParameter.get("function").toString();
 			if (function.equals("update"))
-			{ 
-				
+			{
 				try
 				{
 					// get the record
@@ -109,6 +108,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 				}
 				catch (SQLException e)
 				{
+					e.printStackTrace();
 					PageParameters statusPageParameter = new PageParameters();
 					statusPageParameter.add("message", "Error with the database connection"); 
 					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);								
@@ -155,11 +155,11 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 						
 						if (function.equals("update"))
 						{
-							statusPageParameter.add("message", "The edited data was saved.");
+							statusPageParameter.add("message", "The room was updated.");
 						}
 						else
 						{
-							statusPageParameter.add("message", "The added data was saved.");
+							statusPageParameter.add("message", "The new room was added.");
 						} 
 						
 						setResponsePage(AdminRoomPage.class, statusPageParameter);
@@ -167,11 +167,25 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 					catch (IllegalArgumentException e)
 					{
 						statusMessage = e.getMessage();
+						return;
+					}
+					catch (IllegalStateException e)
+					{
+						statusMessage = e.getMessage();
+						e.printStackTrace();
+						return;
+					}
+					catch (SQLException e)
+					{
+						statusMessage = "An error with the database occured.";
+						e.printStackTrace();
+						return;
 					}
 					catch (Exception e)
 					{
 						statusMessage = "An error occured!";
 						e.printStackTrace();
+						return;
 					}
 				}
 			};

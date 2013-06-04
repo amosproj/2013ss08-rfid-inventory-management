@@ -58,7 +58,7 @@ public class RoomDatabaseHandler
 
 	// Database Access Object, is a handler for reading and writing
 	/** The database handler dao. */
-	private static Dao<RoomDatabaseRecord, String> databaseHandlerDao;
+	private static Dao<RoomDatabaseRecord, Integer> databaseHandlerDao;
 
 
 	/**
@@ -253,29 +253,53 @@ public class RoomDatabaseHandler
 	}
 	
 	/**
+	 * Gets the next free id.
+	 * Runs through the database
+	 * @return the next free id
+	 */
+	private static int getNextFreeId()
+	{
+		int freeId = -1;
+		
+		try
+		{
+			databaseHandlerDao = DaoManager.createDao(new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW), RoomDatabaseRecord.class);
+			
+			for (int i = 0; i < Integer.MAX_VALUE; ++i)
+			{
+				if (!databaseHandlerDao.idExists(i))
+				{
+					freeId = i;
+					break;
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+
+		return freeId;
+	}
+	
+	/**
 	 * Writes the given strings to the database.
 	 *
 	 * @param record the target record
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when room or owner is null
+	 * @throws IllegalStateException if the next free id is -1
 	 * @throws Exception when database setup fails
 	 */
-	public static void updateRecordInDatabase(RoomDatabaseRecord record) throws SQLException, IllegalArgumentException, Exception
+	public static void updateRecordInDatabase(RoomDatabaseRecord record) throws SQLException, IllegalArgumentException, IllegalStateException, Exception
 	{
 		ConnectionSource connectionSource = null;
 		List<RoomDatabaseRecord> databaseRecords = null;
-		String name;
-		String location;
-		Integer id;
-		Integer idMax = 0;
 
 		if (record == null)
 		{
 			throw new IllegalArgumentException("The RoomDatabaseRecord is null");
 		}
-		
-		name = record.getName();
-		location = record.getLocation();
 		
 		try
 		{
@@ -286,44 +310,32 @@ public class RoomDatabaseHandler
 			
 			//read all the records in the table in order to check check whether this input record has already in the table.
 			databaseRecords = databaseHandlerDao.queryForAll();
-			//if now is the edit command
-			if (record.getID() != null)
+			
+			//firstly check whether this input record, including "name" and "location", has already in the table.
+			for (RoomDatabaseRecord roomRecord : databaseRecords)
 			{
-				//firstly check whether this input record, including "name" and "location", has already in the table.
-				for (RoomDatabaseRecord roomRecord : databaseRecords)
+				if (roomRecord.getLocation().equals(record.getLocation()) && roomRecord.getName().equals(record.getName()))
 				{
-					if (roomRecord.getLocation().equals(location) & roomRecord.getName().equals(name))
-					{
-						connectionSource.close();
-						throw new IllegalArgumentException("The edited record is already in the database");
-					}
+					// already existing -> do nothing
+					connectionSource.close();
+					throw new IllegalArgumentException("A room with this name and location is already existing");
 				}
 			}
 			
-			// if now is the add command
+			// if this is the add command, set id
 			if (record.getID() == null)
 			{
-				for (RoomDatabaseRecord roomRecord : databaseRecords)
+				// generate id
+				int nextFreeId = getNextFreeId();
+				
+				if (nextFreeId == -1)
 				{
-					//find the max record ID in the current table
-					id = roomRecord.getID();
-					if (id > idMax)
-					{
-						idMax = id;
-					}
-					
-					//check whether this input record, including "name" and "location", has already in the table.
-					if (roomRecord.getLocation().equals(location) & roomRecord.getName().equals(name))
-					{
-						connectionSource.close();
-						throw new IllegalArgumentException("The added record is already in the database");
-					}
+					throw new IllegalStateException("The next free id is -1.");
 				}
 				
-				//set the ID of input record to the current ID (max +1)
-				record.setID(idMax+1);
+				record.setID(nextFreeId);
 			}
-			
+				
 			// writes to the database: create if new id, or update if existing
 			databaseHandlerDao.createOrUpdate(record);
 		} 

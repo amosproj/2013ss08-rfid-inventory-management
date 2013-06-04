@@ -94,6 +94,7 @@ public class DatabaseAccessRoomForm extends Form<Object>
 		} 
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			statusMessage = e.getMessage();
 		}
 		
@@ -123,10 +124,14 @@ public class DatabaseAccessRoomForm extends Form<Object>
 						catch (Exception e)
 						{
 							e.printStackTrace();
+							statusMessage = "An error occured.";
+							return;
 						}
 						
 						// refreshes the page
-						setResponsePage(AdminRoomPage.class, null);
+						PageParameters pageParameters = new PageParameters();
+						pageParameters.add("message", "The room was deleted.");
+						setResponsePage(AdminRoomPage.class, pageParameters);
 					}
 				});
 				
