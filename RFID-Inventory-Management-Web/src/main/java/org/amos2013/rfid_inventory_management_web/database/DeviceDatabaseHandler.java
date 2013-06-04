@@ -34,6 +34,8 @@ package org.amos2013.rfid_inventory_management_web.database;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.j256.ormlite.dao.Dao;
@@ -141,6 +143,8 @@ public class DeviceDatabaseHandler implements Serializable
 			
 			// also update meta data (MetaDeviceDatabaseRecord)
 			metaDeviceDatabaseHandler.updateRecordInDatabase(record.getMetaDeviceDatabaseRecord());
+			// and update the local list
+			metaDeviceDatabaseHandler.getDatabaseRecordList();
 		} 
 		finally
 		{
@@ -306,7 +310,7 @@ public class DeviceDatabaseHandler implements Serializable
 		}
 		
 		//get meta device data
-		databaseRecords.get(0).setMetaDeviceDatabaseRecord();
+		databaseRecords.get(0).setMetaDeviceDatabaseRecordViaPartNumber();
 		
 		return databaseRecords.get(0);
 	}
@@ -351,11 +355,11 @@ public class DeviceDatabaseHandler implements Serializable
 		{
 			return resultList;
 		}
-
+		
 		// connect with meta data
 		for (DeviceDatabaseRecord record : databaseRecords)
 		{
-			record.setMetaDeviceDatabaseRecord();
+			record.setMetaDeviceDatabaseRecordViaPartNumber();
 		}
 		
 		return databaseRecords;
@@ -417,6 +421,8 @@ public class DeviceDatabaseHandler implements Serializable
 		{
 			e.printStackTrace();
 		}
+		
+		Collections.sort(databaseRecordList, DeviceDatabaseRecord.getDeviceRecordComparator());
 		
 		return databaseRecordList;
 	}

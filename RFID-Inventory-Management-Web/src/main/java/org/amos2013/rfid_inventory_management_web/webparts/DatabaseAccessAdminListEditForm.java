@@ -129,6 +129,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			}
 			catch (SQLException e)
 			{
+				e.printStackTrace();				
 				PageParameters statusPageParameter = new PageParameters();
 				statusPageParameter.add("message", "Error with the database connection"); 
 				throw new RestartResponseAtInterceptPageException(AdminListPage.class, statusPageParameter);
@@ -219,6 +220,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 								catch (Exception e)
 								{
 									statusMessage = e.getMessage();
+									e.printStackTrace();									
 								}
 								
 								roomDropDownChoices.addAll(roomDatabaseRecords);
@@ -233,6 +235,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 								catch (SQLException e)
 								{
 									statusMessage = e.getMessage();
+									e.printStackTrace();
 								}
 								
 								employeeDropDownChoices.addAll(employeeDatabaseRecords);
@@ -294,24 +297,32 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 				{
 					MetaDeviceDatabaseHandler metaDeviceDatabaseHandler = MetaDeviceDatabaseHandler.getInstance();
 					MetaDeviceDatabaseRecord record = metaDeviceDatabaseHandler.getRecordByPartNumber(partNumberInputField);
+
+					// add components to AjaxRequestTarget to be changed dynamically
+					arg0.add(typeTextField);
+					arg0.add(categoryTextField);
+					arg0.add(manufacturerTextField);
+					arg0.add(platformTextField);
+					arg0.add(metaPartNumberTextField);
 					
 					// if a valid part number was entered
 					if (record != null)
 					{
-						// add components to AjaxRequestTarget to be changed dynamically
-						arg0.add(typeTextField);
-						arg0.add(categoryTextField);
-						arg0.add(manufacturerTextField);
-						arg0.add(platformTextField);
-						arg0.add(metaPartNumberTextField);
-						
 						// set new values
 						typeInputField = record.getType();
 						categoryInputField = record.getCategory();
 						manufacturerInputField = record.getManufacturer();
 						platformInputField = record.getPlatform();
-						metaPartNumberInputField = partNumberInputField;
 					}
+					else 
+					{
+						typeInputField = null;
+						categoryInputField = null;
+						manufacturerInputField = null;
+						platformInputField = null;
+					}
+					
+					metaPartNumberInputField = partNumberInputField;
 				}
 			});
 			add(partNumberTextField);
@@ -329,27 +340,71 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 						return;
 					}
 					
-					// TODO update
+					// write to the database: generate records from input data
+					String employeeToSet = null; 
+					String roomToSet = null; 
 					
-					// write to the database
-					/*try
+					if (!selectedLocation.equals("Please select") && !selectedEmployee.equals("Please select"))
 					{
-						RoomDatabaseRecord record = new RoomDatabaseRecord(roomID, roomName, selectedLocation);
-						RoomDatabaseHandler.updateRecordInDatabase(record);
+						employeeToSet = selectedEmployee;
+					}
+
+					if (!selectedLocation.equals("Please select") && !selectedRoom.equals("Please select"))
+					{
+						roomToSet = selectedRoom;
+					}
+					
+					try
+					{
+						DeviceDatabaseRecord record = new DeviceDatabaseRecord(rfidIDInputField, roomToSet, employeeToSet, partNumberInputField, 
+								serialNumberInputField, inventoryNumberInputField, ownerInputField, commentInputField);
+						// only set a new meta record, if there were changes (this will keep the unique id)
+						if (!record.getCategory().equals(categoryInputField) || !record.getType().equals(typeInputField) 
+								|| !record.getPartNumber().equals(metaPartNumberInputField) || !record.getManufacturer().equals(manufacturerInputField)
+								|| !record.getPlatform().equals(platformInputField))
+						{
+							MetaDeviceDatabaseRecord metaRecord = null;
+							
+							try
+							{
+								metaRecord = new MetaDeviceDatabaseRecord(categoryInputField, typeInputField, partNumberInputField, 
+										manufacturerInputField, platformInputField);								
+							}
+							catch (IllegalArgumentException e)
+							{
+								statusMessage = "Error: part number is null!";
+								return;
+							}
+							catch (IllegalStateException ex)
+							{
+								statusMessage = "Error: next free Id in the meta device database table is -1.";
+								return;
+							}
+							
+							record.setMetaDeviceDataBaseRecord(metaRecord);
+						}
+						
+						DeviceDatabaseHandler.getInstance().updateCompleteRecordInDatabase(record);
 						
 						PageParameters statusPageParameter = new PageParameters();
 						statusPageParameter.add("message", "The edited data was saved."); 
 						setResponsePage(AdminListPage.class, statusPageParameter);
 					}
+					catch (SQLException e)
+					{
+						statusMessage = "An error with the database occured.";
+						e.printStackTrace();
+					}
 					catch (IllegalArgumentException e)
 					{
 						statusMessage = e.getMessage();
+						e.printStackTrace();
 					}
 					catch (Exception e)
 					{
 						statusMessage = "An error occured!";
 						e.printStackTrace();
-					}*/
+					}
 				}
 			};
 			add(submitButton);
@@ -372,5 +427,4 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			setResponsePage(AdminListPage.class, null);
 		}
 	}
-
 }

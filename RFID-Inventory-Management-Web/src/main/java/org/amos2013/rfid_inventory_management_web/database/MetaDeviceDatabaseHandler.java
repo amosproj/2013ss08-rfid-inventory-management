@@ -107,13 +107,43 @@ public class MetaDeviceDatabaseHandler implements Serializable
 		return metaDatabaseRecordList;
 	}
 	
+
+	/**
+	 * Gets the next free id.
+	 * Runs through the database
+	 * @return the next free id
+	 */
+	public int getNextFreeId()
+	{
+		int freeId = -1;
+		
+		try
+		{
+			databaseHandlerDao = DaoManager.createDao(new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW), MetaDeviceDatabaseRecord.class);
+			
+			for (int i = 0; i < Integer.MAX_VALUE; ++i)
+			{
+				if (!databaseHandlerDao.idExists(i))
+				{
+					freeId = i;
+					break;
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+
+		return freeId;
+	}
 	
 	/**
 	 * Creates a database if there is no one existing
 	 * @param connectionSource required for setting up db
-	 * @throws Exception
+	 * @throws SQLException the sql exception
 	 */
-	private void setupDatabase(ConnectionSource connectionSource) throws Exception
+	private void setupDatabase(ConnectionSource connectionSource) throws SQLException
 	{
 		databaseHandlerDao = DaoManager.createDao(connectionSource, MetaDeviceDatabaseRecord.class);
 

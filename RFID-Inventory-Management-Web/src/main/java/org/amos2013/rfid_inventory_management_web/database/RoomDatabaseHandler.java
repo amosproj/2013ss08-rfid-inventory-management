@@ -33,6 +33,7 @@ package org.amos2013.rfid_inventory_management_web.database;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.j256.ormlite.dao.Dao;
@@ -204,9 +205,11 @@ public class RoomDatabaseHandler
 				connectionSource.close();
 			}
 		}
-
-		return databaseRecords; 
 		
+		// sort the list by location and name
+		Collections.sort(databaseRecords, RoomDatabaseRecord.getRoomRecordComparator());
+
+		return databaseRecords;
 	}
 	
 	/**

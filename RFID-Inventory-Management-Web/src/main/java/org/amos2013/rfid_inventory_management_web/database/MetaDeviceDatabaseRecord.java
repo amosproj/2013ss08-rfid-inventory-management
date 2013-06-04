@@ -84,7 +84,7 @@ public class MetaDeviceDatabaseRecord implements Serializable
 
 	/**
 	 * Default constructor (empty)
-	 *
+	 * this is called, when getting records from the database
 	 */
 	public MetaDeviceDatabaseRecord()
 	{
@@ -99,9 +99,33 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 * @param part_number 	the part_number
 	 * @param manufacturer the manufacturer
 	 * @param platform 	the platform
+	 * @throws IllegalArgumentException if the part number is null
+	 * @throws IllegalStateException if the next free id is -1
 	 */
-	public MetaDeviceDatabaseRecord(String category, String type, String part_number, String manufacturer, String platform)
+	public MetaDeviceDatabaseRecord(String category, String type, String part_number, String manufacturer, String platform) throws IllegalArgumentException, IllegalStateException
 	{
+		if (part_number == null)
+		{
+			throw new IllegalArgumentException("MetaDeviceDatabaseRecord(): part number is null");
+		}
+		
+		// see, if this part_number is already existing. if so, keep the id. else gerneate it
+		MetaDeviceDatabaseHandler metaDeviceDatabaseHandler = MetaDeviceDatabaseHandler.getInstance();
+		MetaDeviceDatabaseRecord oldRecord = metaDeviceDatabaseHandler.getRecordByPartNumber(part_number);
+		
+		if (oldRecord != null)
+		{
+			this.id = oldRecord.getId();
+		}
+		else 
+		{
+			this.id = metaDeviceDatabaseHandler.getNextFreeId();
+			if (this.id == -1)
+			{
+				throw new IllegalStateException("MetaDeviceDatabaseHandler(): next free id is -1");
+			}
+		}
+			
 		this.category = category;
 		this.type = type;
 		this.part_number = part_number;
@@ -115,16 +139,12 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 */
 	public String getPartNumber()
 	{
-		return part_number;
-	}
-
-	/**
-	 * Sets the part number
-	 * @param part_number Part number to be set
-	 */
-	public void setPartNumber(String part_number)
-	{
-		this.part_number = part_number;
+		if (this.part_number == null)
+		{
+			return "";
+		}
+		
+		return this.part_number;
 	}
 
 	/**
@@ -133,16 +153,7 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 */
 	public int getId()
 	{
-		return id;
-	}
-
-	/**
-	 * Sets the id
-	 * @param id the id to set
-	 */
-	public void setId(int id)
-	{
-		this.id = id;
+		return this.id;
 	}
 
 	/**
@@ -151,16 +162,12 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 */
 	public String getType()
 	{
-		return type;
-	}
-
-	/**
-	 * Sets the type
-	 * @param type the type to set
-	 */
-	public void setType(String type)
-	{
-		this.type = type;
+		if (this.type == null)
+		{
+			return "";
+		}
+		
+		return this.type;
 	}
 
 	/**
@@ -169,16 +176,12 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 */
 	public String getCategory()
 	{
-		return category;
-	}
-
-	/**
-	 * Sets the category
-	 * @param category the category to set
-	 */
-	public void setCategory(String category)
-	{
-		this.category = category;
+		if (this.category == null)
+		{
+			return "";
+		}
+		
+		return this.category;
 	}
 
 	/**
@@ -187,16 +190,12 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 */
 	public String getManufacturer()
 	{
-		return manufacturer;
-	}
-
-	/**
-	 * Sets the manufacturer
-	 * @param manufacturer the manufacturer to set
-	 */
-	public void setManufacturer(String manufacturer)
-	{
-		this.manufacturer = manufacturer;
+		if (this.manufacturer == null)
+		{
+			return "";
+		}
+		
+		return this.manufacturer;
 	}
 
 	/**
@@ -205,16 +204,12 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 */
 	public String getPlatform()
 	{
-		return platform;
-	}
-
-	/**
-	 * Sets the platform
-	 * @param platform the platform to set
-	 */
-	public void setPlatform(String platform)
-	{
-		this.platform = platform;
+		if (this.platform == null)
+		{
+			return "";
+		}
+		
+		return this.platform;
 	}
 
 	/**
@@ -228,6 +223,6 @@ public class MetaDeviceDatabaseRecord implements Serializable
 		{
 			return false;
 		}
-		return id == ((MetaDeviceDatabaseRecord) other).id;
+		return this.id == ((MetaDeviceDatabaseRecord) other).id;
 	}
 }

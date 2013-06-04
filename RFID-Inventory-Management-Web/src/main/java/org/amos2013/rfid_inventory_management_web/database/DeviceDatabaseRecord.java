@@ -32,6 +32,7 @@
 package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -80,7 +81,7 @@ public class DeviceDatabaseRecord implements Serializable
 	private int rfid_id;
 
 	/** The room. */
-	@DatabaseField(columnName = ROOM_COLUMN, canBeNull = false)
+	@DatabaseField(columnName = ROOM_COLUMN)
 	private String room;
 
 	/** The employee. */
@@ -88,7 +89,7 @@ public class DeviceDatabaseRecord implements Serializable
 	private String employee;
 	
 	/** The part_number. */
-	@DatabaseField(columnName = PART_NUMBER_COLUMN)
+	@DatabaseField(columnName = PART_NUMBER_COLUMN, canBeNull = false)
 	private String part_number;
 	
 	/** The serial_number. */
@@ -114,7 +115,7 @@ public class DeviceDatabaseRecord implements Serializable
 	{
 		// gets the corresponding meta data record from the other table in order to be able to access them 
 		// in this class via the getters and setters
-		setMetaDeviceDatabaseRecord();
+		setMetaDeviceDatabaseRecordViaPartNumber();
 	}
 	
 	/**
@@ -137,9 +138,8 @@ public class DeviceDatabaseRecord implements Serializable
 		
 		// gets the corresponding meta data record from the other table in order to be able to access them 
 		// in this class via the getters and setters
-		setMetaDeviceDatabaseRecord();
+		setMetaDeviceDatabaseRecordViaPartNumber();
 	}
-
 
 	/**
 	 * Instantiates a new device database record.
@@ -166,24 +166,29 @@ public class DeviceDatabaseRecord implements Serializable
 		
 		// gets the corresponding meta data record from the other table in order to be able to access them 
 		// in this class via the getters and setters
-		setMetaDeviceDatabaseRecord();
+		setMetaDeviceDatabaseRecordViaPartNumber();
 	}
 	
 	
 	/**
-	 * Sets the meta device database record from the local list
+	 * Sets the meta device database record from the local list.
+	 *
+	 * @throws IllegalStateException the illegal state exception
 	 */
-	public void setMetaDeviceDatabaseRecord() 
+	public void setMetaDeviceDatabaseRecordViaPartNumber() throws IllegalStateException
 	{
-		try
-		{
-			MetaDeviceDatabaseHandler metaDeviceDatabaseHandler = MetaDeviceDatabaseHandler.getInstance();
-			metaDeviceDatabaseRecord = metaDeviceDatabaseHandler.getRecordByPartNumber(part_number);
-		}
-		catch (IllegalStateException e)
-		{
-			e.printStackTrace();
-		}
+		MetaDeviceDatabaseHandler metaDeviceDatabaseHandler = MetaDeviceDatabaseHandler.getInstance();
+		metaDeviceDatabaseRecord = metaDeviceDatabaseHandler.getRecordByPartNumber(this.part_number);
+	}
+	
+	/**
+	 * Sets the meta device data base record.
+	 *
+	 * @param metaDeviceDatabaseRecord the new meta device database record
+	 */
+	public void setMetaDeviceDataBaseRecord(MetaDeviceDatabaseRecord metaDeviceDatabaseRecord)
+	{
+		this.metaDeviceDatabaseRecord = metaDeviceDatabaseRecord;
 	}
 	
 	/**
@@ -193,7 +198,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public MetaDeviceDatabaseRecord getMetaDeviceDatabaseRecord()
 	{
-		return metaDeviceDatabaseRecord;
+		return this.metaDeviceDatabaseRecord;
 	}
 	
 	/**
@@ -202,21 +207,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getType()
 	{
-		if (metaDeviceDatabaseRecord == null)
+		if (this.metaDeviceDatabaseRecord == null)
 		{
 			return "";
 		} 
-		else return metaDeviceDatabaseRecord.getType();
-	}
 
-	/**
-	 * Sets the type.
-	 *
-	 * @param type Type to be set
-	 */
-	public void setType(String type)
-	{
-		metaDeviceDatabaseRecord.setType(type);
+		return this.metaDeviceDatabaseRecord.getType();
 	}
 	
 	/**
@@ -225,21 +221,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getCategory()
 	{
-		if (metaDeviceDatabaseRecord == null)
+		if (this.metaDeviceDatabaseRecord == null)
 		{
 			return "";
 		} 
-		else return metaDeviceDatabaseRecord.getCategory();
-	}
 
-	/**
-	 * Sets the category.
-	 *
-	 * @param category Category to be set
-	 */
-	public void setCategory(String category)
-	{
-		metaDeviceDatabaseRecord.setCategory(category);
+		return this.metaDeviceDatabaseRecord.getCategory();
 	}
 	
 	/**
@@ -248,21 +235,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getManufacturer()
 	{
-		if (metaDeviceDatabaseRecord == null)
+		if (this.metaDeviceDatabaseRecord == null)
 		{
 			return "";
 		} 
-		else return metaDeviceDatabaseRecord.getManufacturer();
-	}
 
-	/**
-	 * Sets the manufacturer.
-	 *
-	 * @param manufacturer Manufacturer to be set
-	 */
-	public void setManufacturer(String manufacturer)
-	{
-		metaDeviceDatabaseRecord.setManufacturer(manufacturer);
+		return this.metaDeviceDatabaseRecord.getManufacturer();
 	}
 	
 	/**
@@ -271,21 +249,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getPlatform()
 	{
-		if (metaDeviceDatabaseRecord == null)
+		if (this.metaDeviceDatabaseRecord == null)
 		{
 			return "";
 		} 
-		else return metaDeviceDatabaseRecord.getPlatform();
-	}
-
-	/**
-	 * Sets the platform.
-	 *
-	 * @param platform Platform to be set
-	 */
-	public void setPlatform(String platform)
-	{
-		metaDeviceDatabaseRecord.setPlatform(platform);
+		
+		return this.metaDeviceDatabaseRecord.getPlatform();
 	}
 	
 	/**
@@ -294,17 +263,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getPartNumber()
 	{
-		return part_number;
-	}
-
-	/**
-	 * Sets the part number.
-	 *
-	 * @param part_number Part number to be set
-	 */
-	public void setPartNumber(String part_number)
-	{
-		this.part_number = part_number;
+		if (this.part_number == null)
+		{
+			return "";
+		}
+		
+		return this.part_number;
 	}
 
 	/**
@@ -313,17 +277,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getSerialNumber()
 	{
-		return serial_number;
-	}
-
-	/**
-	 * Sets the serial number.
-	 *
-	 * @param serial_number Serial number to be set
-	 */
-	public void setSerialNumber(String serial_number)
-	{
-		this.serial_number = serial_number;
+		if (this.serial_number == null)
+		{
+			return "";
+		}
+			
+		return this.serial_number;
 	}
 
 	/**
@@ -332,17 +291,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getInventoryNumber()
 	{
-		return inventory_number;
-	}
-
-	/**
-	 * Sets the inventory number.
-	 *
-	 * @param inventory_number Inventory number to be set
-	 */
-	public void setInventoryNumber(String inventory_number)
-	{
-		this.inventory_number = inventory_number;
+		if (this.inventory_number == null)
+		{
+			return "";
+		}
+		
+		return this.inventory_number;
 	}
 
 	/**
@@ -351,17 +305,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getOwner()
 	{
-		return owner;
-	}
-
-	/**
-	 * Sets the owner.
-	 *
-	 * @param owner Owner to be set
-	 */
-	public void setOwner(String owner)
-	{
-		this.owner = owner;
+		if (this.owner == null)
+		{
+			return "";
+		}
+		
+		return this.owner;
 	}
 
 	/**
@@ -370,17 +319,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getComment()
 	{
-		return comment;
-	}
-
-	/**
-	 * Sets the comment.
-	 *
-	 * @param comment Comment to be set
-	 */
-	public void setComment(String comment)
-	{
-		this.comment = comment;
+		if (this.comment == null)
+		{
+			return "";
+		}
+		
+		return this.comment;
 	}
 
 	/**
@@ -389,17 +333,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public int getRFIDId()
 	{
-		return rfid_id;
-	}
-
-	/**
-	 * Sets the RFID Id.
-	 *
-	 * @param rfid_id Id to be set
-	 */
-	public void setRFIDId(int rfid_id)
-	{
-		this.rfid_id = rfid_id;
+		return this.rfid_id;
 	}
 
 	/**
@@ -408,17 +342,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getRoom()
 	{
-		return room;
-	}
-
-	/**
-	 * Sets the room.
-	 *
-	 * @param room Room to be set
-	 */
-	public void setRoom(String room)
-	{
-		this.room = room;
+		if (this.room == null)
+		{
+			return "";
+		}
+		
+		return this.room;
 	}
 
 	/**
@@ -427,17 +356,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 */
 	public String getEmployee()
 	{
-		return employee;
-	}
-
-	/**
-	 * Sets the current employee of the device.
-	 *
-	 * @param employee Employee to be set
-	 */
-	public void setEmployee(String employee)
-	{
-		this.employee = employee;
+		if (this.employee == null)
+		{
+			return "";
+		}
+		
+		return this.employee;
 	}
 
 	/**
@@ -453,6 +377,22 @@ public class DeviceDatabaseRecord implements Serializable
 		{
 			return false;
 		}
-		return rfid_id == ((DeviceDatabaseRecord) other).rfid_id;
+		return this.rfid_id == ((DeviceDatabaseRecord) other).rfid_id;
+	}
+	
+	/**
+	 * Gets a device record comparator, which compares two rfid ids.
+	 *
+	 * @return the device record comparator
+	 */
+	public static Comparator<DeviceDatabaseRecord> getDeviceRecordComparator()
+	{
+		return new Comparator<DeviceDatabaseRecord>()
+		{
+			public int compare(DeviceDatabaseRecord first, DeviceDatabaseRecord second)
+			{
+				return Integer.compare(first.getRFIDId(), second.getRFIDId());
+			}
+		};
 	}
 }

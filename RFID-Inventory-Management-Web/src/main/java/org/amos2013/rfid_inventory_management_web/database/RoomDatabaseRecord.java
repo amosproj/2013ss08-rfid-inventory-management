@@ -32,6 +32,7 @@
 package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -167,4 +168,27 @@ public class RoomDatabaseRecord implements Serializable
 		return name + ", " + location;
 		
 	}
+	
+	/**
+	 * Gets a room record comparator, which compares two rooms first by location and then by name.
+	 *
+	 * @return the room record comparator
+	 */
+	public static Comparator<RoomDatabaseRecord> getRoomRecordComparator()
+	{
+		return new Comparator<RoomDatabaseRecord>()
+		{
+			public int compare(RoomDatabaseRecord first, RoomDatabaseRecord second)
+			{
+				int result = first.getLocation().compareTo(second.getLocation());
+				if (result == 0)
+				{
+					result = first.getName().compareTo(second.getName());
+				}
+				
+				return result;
+			}
+		};
+	}
+	
 }
