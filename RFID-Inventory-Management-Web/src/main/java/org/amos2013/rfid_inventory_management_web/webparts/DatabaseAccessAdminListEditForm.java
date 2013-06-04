@@ -44,7 +44,6 @@ import org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseRec
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -52,7 +51,6 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValueConversionException;
@@ -65,6 +63,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 	private static final long serialVersionUID = 2663584118784785557L;
 
 	private String statusMessage;
+	private String function;
 
 	// DeviceDatabaseRecord fields
 	private Integer rfidIDInputField;
@@ -105,66 +104,73 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 		
 		if (pageParameter != null)
 		{
-			// if /admin/room/edit is entered, go back
-			if ((pageParameter.get("rfidID").isNull() == true))
+			// if /admin/edit or only /admin/edit&rfidID= is entered, go back
+			if ((pageParameter.get("rfidID").isNull() == true && pageParameter.get("function").isNull() == true)
+					|| (pageParameter.get("rfidID").isNull() == false && pageParameter.get("function").isNull() == true))
 			{
 				throw new RestartResponseAtInterceptPageException(AdminListPage.class, null);				
 			}
 			
-			try
-			{
-				// get the record
-				rfidIDInputField = pageParameter.get("rfidID").toInteger();
-			}
-			catch (StringValueConversionException e)
-			{
-				// is thrown if no integer is entered after the /edit?recordID=
-				throw new RestartResponseAtInterceptPageException(AdminListPage.class, null);			
-			}
+			// if this is the update function, prefill input fields
+			function = pageParameter.get("function").toString();
 			
-			try
+			if (function.equals("update"))
 			{
-				DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
-				deviceRecord = deviceDatabaseHandler.getRecordFromDatabaseById(rfidIDInputField.toString());
+				try
+				{
+					// get the record
+					rfidIDInputField = pageParameter.get("rfidID").toInteger();
+				}
+				catch (StringValueConversionException e)
+				{
+					// is thrown if no integer is entered after the /edit?recordID=
+					throw new RestartResponseAtInterceptPageException(AdminListPage.class, null);			
+				}
+				
+				try
+				{
+					DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
+					deviceRecord = deviceDatabaseHandler.getRecordFromDatabaseById(rfidIDInputField.toString());
+				}
+				catch (SQLException e)
+				{
+					e.printStackTrace();				
+					PageParameters statusPageParameter = new PageParameters();
+					statusPageParameter.add("message", "Error with the database connection"); 
+					throw new RestartResponseAtInterceptPageException(AdminListPage.class, statusPageParameter);
+				}
+	
+				if (deviceRecord == null)
+				{
+					PageParameters statusPageParameter = new PageParameters();
+					statusPageParameter.add("message", "Error: the record is not found"); 
+					throw new RestartResponseAtInterceptPageException(AdminListPage.class, statusPageParameter);		
+				}
+				
+				selectedRoom = deviceRecord.getRoom();
+				if (selectedRoom == null || selectedRoom.isEmpty())
+				{
+					selectedRoom = "Please select";
+				}
+				
+				selectedEmployee = deviceRecord.getEmployee();
+				if (selectedEmployee == null || selectedEmployee.isEmpty())
+				{
+					selectedEmployee = "Please select";
+				}
+				
+				partNumberInputField = deviceRecord.getPartNumber();
+				serialNumberInputField = deviceRecord.getSerialNumber();
+				inventoryNumberInputField = deviceRecord.getInventoryNumber();
+				ownerInputField = deviceRecord.getOwner();
+				commentInputField = deviceRecord.getComment();
+				
+				metaPartNumberInputField = partNumberInputField;
+				typeInputField = deviceRecord.getType();
+				categoryInputField = deviceRecord.getCategory();
+				manufacturerInputField = deviceRecord.getManufacturer();
+				platformInputField = deviceRecord.getPlatform();
 			}
-			catch (SQLException e)
-			{
-				e.printStackTrace();				
-				PageParameters statusPageParameter = new PageParameters();
-				statusPageParameter.add("message", "Error with the database connection"); 
-				throw new RestartResponseAtInterceptPageException(AdminListPage.class, statusPageParameter);
-			}
-
-			if (deviceRecord == null)
-			{
-				PageParameters statusPageParameter = new PageParameters();
-				statusPageParameter.add("message", "Error: the record is not found"); 
-				throw new RestartResponseAtInterceptPageException(AdminListPage.class, statusPageParameter);		
-			}
-			
-			selectedRoom = deviceRecord.getRoom();
-			if (selectedRoom == null || selectedRoom.isEmpty())
-			{
-				selectedRoom = "Please select";
-			}
-			
-			selectedEmployee = deviceRecord.getEmployee();
-			if (selectedEmployee == null || selectedEmployee.isEmpty())
-			{
-				selectedEmployee = "Please select";
-			}
-			
-			partNumberInputField = deviceRecord.getPartNumber();
-			serialNumberInputField = deviceRecord.getSerialNumber();
-			inventoryNumberInputField = deviceRecord.getInventoryNumber();
-			ownerInputField = deviceRecord.getOwner();
-			commentInputField = deviceRecord.getComment();
-			
-			metaPartNumberInputField = partNumberInputField;
-			typeInputField = deviceRecord.getType();
-			categoryInputField = deviceRecord.getCategory();
-			manufacturerInputField = deviceRecord.getManufacturer();
-			platformInputField = deviceRecord.getPlatform();
 			
 			// add components
 			add(new Label("statusMessage"));
@@ -178,71 +184,71 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			add(employeeDropDown);
 			
 			DropDownChoice<String> locationDropDown = new DropDownChoice<String>("locationDropDown", new PropertyModel<String>(this, "selectedLocation"), locationDropDownChoices)
+				{
+					private static final long serialVersionUID = 134567452542543L;
+		            
+					/*
+					 * required, otherwise no notifications will be spread if the selection changes
+					 */
+					protected boolean wantOnSelectionChangedNotifications() 
 					{
-						private static final long serialVersionUID = 134567452542543L;
-			            
-						/*
-						 * required, otherwise no notifications will be spread if the selection changes
-						 */
-						protected boolean wantOnSelectionChangedNotifications() 
-						{
-			                return true;
-			            }
+		                return true;
+		            }
+					
+					@Override
+					protected void onSelectionChanged(String newSelection)
+					{
+						super.onSelectionChanged(newSelection);
 						
-						@Override
-						protected void onSelectionChanged(String newSelection)
+						if (newSelection.equals("Please select"))
 						{
-							super.onSelectionChanged(newSelection);
-							
-							if (newSelection.equals("Please select"))
-							{
-								employeeDropDown.setEnabled(false);
-								roomDropDown.setEnabled(false);
-							}
-							else
-							{
-								employeeDropDown.setEnabled(true);
-								roomDropDown.setEnabled(true);
-								
-								//clear dropdown menu choices
-								roomDropDownChoices.clear();
-								employeeDropDownChoices.clear();
-								
-								roomDropDownChoices.add("Please select");
-								employeeDropDownChoices.add("Please select");
-								
-								//fill room dropdown menu choices
-								List<String> roomDatabaseRecords = null;
-								try
-								{
-									roomDatabaseRecords = RoomDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
-								} 
-								catch (Exception e)
-								{
-									statusMessage = e.getMessage();
-									e.printStackTrace();									
-								}
-								
-								roomDropDownChoices.addAll(roomDatabaseRecords);
-								roomDropDown.setChoices(roomDropDownChoices);
-								
-								// fill owner drop down choices
-								List<String> employeeDatabaseRecords = null;
-								try
-								{
-									employeeDatabaseRecords = EmployeeDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
-								} 
-								catch (SQLException e)
-								{
-									statusMessage = e.getMessage();
-									e.printStackTrace();
-								}
-								
-								employeeDropDownChoices.addAll(employeeDatabaseRecords);
-								employeeDropDown.setChoices(employeeDropDownChoices);
-							}
+							employeeDropDown.setEnabled(false);
+							roomDropDown.setEnabled(false);
 						}
-					};
+						else
+						{
+							employeeDropDown.setEnabled(true);
+							roomDropDown.setEnabled(true);
+							
+							//clear dropdown menu choices
+							roomDropDownChoices.clear();
+							employeeDropDownChoices.clear();
+							
+							roomDropDownChoices.add("Please select");
+							employeeDropDownChoices.add("Please select");
+							
+							//fill room dropdown menu choices
+							List<String> roomDatabaseRecords = null;
+							try
+							{
+								roomDatabaseRecords = RoomDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
+							} 
+							catch (Exception e)
+							{
+								statusMessage = e.getMessage();
+								e.printStackTrace();									
+							}
+							
+							roomDropDownChoices.addAll(roomDatabaseRecords);
+							roomDropDown.setChoices(roomDropDownChoices);
+							
+							// fill owner drop down choices
+							List<String> employeeDatabaseRecords = null;
+							try
+							{
+								employeeDatabaseRecords = EmployeeDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
+							} 
+							catch (SQLException e)
+							{
+								statusMessage = e.getMessage();
+								e.printStackTrace();
+							}
+							
+							employeeDropDownChoices.addAll(employeeDatabaseRecords);
+							employeeDropDown.setChoices(employeeDropDownChoices);
+						}
+					}
+				};
 			add(locationDropDown);
 			
 			final TextField<String> rfidIDTextField = new TextField<String>("rfidIDInputField");
@@ -387,7 +393,16 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 						DeviceDatabaseHandler.getInstance().updateCompleteRecordInDatabase(record);
 						
 						PageParameters statusPageParameter = new PageParameters();
-						statusPageParameter.add("message", "The edited data was saved."); 
+						
+						if (function.equals("update"))
+						{
+							statusPageParameter.add("message", "The device record was updated.");
+						}
+						else
+						{
+							statusPageParameter.add("message", "The new device record was added.");
+						}
+						
 						setResponsePage(AdminListPage.class, statusPageParameter);
 					}
 					catch (SQLException e)

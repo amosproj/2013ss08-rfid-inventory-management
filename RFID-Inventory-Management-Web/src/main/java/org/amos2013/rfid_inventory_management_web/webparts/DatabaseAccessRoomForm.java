@@ -73,15 +73,16 @@ public class DatabaseAccessRoomForm extends Form<Object>
 			statusMessage = pageParameter.get("message").toString();
 		}
 		
-		//add button, can add new records to roomTable
+		//add button, that adds a new record to the roomTable when clicked
 		final Button roomAddButton = new Button("roomAddButton")
 		{
 			private static final long serialVersionUID = 5362847094125103725L;
+			
 			@Override
 			public void onSubmit()
 			{
 				PageParameters editParameter = new PageParameters();
-				editParameter.add("function","add");
+				editParameter.add("function", "add");
 				setResponsePage(AdminRoomEditPage.class, editParameter);
 			}
 		};

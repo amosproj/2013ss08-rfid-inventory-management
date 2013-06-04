@@ -98,6 +98,21 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 		add(new DropDownChoice<String>("search_dropdown", new PropertyModel<String>(this, "selectedSearchOption"), SEARCH_OPTIONS));
 		add(new Label("statusMessage"));
 		
+		//add button, that adds a new record to the roomTable when clicked
+		final Button deviceAddButton = new Button("deviceAddButton")
+		{
+			private static final long serialVersionUID = -8736242207101015483L;
+
+			@Override
+			public void onSubmit()
+			{
+				PageParameters editParameter = new PageParameters();
+				editParameter.add("function", "add");
+				setResponsePage(AdminListEditPage.class, editParameter);
+			}
+		};
+		add(deviceAddButton);
+		
 		if (previousSearchParameters != null 
 				&& (previousSearchParameters.get("search_string").isNull() == false && previousSearchParameters.get("search_option").isNull() == false))
 		{
@@ -203,8 +218,11 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 						{
 							e.printStackTrace();
 						}
+						
 						// refreshes the page
-						setResponsePage(AdminListPage.class, null);						
+						PageParameters pageParameters = new PageParameters();
+						pageParameters.add("message", "The device record was deleted.");
+						setResponsePage(AdminListPage.class, pageParameters);						
 					}
 				});
 				
@@ -216,6 +234,7 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 					public void onClick()
 					{
 						PageParameters editParameter = new PageParameters();
+						editParameter.add("function", "update");
 						editParameter.add("rfidID", record.getRFIDId());
 				        setResponsePage(AdminListEditPage.class, editParameter);
 					}
@@ -285,7 +304,6 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 		 * This will be executed, when the back button on the search page is clicked.
 		 * It will go back to the whole list view
 		 */
-		
 		if (previousSearchParameters != null 
 				&& (previousSearchParameters.get("search_string").isNull() == false && previousSearchParameters.get("search_option").isNull() == false))
 		{
