@@ -287,7 +287,7 @@ public class RoomDatabaseHandler
 	 *
 	 * @param record the target record
 	 * @throws SQLException when database connection close() fails
-	 * @throws IllegalArgumentException when room or owner is null
+	 * @throws IllegalArgumentException when room or location is null
 	 * @throws IllegalStateException if the next free id is -1
 	 * @throws Exception when database setup fails
 	 */

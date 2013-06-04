@@ -48,7 +48,7 @@ public class EmployeeDatabaseRecordTest
 	{
 		String employee = "Gerd Müller";
 		String location = "Erlangen";
-		int id = 100;
+		Integer id = 100;
 
 		EmployeeDatabaseRecord testRecord = new EmployeeDatabaseRecord(id, employee, location);
 		

@@ -32,6 +32,7 @@
 package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -63,7 +64,7 @@ public class EmployeeDatabaseRecord implements Serializable
 	private String location;
 	
 	@DatabaseField(columnName = ID_COLUMN, canBeNull = false, id = true)	// primary key
-	private int id;
+	private Integer id;
 
 	/**
 	 * Default constructor (empty)
@@ -128,7 +129,7 @@ public class EmployeeDatabaseRecord implements Serializable
 	 * Gets the ID.
 	 * @return the ID
 	 */
-	public int getID()
+	public Integer getID()
 	{
 		return id;
 	}
@@ -137,7 +138,7 @@ public class EmployeeDatabaseRecord implements Serializable
 	 * Sets the ID
 	 * @param id ID to be set
 	 */
-	public void setID(int id)
+	public void setID(Integer id)
 	{
 		this.id = id;
 	}
@@ -166,6 +167,28 @@ public class EmployeeDatabaseRecord implements Serializable
 	{
 		return name + ", " + location;
 		
+	}
+	
+	/**
+	 * Gets an employee record comparator, which compares two employees first by location and then by name.
+	 *
+	 * @return the employee record comparator
+	 */
+	public static Comparator<EmployeeDatabaseRecord> getEmployeeRecordComparator()
+	{
+		return new Comparator<EmployeeDatabaseRecord>()
+		{
+			public int compare(EmployeeDatabaseRecord first, EmployeeDatabaseRecord second)
+			{
+				int result = first.getLocation().compareTo(second.getLocation());
+				if (result == 0)
+				{
+					result = first.getName().compareTo(second.getName());
+				}
+				
+				return result;
+			}
+		};
 	}
 
 }

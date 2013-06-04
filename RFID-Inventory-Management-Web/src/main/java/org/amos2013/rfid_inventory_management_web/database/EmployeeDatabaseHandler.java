@@ -31,8 +31,8 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
-import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +42,13 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+
+
+//TODO: Auto-generated Javadoc
 /**
  * This class is used, to access the database
  */
-public class EmployeeDatabaseHandler implements Serializable
+public class EmployeeDatabaseHandler
 {
 	private static final long serialVersionUID = -3925844787079790106L;
 
@@ -55,7 +58,7 @@ public class EmployeeDatabaseHandler implements Serializable
 	private final static String DATABASE_PW = ConfigLoader.getDatabasePassword();
 
 	// Database Access Object, is a handler for reading and writing
-	private static Dao<EmployeeDatabaseRecord, String> databaseHandlerDao;
+	private static Dao<EmployeeDatabaseRecord, Integer> databaseHandlerDao;
 
 
 	/**
@@ -125,6 +128,225 @@ public class EmployeeDatabaseHandler implements Serializable
 		}
 
 		return resultList;
+	}	
+	
+	
+	
+	/**
+	 * Gets the record from database by id.
+	 *
+	 * @param recordID the record id
+	 * @return the record from database by id
+	 * @throws SQLException the sQL exception
+	 */
+	public static EmployeeDatabaseRecord getRecordFromDatabaseByID(int recordID) throws SQLException  // connection.close() can throw
+	{
+		ConnectionSource connectionSource = null;
+		List<EmployeeDatabaseRecord> databaseRecords = null;
+
+		try
+		{
+			// create our data-source for the database (url, user, pwd)
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// setup our database and DAOs
+			databaseHandlerDao = DaoManager.createDao(connectionSource, EmployeeDatabaseRecord.class);
+
+			// read database records
+			databaseRecords = databaseHandlerDao.queryForEq("id", recordID);
+		}
+		finally
+		{
+			// always destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
+
+		if (databaseRecords.isEmpty())
+		{
+			return null;
+		}
+		
+		return databaseRecords.get(0);
+	}
+	
+	/**
+	 * Loops through one table of the database and reads the content.
+	 *
+	 * @return a string containing all records of employeeTable
+	 * @throws SQLException when database connection close fails
+	 */
+	public static List<EmployeeDatabaseRecord> getRecordsFromDatabase() throws SQLException
+	{
+		ConnectionSource connectionSource = null;
+		List<EmployeeDatabaseRecord> databaseRecords = null;
+		
+		try
+		{
+			// create our data-source for the database (url, user, pwd)
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// setup our database and DAOs
+			databaseHandlerDao = DaoManager.createDao(connectionSource, EmployeeDatabaseRecord.class);
+
+			// read database records
+			databaseRecords = databaseHandlerDao.queryForAll();
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		} 
+		finally
+		{
+			// always destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
+		
+		// sort the list by location and name
+		Collections.sort(databaseRecords, EmployeeDatabaseRecord.getEmployeeRecordComparator());
+
+		return databaseRecords;
+	}
+	
+	/**
+	 * Deletes a given row of the employeeTable.
+	 *
+	 * @param record the record
+	 * @throws SQLException when database connection close() fails
+	 * @throws IllegalArgumentException when null is passed as argument
+	 */
+	public static void deleteRecordFromDatabase(EmployeeDatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
+	{
+		ConnectionSource connectionSource = null;
+		
+		if (record == null)
+		{
+			throw new IllegalArgumentException("Parameter for deleteRecordFromDatabase is null.");
+		}
+		
+		try
+		{
+			// create our data-source for the database (url, user, pwd)
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// setup our database and DAOs
+			databaseHandlerDao = DaoManager.createDao(connectionSource, EmployeeDatabaseRecord.class);
+
+			// delete given database record
+			databaseHandlerDao.delete(record);
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		} 
+		finally
+		{
+			// always destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
+	}
+	
+	/**
+	 * Gets the next free id.
+	 * Runs through the database
+	 * @return the next free id
+	 */
+	private static int getNextFreeId()
+	{
+		int freeId = -1;
+		
+		try
+		{
+			databaseHandlerDao = DaoManager.createDao(new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW), EmployeeDatabaseRecord.class);
+			
+			for (int i = 0; i < Integer.MAX_VALUE; ++i)
+			{
+				if (!databaseHandlerDao.idExists(i))
+				{
+					freeId = i;
+					break;
+				}
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+
+		return freeId;
+	}
+	
+	/**
+	 * Writes the given strings to the database.
+	 *
+	 * @param record the target record
+	 * @throws SQLException when database connection close() fails
+	 * @throws IllegalArgumentException when employee or location is null
+	 * @throws IllegalStateException if the next free id is -1
+	 * @throws Exception when database setup fails
+	 */
+	public static void updateRecordInDatabase(EmployeeDatabaseRecord record) throws SQLException, IllegalArgumentException, IllegalStateException, Exception
+	{
+		ConnectionSource connectionSource = null;
+		List<EmployeeDatabaseRecord> databaseRecords = null;
+
+		if (record == null)
+		{
+			throw new IllegalArgumentException("The employeeDatabaseRecord is null");
+		}
+		
+		try
+		{
+			// create data-source for the database
+			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
+			// create a database, if non existing
+			setupDatabase(connectionSource);
+			
+			//read all the records in the table in order to check check whether this input record has already in the table.
+			databaseRecords = databaseHandlerDao.queryForAll();
+			
+			//firstly check whether this input record, including "name" and "location", has already in the table.
+			for (EmployeeDatabaseRecord employeeRecord : databaseRecords)
+			{
+				if (employeeRecord.getLocation().equals(record.getLocation()) && employeeRecord.getName().equals(record.getName()))
+				{
+					// already existing -> do nothing
+					connectionSource.close();
+					throw new IllegalArgumentException("An employee with this name and location is already existing");
+				}
+			}
+			
+			// if this is the add command, set id
+			if (record.getID() == null)
+			{
+				// generate id
+				int nextFreeId = getNextFreeId();
+				
+				if (nextFreeId == -1)
+				{
+					throw new IllegalStateException("The next free id is -1.");
+				}
+				
+				record.setID(nextFreeId);
+			}
+				
+			// writes to the database: create if new id, or update if existing
+			databaseHandlerDao.createOrUpdate(record);
+		} 
+		finally
+		{
+			// destroy the data source which should close underlying connections
+			if (connectionSource != null)
+			{
+				connectionSource.close();
+			}
+		}
 	}
 }
 

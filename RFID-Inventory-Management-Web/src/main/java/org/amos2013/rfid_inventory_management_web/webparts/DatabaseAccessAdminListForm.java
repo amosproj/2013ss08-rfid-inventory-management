@@ -98,7 +98,7 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 		add(new DropDownChoice<String>("search_dropdown", new PropertyModel<String>(this, "selectedSearchOption"), SEARCH_OPTIONS));
 		add(new Label("statusMessage"));
 		
-		//add button, that adds a new record to the roomTable when clicked
+		//add button, that adds a new record to the deviceTable when clicked
 		final Button deviceAddButton = new Button("deviceAddButton")
 		{
 			private static final long serialVersionUID = -8736242207101015483L;
