@@ -33,16 +33,23 @@ package org.amos2013.rfid_inventory_management_web.database;
 
 import static org.junit.Assert.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * Junit test for class {@link EmployeeDatabaseHandler}
  */
 public class EmployeeDatabaseHandlerTest
 {
+	/** The expected exception. */
+	@Rule 
+	public ExpectedException exception = ExpectedException.none();
+	
 	/**
 	 * Test for {@link EmployeeDatabaseHandler#getRecordsFromDatabaseByLocation(String)}
 	 */
@@ -62,4 +69,69 @@ public class EmployeeDatabaseHandlerTest
 		assertNotNull(resultList);
 	}
 
+	/**
+	 * Test for {@link EmployeeDatabaseHandler#updateRecordInDatabase(EmployeeDatabaseRecord)}.
+	 *
+	 * @throws IllegalArgumentException the illegal argument exception is not expected
+	 * @throws IllegalStateException the illegal state exception is not expected
+	 * @throws SQLException the sQL exception is not expected
+	 * @throws Exception the exception is not expected
+	 */
+	@Test
+	public void testUpdateRecordInDatabase() throws IllegalArgumentException, IllegalStateException, SQLException, Exception
+	{
+		exception.expect(IllegalArgumentException.class);		
+		EmployeeDatabaseHandler.updateRecordInDatabase(null);
+	}
+	
+	/**
+	 * Test for {@link EmployeeDatabaseHandler#deleteRecordFromDatabase(EmployeeDatabaseRecord)}.
+	 *
+	 * @throws IllegalArgumentException the illegal argument exception is excpected
+	 * @throws SQLException the sQL exception is not expected
+	 */
+	@Test
+	public void testDeleteRecordFromDatabase() throws IllegalArgumentException, SQLException
+	{
+		exception.expect(IllegalArgumentException.class);		
+		EmployeeDatabaseHandler.deleteRecordFromDatabase(null);
+	}
+	
+	/**
+	 * Test for {@link EmployeeDatabaseHandler#getRecordsFromDatabase()}
+	 */
+	@Test
+	public void testGetRecordsFromDatabase()
+	{
+		List<EmployeeDatabaseRecord> resultList = null;
+		try
+		{
+			resultList = EmployeeDatabaseHandler.getRecordsFromDatabase();
+		}
+		catch (SQLException e)
+		{
+			Assert.fail("Didn't expect an exception, but got: " + e.getMessage());
+		}
+		
+		assertNotNull(resultList);
+	}
+	
+	/**
+	 * Test for {@link EmployeeDatabaseHandler#getRecordFromDatabaseByID(int)}
+	 */
+	@Test
+	public void testGetRecordFromDatabaseByID()
+	{
+		EmployeeDatabaseRecord resultRecord = null;
+		try
+		{
+			resultRecord = EmployeeDatabaseHandler.getRecordFromDatabaseByID(-111112);
+		}
+		catch (SQLException e)
+		{
+			Assert.fail("Didn't expect an exception, but got: " + e.getMessage());
+		}
+		
+		assertNull(resultRecord);
+	}
 }

@@ -82,7 +82,7 @@ public class EmployeeDatabaseRecord implements Serializable
 	 * @param name the name
 	 * @param location the location
 	 */
-	public EmployeeDatabaseRecord(int id, String name, String location)
+	public EmployeeDatabaseRecord(Integer id, String name, String location)
 	{
 		this.id = id;
 		this.name = name;
@@ -165,8 +165,7 @@ public class EmployeeDatabaseRecord implements Serializable
 	@Override
 	public String toString()
 	{
-		return name + ", " + location;
-		
+		return name + ", " + location;	
 	}
 	
 	/**

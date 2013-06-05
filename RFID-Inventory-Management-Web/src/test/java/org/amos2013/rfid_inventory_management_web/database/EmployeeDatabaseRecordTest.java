@@ -56,5 +56,4 @@ public class EmployeeDatabaseRecordTest
 		assertEquals(location, testRecord.getLocation());
 		assertEquals(id, testRecord.getID());
 	}
-
 }

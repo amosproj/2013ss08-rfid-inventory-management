@@ -31,6 +31,7 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -42,15 +43,12 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-
-
-//TODO: Auto-generated Javadoc
 /**
- * This class is used, to access the database
+ * This class is used, to access the employee database table
  */
-public class EmployeeDatabaseHandler
+public class EmployeeDatabaseHandler implements Serializable
 {
-	private static final long serialVersionUID = -3925844787079790106L;
+	private static final long serialVersionUID = 4442258450290111370L;
 
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
 
@@ -59,7 +57,6 @@ public class EmployeeDatabaseHandler
 
 	// Database Access Object, is a handler for reading and writing
 	private static Dao<EmployeeDatabaseRecord, Integer> databaseHandlerDao;
-
 
 	/**
 	 * Creates a database if there is no one existing
@@ -85,7 +82,6 @@ public class EmployeeDatabaseHandler
 			}
 		}
 	}
-
 
 	/**
 	 * Loops through one table of the database and reads the content
@@ -129,8 +125,6 @@ public class EmployeeDatabaseHandler
 
 		return resultList;
 	}	
-	
-	
 	
 	/**
 	 * Gets the record from database by id.
@@ -349,4 +343,3 @@ public class EmployeeDatabaseHandler
 		}
 	}
 }
-
