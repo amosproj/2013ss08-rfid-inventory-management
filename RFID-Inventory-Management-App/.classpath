@@ -5,5 +5,7 @@
 	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
 	<classpathentry kind="lib" path="libs/android.jar"/>
 	<classpathentry kind="lib" path="libs/annotations.jar"/>
+	<classpathentry kind="lib" path="/RFID-Inventory-Management-Web/src/main/java/org/amos2013/rfid_inventory_management_web/database"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RFID-Inventory-Management-Web"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
