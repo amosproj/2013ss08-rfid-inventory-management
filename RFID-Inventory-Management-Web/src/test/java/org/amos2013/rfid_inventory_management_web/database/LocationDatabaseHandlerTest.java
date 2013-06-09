@@ -42,43 +42,43 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Junit test for class {@link RoomDatabaseHandler}
+ * Junit test for class {@link LocationDatabaseHandler}
  */
-public class RoomDatabaseHandlerTest
+public class LocationDatabaseHandlerTest
 {
 	/** The expected exception. */
 	@Rule 
 	public ExpectedException exception = ExpectedException.none();
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#getRecordsFromDatabaseByLocation(String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler#getRecordsFromDatabaseByLocation(String)}.
 	 */
 	@Test
 	public void testGetRecordsFromDatabaseByLocation()
 	{
-		List<String> resultList = null;
+		LocationDatabaseRecord resultList = null;
 		try
 		{
-			resultList = RoomDatabaseHandler.getRecordsFromDatabaseByLocation("empty");
+			resultList = LocationDatabaseHandler.getRecordsFromDatabaseByLocation("empty");
 		}
 		catch (Exception ex)
 		{
 			Assert.fail("Expected no exception, but got: " + ex.getMessage());
 		}
 		
-		assertNotNull(resultList);
+		assertNull(resultList);
 	}
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#getRecordFromDatabaseByID(Integer)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler#getRecordFromDatabaseByID(Integer)}.
 	 */
 	@Test
 	public void testGetRecordFromDatabaseByID()
 	{
-		RoomDatabaseRecord resultRecord = null;
+		LocationDatabaseRecord resultRecord = null;
 		try
 		{
-			resultRecord = RoomDatabaseHandler.getRecordFromDatabaseByID(-1111111);
+			resultRecord = LocationDatabaseHandler.getRecordFromDatabaseByID(-11111113);
 		}
 		catch (Exception ex)
 		{
@@ -89,15 +89,15 @@ public class RoomDatabaseHandlerTest
 	}
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#getRecordsFromDatabase()}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler#getRecordsFromDatabase()}.
 	 */
 	@Test
 	public void testGetRecordsFromDatabase()
 	{
-		List<RoomDatabaseRecord> resultList = null;
+		List<LocationDatabaseRecord> resultList = null;
 		try
 		{
-			resultList = RoomDatabaseHandler.getRecordsFromDatabase();
+			resultList = LocationDatabaseHandler.getRecordsFromDatabase();
 		}
 		catch (Exception ex)
 		{
@@ -108,7 +108,7 @@ public class RoomDatabaseHandlerTest
 	}
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#deleteRecordFromDatabase(RoomDatabaseRecord)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler#deleteRecordFromDatabase(LocationDatabaseRecord)}.
 	 * @throws SQLException will not be expected
 	 * @throws IllegalArgumentException will be expected
 	 */
@@ -116,11 +116,11 @@ public class RoomDatabaseHandlerTest
 	public void testDeleteRecordFromDatabase() throws IllegalArgumentException, SQLException
 	{
 		exception.expect(IllegalArgumentException.class);
-		RoomDatabaseHandler.deleteRecordFromDatabase(null);
+		LocationDatabaseHandler.deleteRecordFromDatabase(null);
 	}
 
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#updateRecordInDatabase(RoomDatabaseRecord)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler#updateRecordInDatabase(LocationDatabaseRecord)}.
 	 * @throws Exception will not be expected
 	 * @throws SQLException will not be expected
 	 * @throws IllegalArgumentException will be expected
@@ -129,6 +129,6 @@ public class RoomDatabaseHandlerTest
 	public void testUpdateRecordInDatabase() throws IllegalArgumentException, SQLException, Exception
 	{
 		exception.expect(IllegalArgumentException.class);
-		RoomDatabaseHandler.updateRecordInDatabase(null);
+		LocationDatabaseHandler.updateRecordInDatabase(null);
 	}
 }

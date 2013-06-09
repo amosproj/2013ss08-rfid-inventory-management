@@ -133,7 +133,7 @@ public class EmployeeDatabaseHandler implements Serializable
 	 * @return the record from database by id
 	 * @throws SQLException the sQL exception
 	 */
-	public static EmployeeDatabaseRecord getRecordFromDatabaseByID(int recordID) throws SQLException  // connection.close() can throw
+	public static EmployeeDatabaseRecord getRecordFromDatabaseByID(Integer recordID) throws SQLException  // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		List<EmployeeDatabaseRecord> databaseRecords = null;
