@@ -39,7 +39,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  */
 public class AdminEmployeeEditPage extends MainPage
 {
-	private static final long serialVersionUID = -6068261772020491369L;
+	private static final long serialVersionUID = -4292422273959819470L;
 
 	/**
 	 * The constructor creates a website which contains a Form to update the record in employeeTable.

@@ -33,7 +33,7 @@ package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,11 +45,11 @@ import com.j256.ormlite.table.TableUtils;
 
 // TODO: Auto-generated Javadoc
 /**
- * This class is used, to access the room database table.
+ * This class is used, to access the database.
  */
-public class RoomDatabaseHandler implements Serializable
+public class LocationDatabaseHandler implements Serializable
 {
-	private static final long serialVersionUID = 5719539748399492953L;
+	private static final long serialVersionUID = -9076746906440733343L;
 
 	/** The Constant DATABASE_URL. */
 	private final static String DATABASE_URL = "jdbc:postgresql://faui2o2j.informatik.uni-erlangen.de:5432/ss13-proj8";
@@ -60,7 +60,7 @@ public class RoomDatabaseHandler implements Serializable
 
 	// Database Access Object, is a handler for reading and writing
 	/** The database handler dao. */
-	private static Dao<RoomDatabaseRecord, Integer> databaseHandlerDao;
+	private static Dao<LocationDatabaseRecord, Integer> databaseHandlerDao;
 
 
 	/**
@@ -71,7 +71,7 @@ public class RoomDatabaseHandler implements Serializable
 	 */
 	private static void setupDatabase(ConnectionSource connectionSource) throws Exception
 	{
-		databaseHandlerDao = DaoManager.createDao(connectionSource, RoomDatabaseRecord.class);
+		databaseHandlerDao = DaoManager.createDao(connectionSource, LocationDatabaseRecord.class);
 
 		// if the database is not existing create a new one
 		if (databaseHandlerDao.isTableExists() == false)
@@ -80,7 +80,7 @@ public class RoomDatabaseHandler implements Serializable
 			{
 				// createTableIfNotExists is not working: always tries to create a new database
 				// -> if block around
-				TableUtils.createTableIfNotExists(connectionSource, RoomDatabaseRecord.class);
+				TableUtils.createTableIfNotExists(connectionSource, LocationDatabaseRecord.class);
 			}
 			catch (Exception e)
 			{
@@ -93,24 +93,23 @@ public class RoomDatabaseHandler implements Serializable
 	 * Loops through one table of the database and reads the content.
 	 *
 	 * @param location a string which filters the results after their location
-	 * @return a list of Strings with all room numbers
+	 * @return a list of Strings with all locations
 	 * @throws SQLException when database connection close fails
 	 */
-	public static List<String> getRecordsFromDatabaseByLocation(String location) throws SQLException  // connection.close() can throw
+	public static LocationDatabaseRecord getRecordsFromDatabaseByLocation(String location) throws SQLException  // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
-		List<RoomDatabaseRecord> databaseRecords = null;
-		ArrayList<String> resultList = new ArrayList<String>();
+		List<LocationDatabaseRecord> databaseRecords = null;
 		
 		try
 		{
 			// create our data-source for the database (url, user, pwd)
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
-			databaseHandlerDao = DaoManager.createDao(connectionSource, RoomDatabaseRecord.class);
+			databaseHandlerDao = DaoManager.createDao(connectionSource, LocationDatabaseRecord.class);
 			
 			// read database records
-			databaseRecords = databaseHandlerDao.queryForAll();
+			databaseRecords = databaseHandlerDao.queryForEq("location",location);
 		}
 		finally
 		{
@@ -121,16 +120,12 @@ public class RoomDatabaseHandler implements Serializable
 			}
 		}
 		
-		// add string for record to result list
-		for (RoomDatabaseRecord record : databaseRecords)
+		if (databaseRecords.isEmpty())
 		{
-			if (record.getLocation().equals(location))
-			{
-				resultList.add(record.getName());
-			}
+			return null;
 		}
 		
-		return resultList;
+		return databaseRecords.get(0);
 	}
 
 
@@ -141,17 +136,17 @@ public class RoomDatabaseHandler implements Serializable
 	 * @return the record from database by id
 	 * @throws SQLException the sQL exception
 	 */
-	public static RoomDatabaseRecord getRecordFromDatabaseByID(int recordID) throws SQLException  // connection.close() can throw
+	public static LocationDatabaseRecord getRecordFromDatabaseByID(Integer recordID) throws SQLException  // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
-		List<RoomDatabaseRecord> databaseRecords = null;
+		List<LocationDatabaseRecord> databaseRecords = null;
 
 		try
 		{
 			// create our data-source for the database (url, user, pwd)
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
-			databaseHandlerDao = DaoManager.createDao(connectionSource, RoomDatabaseRecord.class);
+			databaseHandlerDao = DaoManager.createDao(connectionSource, LocationDatabaseRecord.class);
 
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForEq("id", recordID);
@@ -176,20 +171,20 @@ public class RoomDatabaseHandler implements Serializable
 	/**
 	 * Loops through one table of the database and reads the content.
 	 *
-	 * @return a string containing all records of roomTable
+	 * @return a string containing all records of locationTable
 	 * @throws SQLException when database connection close fails
 	 */
-	public static List<RoomDatabaseRecord> getRecordsFromDatabase() throws SQLException
+	public static List<LocationDatabaseRecord> getRecordsFromDatabase() throws SQLException
 	{
 		ConnectionSource connectionSource = null;
-		List<RoomDatabaseRecord> databaseRecords = null;
+		List<LocationDatabaseRecord> databaseRecords = null;
 		
 		try
 		{
 			// create our data-source for the database (url, user, pwd)
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
-			databaseHandlerDao = DaoManager.createDao(connectionSource, RoomDatabaseRecord.class);
+			databaseHandlerDao = DaoManager.createDao(connectionSource, LocationDatabaseRecord.class);
 
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForAll();
@@ -208,20 +203,20 @@ public class RoomDatabaseHandler implements Serializable
 			}
 		}
 		
-		// sort the list by location and name
-		Collections.sort(databaseRecords, RoomDatabaseRecord.getRoomRecordComparator());
+		// sort the list by location
+		Collections.sort(databaseRecords, LocationDatabaseRecord.getLocationRecordComparator());
 
 		return databaseRecords;
 	}
 	
 	/**
-	 * Deletes a given row of the RoomTable.
+	 * Deletes a given row of the locationTable.
 	 *
 	 * @param record the record
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when null is passed as argument
 	 */
-	public static void deleteRecordFromDatabase(RoomDatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
+	public static void deleteRecordFromDatabase(LocationDatabaseRecord record) throws SQLException, IllegalArgumentException // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		
@@ -235,7 +230,7 @@ public class RoomDatabaseHandler implements Serializable
 			// create our data-source for the database (url, user, pwd)
 			connectionSource = new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW);
 			// setup our database and DAOs
-			databaseHandlerDao = DaoManager.createDao(connectionSource, RoomDatabaseRecord.class);
+			databaseHandlerDao = DaoManager.createDao(connectionSource, LocationDatabaseRecord.class);
 
 			// delete given database record
 			databaseHandlerDao.delete(record);
@@ -265,7 +260,7 @@ public class RoomDatabaseHandler implements Serializable
 		
 		try
 		{
-			databaseHandlerDao = DaoManager.createDao(new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW), RoomDatabaseRecord.class);
+			databaseHandlerDao = DaoManager.createDao(new JdbcConnectionSource(DATABASE_URL, "ss13-proj8", DATABASE_PW), LocationDatabaseRecord.class);
 			
 			for (int i = 0; i < Integer.MAX_VALUE; ++i)
 			{
@@ -289,18 +284,18 @@ public class RoomDatabaseHandler implements Serializable
 	 *
 	 * @param record the target record
 	 * @throws SQLException when database connection close() fails
-	 * @throws IllegalArgumentException when room or location is null
+	 * @throws IllegalArgumentException when location is null
 	 * @throws IllegalStateException if the next free id is -1
 	 * @throws Exception when database setup fails
 	 */
-	public static void updateRecordInDatabase(RoomDatabaseRecord record) throws SQLException, IllegalArgumentException, IllegalStateException, Exception
+	public static void updateRecordInDatabase(LocationDatabaseRecord record) throws SQLException, IllegalArgumentException, IllegalStateException, Exception
 	{
 		ConnectionSource connectionSource = null;
-		List<RoomDatabaseRecord> databaseRecords = null;
+		List<LocationDatabaseRecord> databaseRecords = null;
 
 		if (record == null)
 		{
-			throw new IllegalArgumentException("The RoomDatabaseRecord is null");
+			throw new IllegalArgumentException("The LocationDatabaseRecord is null");
 		}
 		
 		try
@@ -313,14 +308,14 @@ public class RoomDatabaseHandler implements Serializable
 			//read all the records in the table in order to check check whether this input record has already in the table.
 			databaseRecords = databaseHandlerDao.queryForAll();
 			
-			//firstly check whether this input record, including "name" and "location", has already in the table.
-			for (RoomDatabaseRecord roomRecord : databaseRecords)
+			//firstly check whether this input record, including "location", has already in the table.
+			for (LocationDatabaseRecord locationRecord : databaseRecords)
 			{
-				if (roomRecord.getLocation().equals(record.getLocation()) && roomRecord.getName().equals(record.getName()))
+				if (locationRecord.getLocation().equals(record.getLocation()))
 				{
 					// already existing -> do nothing
 					connectionSource.close();
-					throw new IllegalArgumentException("A room with this name and location is already existing");
+					throw new IllegalArgumentException("The location is already existing");
 				}
 			}
 			

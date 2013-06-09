@@ -32,40 +32,40 @@
 package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.Arrays;
+//import java.util.List;
 
-import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
-import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseRecord;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseRecord;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
+//import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
+//import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValueConversionException;
 
 /**
- * Form that is displayed on /admin/employee/edit. Used to update the record in employeeTable
+ * Form that is displayed on /admin/location/edit. Used to update the record in locationTable
  */
-public class DatabaseAccessEmployeeEditForm extends Form<Object>
+public class DatabaseAccessLocationEditForm extends Form<Object>
 {
-	private static final long serialVersionUID = -1193158177351257195L;
+	private static final long serialVersionUID = 8300102457162433623L;
 
 	private String statusMessage;
 
-	private Integer employeeID = null;
-	private String employeeName;
+	private Integer locationID = null;
+	private String location;
 
 	// TODO later on we should probably get the contents for the following string from the database
-	private List<String> locationDropDownCoices = new ArrayList<String>(Arrays.asList("Tennenlohe (DE)", "Bothell (US)"));
-	private String selectedLocation = "Tennenlohe (DE)";
+	//private List<String> locationDropDownCoices = new ArrayList<String>(Arrays.asList("Tennenlohe (DE)", "Bothell (US)"));
+	//private String selectedLocation = "Tennenlohe (DE)";
 
-	private EmployeeDatabaseRecord employeeRecord;
+	private LocationDatabaseRecord locationRecord;
 	String function;
 
 	/**
@@ -74,18 +74,18 @@ public class DatabaseAccessEmployeeEditForm extends Form<Object>
 	 * @param id the name of this form, to use it in html
 	 * @param pageParameter the page parameter
 	 */
-	public DatabaseAccessEmployeeEditForm(String id, final PageParameters pageParameter)
+	public DatabaseAccessLocationEditForm(String id, final PageParameters pageParameter)
 	{
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this));	// sets the model to bind to the wicket ids
 		
 		if (pageParameter != null)
 		{
-			// if /admin/employee/edit or only /admin/employee/edit&recordID= is entered, go back
+			// if /admin/location/edit or only /admin/location/edit&recordID= is entered, go back
 			if ((pageParameter.get("recordID").isNull() == true && pageParameter.get("function").isNull() == true)
 					|| (pageParameter.get("recordID").isNull() == false && pageParameter.get("function").isNull() == true))
 			{
-				throw new RestartResponseAtInterceptPageException(AdminEmployeePage.class, null);				
+				throw new RestartResponseAtInterceptPageException(AdminLocationPage.class, null);				
 			}
 			
 			function = pageParameter.get("function").toString();
@@ -94,75 +94,74 @@ public class DatabaseAccessEmployeeEditForm extends Form<Object>
 				try
 				{
 					// get the record
-					employeeID = pageParameter.get("recordID").toInteger();
+					locationID = pageParameter.get("recordID").toInteger();
 				}
 				catch (StringValueConversionException e)
 				{
 					// is thrown if no integer is entered after the /edit?recordID=
-					throw new RestartResponseAtInterceptPageException(AdminEmployeePage.class, null);			
+					throw new RestartResponseAtInterceptPageException(AdminLocationPage.class, null);			
 				}
 				
 				try
 				{
-					employeeRecord = EmployeeDatabaseHandler.getRecordFromDatabaseByID(employeeID);
+					locationRecord = LocationDatabaseHandler.getRecordFromDatabaseByID(locationID);
 				}
 				catch (SQLException e)
 				{
 					e.printStackTrace();
 					PageParameters statusPageParameter = new PageParameters();
 					statusPageParameter.add("message", "Error with the database connection"); 
-					throw new RestartResponseAtInterceptPageException(AdminEmployeePage.class, statusPageParameter);								
+					throw new RestartResponseAtInterceptPageException(AdminLocationPage.class, statusPageParameter);								
 				}
 	
-				if (employeeRecord == null)
+				if (locationRecord == null)
 				{
 					PageParameters statusPageParameter = new PageParameters();
 					statusPageParameter.add("message", "Error: the record is not found"); 
-					throw new RestartResponseAtInterceptPageException(AdminEmployeePage.class, statusPageParameter);		
+					throw new RestartResponseAtInterceptPageException(AdminLocationPage.class, statusPageParameter);		
 				}
 				
-				employeeName = employeeRecord.getName();
-				selectedLocation = employeeRecord.getLocation();
+				location = locationRecord.getLocation();
 			}
 			
 			add(new Label("statusMessage"));
 			
-			final TextField<String> nameTextField = new TextField<String>("employeeName");
-			add(nameTextField);
+			final TextField<String> locationTextField = new TextField<String>("location");
+			add(locationTextField);
 			
-			add(new DropDownChoice<String>("locationDropdown", new PropertyModel<String>(this, "selectedLocation"), locationDropDownCoices));
+			//add(new DropDownChoice<String>("locationDropdown", new PropertyModel<String>(this, "selectedLocation"), locationDropDownCoices));
 			
-			final Button submitButton = new Button("employeeSubmitButton")
+			final Button submitButton = new Button("locationSubmitButton")
 			{
-				private static final long serialVersionUID = -1616761226247933012L;
+				private static final long serialVersionUID = -1186920567456585139L;
 
 				public void onSubmit()
 				{
 					// catch invalid input first
-					if (employeeName == null || selectedLocation == null)
+					if (location == null)
 					{
-						statusMessage = "Please enter a name and a location.";
+						statusMessage = "Please enter a location.";
 						return;
 					}
 					
 					// write to the database
 					try
 					{
-						EmployeeDatabaseRecord record = new EmployeeDatabaseRecord(employeeID, employeeName, selectedLocation);
-						EmployeeDatabaseHandler.updateRecordInDatabase(record);
+						LocationDatabaseRecord record = new LocationDatabaseRecord(locationID, location);
+						LocationDatabaseHandler.updateRecordInDatabase(record);
 						
 						PageParameters statusPageParameter = new PageParameters();
 						
 						if (function.equals("update"))
 						{
-							statusPageParameter.add("message", "The employee was updated.");
+							statusPageParameter.add("message", "The location was updated.");
 						}
 						else
 						{
-							statusPageParameter.add("message", "The new employee was added.");
+							statusPageParameter.add("message", "The new location was added.");
 						} 
 						
-						setResponsePage(AdminEmployeePage.class, statusPageParameter);
+						setResponsePage(AdminLocationPage.class, statusPageParameter);
 					}
 					catch (IllegalArgumentException e)
 					{
@@ -191,22 +190,22 @@ public class DatabaseAccessEmployeeEditForm extends Form<Object>
 			};
 			add(submitButton);
 			
-			final Button employeeCancelButton = new Button("employeeCancelButton")
+			final Button locationCancelButton = new Button("locationCancelButton")
 			{
-				private static final long serialVersionUID = -1926515273886994648L;
+				private static final long serialVersionUID = -7253326900738732029L;
 
 				@Override
 				public void onSubmit()
 				{
-					setResponsePage(AdminEmployeePage.class, null);
+					setResponsePage(AdminLocationPage.class, null);
 				}
 			};
-			add(employeeCancelButton);
+			add(locationCancelButton);
 		}
 		else
 		{
 			// no page parameter: go back
-			setResponsePage(AdminEmployeePage.class, null);
+			setResponsePage(AdminLocationPage.class, null);
 		}
 	}
 

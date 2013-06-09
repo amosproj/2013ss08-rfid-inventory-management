@@ -33,8 +33,8 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.util.List;
 
-import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
-import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseRecord;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.main.ConfirmationClickLink;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
@@ -47,24 +47,24 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
- * Form that is displayed on the website. Used for reading and writing employees from/ to the database
+ * Form that is displayed on the website. Used for reading and writing locations from/ to the database
  */
-public class DatabaseAccessEmployeeForm extends Form<Object>
+public class DatabaseAccessLocationForm extends Form<Object>
 {
-	private static final long serialVersionUID = -4875920952370395619L;
-	private String statusMessage;
+	private static final long serialVersionUID = -4238019081892952671L;
 	
+	private String statusMessage;
 	
 	/**
 	 * Creates a Form Object.
 	 * @param id the name of this form, to use in html
 	 */
-	public DatabaseAccessEmployeeForm(String id, final PageParameters pageParameter)
+	public DatabaseAccessLocationForm(String id, final PageParameters pageParameter)
 	{
 		super(id);
 		setDefaultModel(new CompoundPropertyModel<Object>(this)); // sets the model to bind to the wicket ids
-		List<EmployeeDatabaseRecord> databaseRecords = null;
-			
+		List<LocationDatabaseRecord> databaseRecords = null;
+		
 		add(new Label("statusMessage"));
 		
 		//if this page shows the edited record, it will show "The edited record was saved."
@@ -73,25 +73,25 @@ public class DatabaseAccessEmployeeForm extends Form<Object>
 			statusMessage = pageParameter.get("message").toString();
 		}
 		
-		//add button, that adds a new record to the employeeTable when clicked
-		final Button employeeAddButton = new Button("employeeAddButton")
+		//add button, that adds a new record to the locationTable when clicked
+		final Button locationAddButton = new Button("locationAddButton")
 		{
-			private static final long serialVersionUID = -2309020398453139352L;
+			private static final long serialVersionUID = -418314938069730221L;
 
 			@Override
 			public void onSubmit()
 			{
 				PageParameters editParameter = new PageParameters();
 				editParameter.add("function", "add");
-				setResponsePage(AdminEmployeeEditPage.class, editParameter);
+				setResponsePage(AdminLocationEditPage.class, editParameter);
 			}
 		};
-		add(employeeAddButton); 
+		add(locationAddButton); 
 		
 		// get all database records and display in a listview
 		try
 		{
-			databaseRecords = EmployeeDatabaseHandler.getRecordsFromDatabase();
+			databaseRecords = LocationDatabaseHandler.getRecordsFromDatabase();
 		} 
 		catch (Exception e)
 		{
@@ -99,20 +99,19 @@ public class DatabaseAccessEmployeeForm extends Form<Object>
 			statusMessage = e.getMessage();
 		}
 		
-		add(new ListView<EmployeeDatabaseRecord>("employeeRecordsReadListView", databaseRecords)
+		add(new ListView<LocationDatabaseRecord>("locationRecordsReadListView", databaseRecords)
 		{
-			private static final long serialVersionUID = 3164356346909399445L;
+			private static final long serialVersionUID = -7706007793961363870L;
 
-			protected void populateItem(ListItem<EmployeeDatabaseRecord> item)
+			protected void populateItem(ListItem<LocationDatabaseRecord> item)
 			{
-				final EmployeeDatabaseRecord record = (EmployeeDatabaseRecord) item.getModelObject();
-				item.add(new Label("recordNameLabel", record.getName()));
+				final LocationDatabaseRecord record = (LocationDatabaseRecord) item.getModelObject();
 				item.add(new Label("recordLocationLabel", record.getLocation()));
 				
 				// adds a link to delete the current record item
 				item.add(new ConfirmationClickLink<String>("deleteRecordLink", "Do you really want to delete this record?")
 				{
-					private static final long serialVersionUID = -8301447184775119472L;
+					private static final long serialVersionUID = 686521081777770146L;
 
 					@Override
 					public void onClick(AjaxRequestTarget arg0)
@@ -120,7 +119,7 @@ public class DatabaseAccessEmployeeForm extends Form<Object>
 						// call to delete the product
 						try
 						{
-							EmployeeDatabaseHandler.deleteRecordFromDatabase(record);
+							LocationDatabaseHandler.deleteRecordFromDatabase(record);
 						} 
 						catch (Exception e)
 						{
@@ -131,15 +130,15 @@ public class DatabaseAccessEmployeeForm extends Form<Object>
 						
 						// refreshes the page
 						PageParameters pageParameters = new PageParameters();
-						pageParameters.add("message", "The employee was deleted.");
-						setResponsePage(AdminEmployeePage.class, pageParameters);
+						pageParameters.add("message", "The location was deleted.");
+						setResponsePage(AdminLocationPage.class, pageParameters);
 					}
 				});
 				
 				// adds a link to edit the current record item
 				item.add(new Link<String>("editRecordLink")
 			    {
-					private static final long serialVersionUID = -2311167802339670665L;
+					private static final long serialVersionUID = -6685707946329181935L;
 
 					public void onClick()
 					{
@@ -147,7 +146,7 @@ public class DatabaseAccessEmployeeForm extends Form<Object>
 						PageParameters editParameter = new PageParameters();
 						editParameter.add("function", "update");
 						editParameter.add("recordID", record.getID());
-				        setResponsePage(AdminEmployeeEditPage.class, editParameter);
+				        setResponsePage(AdminLocationEditPage.class, editParameter);
 					}
 			    });
 			}

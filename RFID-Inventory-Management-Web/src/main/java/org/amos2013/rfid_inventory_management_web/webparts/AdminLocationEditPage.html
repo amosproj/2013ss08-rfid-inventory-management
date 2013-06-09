@@ -37,47 +37,19 @@
 	</head>
 	<body>
 	<wicket:extend>
-	    <h3>Room List Administration</h3>
-	    <p>
-	    	<table>
-	    		<tr>
-	    			<td><form action="/admin"><input type="submit" value="Hardware List"></form></td>
-	    			<td><form action="/admin/employee"><input type="submit" value="Employee List"></form></td>
-	   				<td><form action="/admin/room"><input type="submit" value="Room List"></form></td>
-	   				<td><form action="/admin/location"><input type="submit" value="Location List"></form></td>
-	   			 </tr>
-	   		 </table>
-	   		 <hr />
-	    </p>
-		<form id="databaseAccessRoomForm" method="get" wicket:id="databaseAccessRoomForm">
+		<form id="databaseAccessLocationEditForm" method="get" wicket:id="databaseAccessLocationEditForm">
 			<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
-			<p><b>Tip:</b> You could search by using the browser's search function <b>[Ctrl]+[F]</b></p>
-			
 			<fieldset>
-				<legend style="color: #fb3d09; font-weight: bold;">Room List</legend>
-				<input wicket:id="roomAddButton" type="submit" value="Add"/>
-				<table>
-					<tbody>
-						<tr>
-							<th>Name</th>
-							<th>Location</th>
-							<th></th>
-							<th></th>
-						</tr>
-						<span wicket:id="roomRecordsReadListView">  								
-					 		<tr>
-					 			<td><span wicket:id="recordNameLabel" /></td>	
-						 		<td><span wicket:id="recordLocationLabel" /></td>
-   			 				    <td><a href="#" wicket:id="editRecordLink">edit</a></td>
-				 				<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>
-							</tr>
-						</span>
-					</tbody>
-				</table>
+				<legend style="color: #fb3d09; font-weight: bold;">Location to update:</legend>
+				<br/>
+				<label>Location</label><input wicket:id="location" type="text" id="location" style="width:184px"/><br/>
+				<p>
+					<input wicket:id="locationSubmitButton" style="margin-left:150px;" type="submit" value="Save"/>
+					<input wicket:id="locationCancelButton" type="submit" value="Cancel"/>
+				</p>
 			</fieldset>
 		</form>
 		<br/>
-	    <p>&nbsp;</p>
 	</wicket:extend>
 	</body>
 </html>

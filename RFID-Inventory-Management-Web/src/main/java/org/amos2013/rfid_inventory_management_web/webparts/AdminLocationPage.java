@@ -36,20 +36,20 @@ import java.io.IOException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
- * This class defines a sub-website from AdminPage, which creates a Form of employeeTable to administrate
- * data in the employeeTable.
+ * This class defines a sub-website from AdminPage, which creates a Form of locationTable to administrate
+ * data in the locationTable.
  */
-public class AdminEmployeePage extends MainPage
+public class AdminLocationPage extends MainPage
 {
-	private static final long serialVersionUID = -319645000925422708L;
+	private static final long serialVersionUID = -8738459378777485416L;
 
 	/**
 	 * The constructor creates a website which contains a Form to administrate data in the database.
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public AdminEmployeePage(final PageParameters pageParameter) throws IOException
+	public AdminLocationPage(final PageParameters pageParameter) throws IOException
 	{
-		add(new DatabaseAccessEmployeeForm("databaseAccessEmployeeForm", pageParameter));
+		add(new DatabaseAccessLocationForm("databaseAccessLocationForm", pageParameter));
 	}
 }
