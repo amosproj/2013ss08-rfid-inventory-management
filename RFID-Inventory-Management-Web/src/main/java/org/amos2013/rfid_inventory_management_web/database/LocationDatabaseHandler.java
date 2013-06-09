@@ -136,7 +136,7 @@ public class LocationDatabaseHandler implements Serializable
 	 * @return the record from database by id
 	 * @throws SQLException the sQL exception
 	 */
-	public static LocationDatabaseRecord getRecordFromDatabaseByID(Integer recordID) throws SQLException  // connection.close() can throw
+	public static LocationDatabaseRecord getRecordFromDatabaseByID(int recordID) throws SQLException  // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		List<LocationDatabaseRecord> databaseRecords = null;

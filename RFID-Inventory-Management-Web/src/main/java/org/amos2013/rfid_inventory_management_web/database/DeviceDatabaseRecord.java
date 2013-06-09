@@ -391,7 +391,12 @@ public class DeviceDatabaseRecord implements Serializable
 		{
 			public int compare(DeviceDatabaseRecord first, DeviceDatabaseRecord second)
 			{
-				return Integer.compare(first.getRFIDId(), second.getRFIDId());
+				// as Integer.compare(first.getRFIDId(), second.getRFIDId()) is not working with JRE 1.6
+				// because this method was introduced with JRE 1.7:
+				Integer firstInteger = new Integer(first.getRFIDId());
+				Integer secondInteger = new Integer(second.getRFIDId());
+				
+				return firstInteger.compareTo(secondInteger);
 			}
 		};
 	}

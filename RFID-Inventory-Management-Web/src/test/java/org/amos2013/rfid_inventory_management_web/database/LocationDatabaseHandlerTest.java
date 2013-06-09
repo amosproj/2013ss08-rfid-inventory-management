@@ -70,7 +70,7 @@ public class LocationDatabaseHandlerTest
 	}
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler#getRecordFromDatabaseByID(Integer)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler#getRecordFromDatabaseByID(int)}.
 	 */
 	@Test
 	public void testGetRecordFromDatabaseByID()

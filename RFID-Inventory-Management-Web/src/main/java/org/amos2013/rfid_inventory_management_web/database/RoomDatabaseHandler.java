@@ -141,7 +141,7 @@ public class RoomDatabaseHandler implements Serializable
 	 * @return the record from database by id
 	 * @throws SQLException the sQL exception
 	 */
-	public static RoomDatabaseRecord getRecordFromDatabaseByID(Integer recordID) throws SQLException  // connection.close() can throw
+	public static RoomDatabaseRecord getRecordFromDatabaseByID(int recordID) throws SQLException  // connection.close() can throw
 	{
 		ConnectionSource connectionSource = null;
 		List<RoomDatabaseRecord> databaseRecords = null;

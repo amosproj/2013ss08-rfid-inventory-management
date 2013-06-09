@@ -70,7 +70,7 @@ public class RoomDatabaseHandlerTest
 	}
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#getRecordFromDatabaseByID(Integer)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler#getRecordFromDatabaseByID(int)}.
 	 */
 	@Test
 	public void testGetRecordFromDatabaseByID()

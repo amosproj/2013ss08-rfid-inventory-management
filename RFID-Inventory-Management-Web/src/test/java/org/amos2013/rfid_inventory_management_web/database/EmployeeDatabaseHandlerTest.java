@@ -117,7 +117,7 @@ public class EmployeeDatabaseHandlerTest
 	}
 	
 	/**
-	 * Test for {@link EmployeeDatabaseHandler#getRecordFromDatabaseByID(Integer)}
+	 * Test for {@link EmployeeDatabaseHandler#getRecordFromDatabaseByID(int)}
 	 */
 	@Test
 	public void testGetRecordFromDatabaseByID()
