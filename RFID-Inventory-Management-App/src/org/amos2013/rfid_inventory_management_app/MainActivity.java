@@ -123,7 +123,7 @@ public class MainActivity extends Activity
 						textViewStatus.setText(e.getMessage());
 					}
 					
-					employeeChoicesList.add("please select");
+					employeeChoicesList.add(0, "Please select");
 					spinnerEmployee.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, employeeChoicesList));
 				}
 			}
