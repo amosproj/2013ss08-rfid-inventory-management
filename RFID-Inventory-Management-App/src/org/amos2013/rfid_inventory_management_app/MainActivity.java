@@ -37,6 +37,7 @@ import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -238,7 +239,7 @@ public class MainActivity extends Activity
 		// List<String> scannedTagsList = Reader.scan();
 		
 		// display results in the listview
-		List<String> scannedTagsList = Arrays.asList("000120304000056", "012000040450054" );
+		List<String> scannedTagsList = Arrays.asList("01203040056", "01240450054" );
 		ListAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.scanned_tags_list_element, scannedTagsList);
 		listViewScannedTags.setAdapter(adapter);
 	}
@@ -254,6 +255,7 @@ public class MainActivity extends Activity
 		ListView listViewScannedTags = (ListView) findViewById(R.id.listViewScannedTags);
 		Spinner spinnerRoom = (Spinner) findViewById(R.id.spinnerRoom);
 		Spinner spinnerEmployee = (Spinner) findViewById(R.id.spinnerEmployee);
+		TextView textViewStatus = (TextView) findViewById(R.id.textViewStatus);
 		
 		SparseBooleanArray checked = listViewScannedTags.getCheckedItemPositions();
 		
@@ -261,10 +263,25 @@ public class MainActivity extends Activity
 		{
 			if (checked.get(i) == true)
 			{
-				String rfidId =  (String) listViewScannedTags.getItemAtPosition(i);
+				Integer rfidId =  (Integer) listViewScannedTags.getItemAtPosition(i);
 				String selectedRoom = (String) spinnerRoom.getSelectedItem();
 				String selectedEmployee = (String) spinnerEmployee.getSelectedItem();
-				// TODO save to database
+				
+				//TODO
+				try
+				{
+					DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
+					deviceDatabaseHandler.updateRecordFromAppInDatabase(rfidId, selectedRoom, selectedEmployee);
+					textViewStatus.setText("- data saved -");
+				}
+				catch (IllegalArgumentException e)
+				{
+					textViewStatus.setText(e.getMessage());
+				}
+				catch (Exception e)
+				{
+					textViewStatus.setText(e.getMessage());
+				}
 			}
 		}
 	}
