@@ -239,7 +239,7 @@ public class MainActivity extends Activity
 		// List<String> scannedTagsList = Reader.scan();
 		
 		// display results in the listview
-		List<String> scannedTagsList = Arrays.asList("01203040056", "01240450054" );
+		List<String> scannedTagsList = Arrays.asList("123456", "654321" );
 		ListAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.scanned_tags_list_element, scannedTagsList);
 		listViewScannedTags.setAdapter(adapter);
 	}
@@ -263,7 +263,7 @@ public class MainActivity extends Activity
 		{
 			if (checked.get(i) == true)
 			{
-				Integer rfidId =  (Integer) listViewScannedTags.getItemAtPosition(i);
+				String rfidId =  (String) listViewScannedTags.getItemAtPosition(i);
 				String selectedRoom = (String) spinnerRoom.getSelectedItem();
 				String selectedEmployee = (String) spinnerEmployee.getSelectedItem();
 				
@@ -271,7 +271,7 @@ public class MainActivity extends Activity
 				try
 				{
 					DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
-					deviceDatabaseHandler.updateRecordFromAppInDatabase(rfidId, selectedRoom, selectedEmployee);
+					deviceDatabaseHandler.updateRecordFromAppInDatabase(Integer.parseInt(rfidId), selectedRoom, selectedEmployee);
 					textViewStatus.setText("- data saved -");
 				}
 				catch (IllegalArgumentException e)
