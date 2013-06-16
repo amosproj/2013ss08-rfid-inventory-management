@@ -39,6 +39,8 @@ import java.util.List;
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.MetaDeviceDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
@@ -82,13 +84,13 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 	private String manufacturerInputField;
 	private String platformInputField;
 	
+	private List<String> locationDropDownChoices = new ArrayList<String>();
 	private List<String> roomDropDownChoices = new ArrayList<String>();
 	private List<String> employeeDropDownChoices = new ArrayList<String>();
 	
-	// TODO later on we should probably get the contents for the following string from the database
-	private List<String> locationDropDownChoices = Arrays.asList(new String[] {"Please select", "Tennenlohe (DE)", "Bothell (US)"});
 	private String selectedLocation = "Please select";
-
+	// TODO later on we should probably get the contents for the following string from the database
+	
 	private DeviceDatabaseRecord deviceRecord;
 
 	/**
@@ -183,6 +185,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			employeeDropDown.setEnabled(false);
 			add(employeeDropDown);
 			
+			
 			DropDownChoice<String> locationDropDown = new DropDownChoice<String>("locationDropDown", new PropertyModel<String>(this, "selectedLocation"), locationDropDownChoices)
 				{
 					private static final long serialVersionUID = 134567452542543L;
@@ -199,7 +202,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 					protected void onSelectionChanged(String newSelection)
 					{
 						super.onSelectionChanged(newSelection);
-						
+												
 						if (newSelection.equals("Please select"))
 						{
 							employeeDropDown.setEnabled(false);
@@ -249,7 +252,31 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 						}
 					}
 				};
+			locationDropDown.setEnabled(true);
 			add(locationDropDown);
+			
+			
+			//fill location dropdown menu choices
+			locationDropDownChoices.clear();
+			List<LocationDatabaseRecord> location = null;
+			List<String> locationDatabaseRecords = new ArrayList<String>();
+			try
+			{
+				location = LocationDatabaseHandler.getRecordsFromDatabase();
+				// add string for record to locationDatabaseRecords
+				for (LocationDatabaseRecord record : location)
+				{
+					locationDatabaseRecords.add(record.getLocation());
+				}
+			}
+			catch (Exception e)
+			{
+				statusMessage = e.getMessage();
+			}
+			
+			locationDropDownChoices.add("please select");
+			locationDropDownChoices.addAll(locationDatabaseRecords);
+			locationDropDown.setChoices(locationDropDownChoices);
 			
 			final TextField<String> rfidIDTextField = new TextField<String>("rfidIDInputField");
 			add(rfidIDTextField);

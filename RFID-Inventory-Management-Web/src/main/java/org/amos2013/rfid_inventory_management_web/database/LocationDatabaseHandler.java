@@ -33,6 +33,7 @@ package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 //import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -205,7 +206,7 @@ public class LocationDatabaseHandler implements Serializable
 		
 		// sort the list by location
 		Collections.sort(databaseRecords, LocationDatabaseRecord.getLocationRecordComparator());
-
+		
 		return databaseRecords;
 	}
 	

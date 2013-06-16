@@ -38,6 +38,8 @@ import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseRecord;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseRecord;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -61,9 +63,8 @@ public class DatabaseAccessEmployeeEditForm extends Form<Object>
 	private Integer employeeID = null;
 	private String employeeName;
 
-	// TODO later on we should probably get the contents for the following string from the database
-	private List<String> locationDropDownCoices = new ArrayList<String>(Arrays.asList("Tennenlohe (DE)", "Bothell (US)"));
-	private String selectedLocation = "Tennenlohe (DE)";
+	private List<String> locationDropDownCoices = new ArrayList<String>();
+	private String selectedLocation = "Please select";
 
 	private EmployeeDatabaseRecord employeeRecord;
 	String function;
@@ -130,7 +131,32 @@ public class DatabaseAccessEmployeeEditForm extends Form<Object>
 			final TextField<String> nameTextField = new TextField<String>("employeeName");
 			add(nameTextField);
 			
-			add(new DropDownChoice<String>("locationDropdown", new PropertyModel<String>(this, "selectedLocation"), locationDropDownCoices));
+			
+			DropDownChoice<String> locationDropdown = new DropDownChoice<String> ("locationDropdown", new PropertyModel<String>(this, "selectedLocation"), locationDropDownCoices);
+			locationDropdown.setEnabled(true);
+			add(locationDropdown);
+			
+			//fill location dropdown menu choices
+			locationDropDownCoices.clear();
+			List<LocationDatabaseRecord> location = null;
+			List<String> locationDatabaseRecords = new ArrayList<String>();
+			try
+			{
+				location = LocationDatabaseHandler.getRecordsFromDatabase();
+				// add string for record to locationDatabaseRecords
+				for (LocationDatabaseRecord record : location)
+				{
+					locationDatabaseRecords.add(record.getLocation());
+				}
+			}
+			catch (Exception e)
+			{
+				statusMessage = e.getMessage();
+			}
+			
+			locationDropDownCoices.add("please select");
+			locationDropDownCoices.addAll(locationDatabaseRecords);
+			locationDropdown.setChoices(locationDropDownCoices);
 			
 			final Button submitButton = new Button("employeeSubmitButton")
 			{

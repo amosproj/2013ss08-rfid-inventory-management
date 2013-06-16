@@ -33,12 +33,14 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
+//import java.util.Arrays;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseRecord;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -60,9 +62,9 @@ public class DatabaseAppForm extends Form<Object>
 	
 	private List<String> roomDropDownCoices = new ArrayList<String>();
 	private List<String> employeeDropDownCoices = new ArrayList<String>();
-	// TODO later on we should probably get the contents for the following string from the database
-	private List<String> locationDropDownCoices = Arrays.asList(new String[] {"Tennenlohe (DE)", "Bothell (US)"});
-	private String selected_location = "Tennenlohe (DE)";
+	private List<String> locationDropDownCoices = new ArrayList<String>();
+	
+	private String selected_location = "Please select";
 	private String selected_room = "please select";
 	private String selected_employee = "please select";
 
@@ -77,7 +79,32 @@ public class DatabaseAppForm extends Form<Object>
 		setDefaultModel(new CompoundPropertyModel<Object>(this));	// sets the model to bind to the wicket ids
 				
 		// add all forms
-		add(new DropDownChoice<String>("locationDropdown", new PropertyModel<String>(this, "selected_location"), locationDropDownCoices));
+		final DropDownChoice<String> locationDropdown = new DropDownChoice<String>("locationDropdown", new PropertyModel<String>(this, "selected_location"), locationDropDownCoices);
+		locationDropdown.setEnabled(true);
+		add(locationDropdown);
+				
+		//fill location dropdown menu choices
+		locationDropDownCoices.clear();
+		List<LocationDatabaseRecord> location = null;
+		List<String> locationDatabaseRecords = new ArrayList<String>();
+		try
+		{
+			location = LocationDatabaseHandler.getRecordsFromDatabase();
+			// add string for record to locationDatabaseRecords
+			for (LocationDatabaseRecord record : location)
+			{
+				locationDatabaseRecords.add(record.getLocation());
+			}
+		}
+		catch (Exception e)
+		{
+			statusMessage = e.getMessage();
+		}
+		
+		locationDropDownCoices.add("please select");
+		locationDropDownCoices.addAll(locationDatabaseRecords);
+		locationDropdown.setChoices(locationDropDownCoices);
+		
 		
 		add(new Label("statusMessage"));
 		
