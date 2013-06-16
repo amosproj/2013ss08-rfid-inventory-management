@@ -40,7 +40,7 @@ import com.j256.ormlite.table.DatabaseTable;
 /**
  * This class defines the structure (the columns) of the database.
  */
-@DatabaseTable(tableName = "deviceTable")
+@DatabaseTable(tableName = "uniqueDeviceTable")
 public class DeviceDatabaseRecord implements Serializable
 {
 	/** The Constant serialVersionUID. */
@@ -78,7 +78,7 @@ public class DeviceDatabaseRecord implements Serializable
 	// Columns definition:
 	/** The rfid_id. */
 	@DatabaseField(columnName = RFID_ID_COLUMN, canBeNull = false, id = true)	// primary key
-	private int rfid_id;
+	private String rfid_id;
 
 	/** The room. */
 	@DatabaseField(columnName = ROOM_COLUMN)
@@ -125,7 +125,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 * @param room the room
 	 * @param employee the holder
 	 */
-	public DeviceDatabaseRecord(int rfid_id, String room, String employee)
+	public DeviceDatabaseRecord(String rfid_id, String room, String employee)
 	{
 		this.rfid_id = rfid_id;
 		this.room = room;
@@ -153,7 +153,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 * @param owner the owner
 	 * @param comment the comment
 	 */
-	public DeviceDatabaseRecord(int rfid_id, String room, String employee, String part_number, String serial_number, String inventory_number, String owner, String comment)
+	public DeviceDatabaseRecord(String rfid_id, String room, String employee, String part_number, String serial_number, String inventory_number, String owner, String comment)
 	{
 		this.rfid_id = rfid_id;
 		this.room = room;
@@ -331,7 +331,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 * Gets the RFID Id.
 	 * @return the rFID id
 	 */
-	public int getRFIDId()
+	public String getRFIDId()
 	{
 		return this.rfid_id;
 	}
@@ -391,12 +391,10 @@ public class DeviceDatabaseRecord implements Serializable
 		{
 			public int compare(DeviceDatabaseRecord first, DeviceDatabaseRecord second)
 			{
-				// as Integer.compare(first.getRFIDId(), second.getRFIDId()) is not working with JRE 1.6
-				// because this method was introduced with JRE 1.7:
-				Integer firstInteger = new Integer(first.getRFIDId());
-				Integer secondInteger = new Integer(second.getRFIDId());
+				String firstString = new String(first.getRFIDId());
+				String secondString = new String(second.getRFIDId());
 				
-				return firstInteger.compareTo(secondInteger);
+				return firstString.compareTo(secondString);
 			}
 		};
 	}

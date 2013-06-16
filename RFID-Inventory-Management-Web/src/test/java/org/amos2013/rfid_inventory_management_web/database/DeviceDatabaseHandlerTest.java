@@ -145,13 +145,13 @@ public class DeviceDatabaseHandlerTest
 	}
 	
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#updateRecordFromAppInDatabase(int, String, String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#updateRecordFromAppInDatabase(String, String, String)}.
 	 * @throws Exception not testing for this one
 	 */
 	@Test
 	public final void testUpdateRecordFromAppInDatabase() throws Exception
 	{
 		exception.expect(IllegalArgumentException.class);	// asserts that a IllegalArgumentException is thrown
-		deviceDatabaseHandler.updateRecordFromAppInDatabase(123, null, null);
+		deviceDatabaseHandler.updateRecordFromAppInDatabase(null, null, null);
 	}
 }

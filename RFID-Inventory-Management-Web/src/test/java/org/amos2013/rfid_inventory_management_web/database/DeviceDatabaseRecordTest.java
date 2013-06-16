@@ -41,14 +41,14 @@ import org.junit.Test;
 public class DeviceDatabaseRecordTest
 {
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord#DeviceDatabaseRecord(int, String, String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord#DeviceDatabaseRecord(String, String, String)}.
 	 */
 	@Test
 	public final void testDeviceDatabaseRecordConstructor()
 	{
 		String room = "42.42";
 		String employee = "Musterfrau";
-		int id = 42;
+		String id = "01234567890";
 
 		DeviceDatabaseRecord testRecord = new DeviceDatabaseRecord(id, room, employee);
 		

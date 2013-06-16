@@ -164,11 +164,11 @@ public class DeviceDatabaseHandler implements Serializable
 	 * @throws IllegalArgumentException when room or owner is null
 	 * @throws Exception when database setup fails
 	 */
-	public void updateRecordFromAppInDatabase(int rfid_id, String room, String employee) throws SQLException, IllegalArgumentException, Exception
+	public void updateRecordFromAppInDatabase(String rfid_id, String room, String employee) throws SQLException, IllegalArgumentException, Exception
 	{
-		if (room == null || employee == null || rfid_id < 0)
+		if (room == null || employee == null || rfid_id == null)
 		{
-			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is invalid (null or below 0)");
+			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is invalid");
 		}
 				
 		ConnectionSource connectionSource = null;

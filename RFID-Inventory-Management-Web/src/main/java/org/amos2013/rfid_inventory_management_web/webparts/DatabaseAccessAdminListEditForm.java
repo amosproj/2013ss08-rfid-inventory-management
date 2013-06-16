@@ -67,7 +67,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 	private String function;
 
 	// DeviceDatabaseRecord fields
-	private Integer rfidIDInputField;
+	private String rfidIDInputField;
 	private String selectedRoom = "Please select";
 	private String selectedEmployee = "Please select";
 	private String partNumberInputField;
@@ -119,7 +119,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 				try
 				{
 					// get the record
-					rfidIDInputField = pageParameter.get("rfidID").toInteger();
+					rfidIDInputField = pageParameter.get("rfidID").toString();
 				}
 				catch (StringValueConversionException e)
 				{

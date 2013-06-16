@@ -44,7 +44,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.NumberTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -56,7 +56,7 @@ public class DatabaseAppForm extends Form<Object>
 {
 	private static final long serialVersionUID = 2948880218956382827L;
 
-	private Integer rfid_id; // use Integer instead of int, so the default value is null and not 0. so nothing will be displayed
+	private String rfid_id;
 	private String statusMessage;
 	
 	private List<String> roomDropDownChoices = new ArrayList<String>();
@@ -113,7 +113,7 @@ public class DatabaseAppForm extends Form<Object>
 		// add input fields
 		add(new Label("statusMessage"));
 		
-		final NumberTextField<Integer> rfidIDTextField = new NumberTextField<Integer>("rfid_id");
+		final TextField<String> rfidIDTextField = new TextField<String>("rfid_id");
 		rfidIDTextField.setEnabled(false);
 		add(rfidIDTextField);
 		
@@ -135,7 +135,7 @@ public class DatabaseAppForm extends Form<Object>
 			public void onSubmit()
 			{
 				// catch invalid input first
-				if (rfid_id == null)
+				if (rfid_id == null || rfid_id.isEmpty())
 				{
 					statusMessage = "Please enter an RFID Id into the field.";
 					return;
