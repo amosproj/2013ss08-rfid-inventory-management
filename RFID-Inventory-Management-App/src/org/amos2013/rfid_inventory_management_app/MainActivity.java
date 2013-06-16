@@ -42,13 +42,6 @@ import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 
-import com.mti.rfid.minime.CMD_AntPortOp;
-import com.mti.rfid.minime.CMD_FwAccess;
-import com.mti.rfid.minime.CMD_Iso18k6cTagAccess;
-import com.mti.rfid.minime.CMD_PwrMgt;
-import com.mti.rfid.minime.MtiCmd;
-import com.mti.rfid.minime.UsbCommunication;
-
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -70,11 +63,17 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.mti.rfid.minime.CMD_AntPortOp;
+import com.mti.rfid.minime.CMD_FwAccess;
+import com.mti.rfid.minime.CMD_Iso18k6cTagAccess;
+import com.mti.rfid.minime.CMD_PwrMgt;
+import com.mti.rfid.minime.MtiCmd;
+import com.mti.rfid.minime.UsbCommunication;
 
 /**
  * The Class MainActivity.
@@ -83,21 +82,27 @@ public class MainActivity extends Activity
 {
 	public static ArrayList<String> scannedTagsList = new ArrayList<String>();
 	private MtiCmd mMtiCmd;
-	private UsbCommunication mUsbCommunication = UsbCommunication.getInstance();
-	private ArrayAdapter<String> tagAdapter;
+	private UsbCommunication mUsbCommunication = UsbCommunication.newInstance();
+	private ArrayAdapter<String> scannedTagsAdapter;
 	private UsbManager mManager;
 	private PendingIntent mPermissionIntent;
+	
+	/** The Constant ACTION_USB_PERMISSION. */
 	private static final String ACTION_USB_PERMISSION = "org.amos2013.rfid_inventory_management_app.USB_PERMISSION";
+	
+	/** The Constant PID. */
 	private static final int PID = 49193;
+	
+	/** The Constant VID. */
 	private static final int VID = 4901;
 	
 	private TextView textViewStatus;
 	
-	// #### broadcast receiver ####
+	/** The usb receiver. */
 	BroadcastReceiver usbReceiver = new BroadcastReceiver() 
 	{
 		@Override
-		public void onReceive(Context context, Intent intent) 
+		public void onReceive(Context context, Intent intent)
 		{
 			String action = intent.getAction();
 			Toast.makeText(context, "Broadcast Receiver", Toast.LENGTH_SHORT).show();
@@ -122,51 +127,47 @@ public class MainActivity extends Activity
 				{
 					UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 					
-					Toast.makeText(context, "USB Permission" + device.toString(), Toast.LENGTH_LONG).show();
+					Toast.makeText(context, "USB Permission", Toast.LENGTH_SHORT).show();
 					if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) 
 					{
-						Toast.makeText(context, "USB Permission" + mManager.toString(), Toast.LENGTH_LONG).show();
+						Toast.makeText(context, "USB Permission", Toast.LENGTH_SHORT).show();
 							
-					/*	mUsbCommunication.setUsbInterface(mManager, device);
+						mUsbCommunication.setUsbInterface(mManager, device);
 						setUsbState(true);
 						sleep(400);
 //						if(bSavedInst)
 //							getReaderSn(true);
 						setPowerLevel();
 						setPowerState();
-//						if (iMenu == R.menu.menu_option_xlarge)
-//							insertFragTag();*/
 					} 	
 					else 
 					{
-						Toast.makeText(context, "else", Toast.LENGTH_SHORT).show();
-//						finish();
+						finish();
 					}
 				}
 			}
 		}
 	};
 	
+	/**
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		
         mManager = (UsbManager)getSystemService(Context.USB_SERVICE);
         mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
         
+        // register usb receiver
         IntentFilter filter = new IntentFilter();
         filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);					// will intercept by system
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         filter.addAction(ACTION_USB_PERMISSION);
         registerReceiver(usbReceiver, filter);
-
 		
-		
-        
-        
 		final Button saveButton = (Button) findViewById(R.id.buttonSave);
 		
 		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
@@ -287,7 +288,7 @@ public class MainActivity extends Activity
 			}
 		});
 		
-		ListAdapter scannedTagsAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.scanned_tags_list_element, scannedTagsList);
+		scannedTagsAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.scanned_tags_list_element, scannedTagsList);
 		listViewScannedTags.setAdapter(scannedTagsAdapter);
 		
 		// show a message, when a tag id is long pressed
@@ -306,7 +307,6 @@ public class MainActivity extends Activity
 		});
 	}
 	
-	
 	/**
 	 * Start stop button click.
 	 * Changes the button text from start to stop and the other way around.
@@ -320,15 +320,38 @@ public class MainActivity extends Activity
 		
 	    final int scantimes = 25;
 		
+	    // if reader is connected -> scan
 		if(getUsbState()) 
 		{
-		//	final ProgressDialog mProgDlg = ProgressDialog.show(getActivity(), "Inventory", "Searching ...", true);
+			Button startStopButton = (Button) findViewById(R.id.buttonStartStopScanning);
 			
-			new Thread() {
+			ListView listViewScannedTags = (ListView) findViewById(R.id.listViewScannedTags);
+			TextView textViewScannedTags = (TextView) findViewById(R.id.textViewScannedTags);
+
+			// change text on click and show scan results
+			if (startStopButton.getText().equals("Start scanning"))
+			{
+				startStopButton.setText("Stop scanning");
+				
+				textViewScannedTags.setVisibility(TextView.VISIBLE);
+				listViewScannedTags.setVisibility(ListView.VISIBLE);
+				listViewScannedTags.setEnabled(false);
+			}
+			else 
+			{	
+				startStopButton.setText("Start scanning");
+				
+				listViewScannedTags.setEnabled(true);
+			}
+			
+			// start the scanning
+			new Thread() 
+			{
 				int numTags;
 				String tagId;
 
-	    		public void run() {
+	    		public void run() 
+	    		{
 			    	scannedTagsList.clear();
 			    	for (int i = 0; i < scantimes; i++) 
 			    	{
@@ -338,60 +361,46 @@ public class MainActivity extends Activity
 						if(finalCmd.setCmd(CMD_Iso18k6cTagAccess.Action.StartInventory)) 
 						{
 							tagId = finalCmd.getTagId();
-							if(finalCmd.getTagNumber() > 0) {
+							if(finalCmd.getTagNumber() > 0) 
+							{
 								if(!scannedTagsList.contains(tagId))
+								{
 									scannedTagsList.add(tagId);
-//								finalCmd.setCmd(CMD_Iso18k6cTagAccess.Action.GetAllTags);
+								}
 							}
 							
-							for(numTags = finalCmd.getTagNumber(); numTags > 1; numTags--) {
-								if(finalCmd.setCmd(CMD_Iso18k6cTagAccess.Action.NextTag)) {
+							for(numTags = finalCmd.getTagNumber(); numTags > 1; --numTags) 
+							{
+								if(finalCmd.setCmd(CMD_Iso18k6cTagAccess.Action.NextTag)) 
+								{
 									tagId = finalCmd.getTagId();
-									if(!scannedTagsList.contains(tagId)){
+									if(!scannedTagsList.contains(tagId))
+									{
 										scannedTagsList.add(tagId);
 									}
 								}
 							}
-							
+
 							Collections.sort(scannedTagsList);
 							handler.post(updateResult);
-						} else {
-							// #### process error ####
+						} 
+						else 
+						{
+							// error
+							textViewStatus.setText("Errors");
 						}
 			    	}
-//	    			mProgDlg.dismiss();
+			    	
 	    			setPowerState();
 	    		}
 	    		
+	    		// refresh the list of the scanned tags -> show result
 	    		final Runnable updateResult = new Runnable() 
 	    		{
 					@Override
 					public void run() 
 					{
-						
-						//TODO clear page when pressed second time
-						Button startStopButton = (Button) findViewById(R.id.buttonStartStopScanning);
-						
-						ListView listViewScannedTags = (ListView) findViewById(R.id.listViewScannedTags);
-						TextView textViewScannedTags = (TextView) findViewById(R.id.textViewScannedTags);
-
-						// change text on click and show scan results
-						if (startStopButton.getText().equals("Start scanning"))
-						{
-							startStopButton.setText("Stop scanning");
-							
-							textViewScannedTags.setVisibility(TextView.VISIBLE);
-							listViewScannedTags.setVisibility(ListView.VISIBLE);
-							listViewScannedTags.setEnabled(false);
-						}
-						else 
-						{	
-							startStopButton.setText("Start scanning");
-							
-							listViewScannedTags.setEnabled(true);
-						}
-						
-						tagAdapter.notifyDataSetChanged();
+						scannedTagsAdapter.notifyDataSetChanged();
 					}
 	    		};
 			}.start();
@@ -400,21 +409,6 @@ public class MainActivity extends Activity
 		{
 			Toast.makeText(this, "The Reader is not connected", Toast.LENGTH_SHORT).show();
 		}
-		
-		
-		
-
-		
-		/*
-		// TODO tell reader to scan
-		// something like:
-		// List<String> scannedTagsList = Reader.scan();
-		
-		// display results in the listview
-		List<String> scannedTagsList = Arrays.asList("1234576", "3253653" );
-		ListAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.scanned_tags_list_element, scannedTagsList);
-		listViewScannedTags.setAdapter(adapter);
-		*/
 	}
 	
 	/**
@@ -439,7 +433,6 @@ public class MainActivity extends Activity
 				String selectedRoom = (String) spinnerRoom.getSelectedItem();
 				String selectedEmployee = (String) spinnerEmployee.getSelectedItem();
 				
-				//TODO
 				try
 				{
 					DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
@@ -458,6 +451,9 @@ public class MainActivity extends Activity
 		}
 	}
 	
+	/**
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -466,7 +462,9 @@ public class MainActivity extends Activity
 		return true;
 	}
 	
-
+	/**
+	 * @see android.app.Activity#onResume()
+	 */
 	@Override
 	protected void onResume() 
 	{
@@ -485,6 +483,9 @@ public class MainActivity extends Activity
 		}
 	}
 
+	/**
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override
 	protected void onPause() 
 	{
@@ -494,6 +495,9 @@ public class MainActivity extends Activity
 			mUsbCommunication.setUsbInterface(null, null);
 	}
 
+	/**
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
 	protected void onDestroy() 
 	{
@@ -502,11 +506,21 @@ public class MainActivity extends Activity
 		unregisterReceiver(usbReceiver);
 	}
 	
+	/**
+	 * Gets the usb state.
+	 *
+	 * @return the usb state
+	 */
 	private boolean getUsbState() 
 	{
         return textViewStatus.getText().equals("Connected");
 	}
 	
+	/**
+	 * Sets the usb state.
+	 *
+	 * @param state the new usb state
+	 */
 	private void setUsbState(boolean state) 
 	{
         if (state) 
@@ -521,12 +535,18 @@ public class MainActivity extends Activity
 		}
 	}
 	
+	/**
+	 * Sets the power state.
+	 */
 	private void setPowerState() 
 	{
 		MtiCmd mMtiCmd = new CMD_PwrMgt.RFID_PowerEnterPowerState(mUsbCommunication);
 		CMD_PwrMgt.RFID_PowerEnterPowerState finalCmd = (CMD_PwrMgt.RFID_PowerEnterPowerState) mMtiCmd;
 	}
 	
+	/**
+	 * Sets the power level.
+	 */
 	private void setPowerLevel() 
 	{
 		MtiCmd mMtiCmd = new CMD_AntPortOp.RFID_AntennaPortSetPowerLevel(mUsbCommunication);
@@ -535,6 +555,12 @@ public class MainActivity extends Activity
 		finalCmd.setCmd((byte)18);
 	}
 
+	/**
+	 * Gets the reader sn.
+	 *
+	 * @param bState the b state
+	 * @return the reader sn
+	 */
 	private void getReaderSn(boolean bState) 
 	{
 		MtiCmd mMtiCmd;
@@ -558,6 +584,11 @@ public class MainActivity extends Activity
 	}
 	
 	
+	/**
+	 * Sleep.
+	 *
+	 * @param millisecond the millisecond
+	 */
 	private void sleep(int millisecond) 
 	{
 		try

@@ -48,7 +48,7 @@
     <ListView
         android:id="@+id/listViewScannedTags"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:choiceMode="multipleChoice" 
         android:visibility="invisible"
         android:background="@drawable/border_ui" 
