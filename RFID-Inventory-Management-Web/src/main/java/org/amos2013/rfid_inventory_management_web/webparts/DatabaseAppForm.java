@@ -93,7 +93,13 @@ public class DatabaseAppForm extends Form<Object>
 		{
 			statusMessage = e.getMessage();
 		}
-
+		
+		if (locationDatabaseRecords == null)
+		{
+			statusMessage = "ERROR: location list is null";
+			locationDatabaseRecords = new ArrayList<LocationDatabaseRecord>();
+		}
+		
 		// get strings
 		for (LocationDatabaseRecord record : locationDatabaseRecords)
 		{

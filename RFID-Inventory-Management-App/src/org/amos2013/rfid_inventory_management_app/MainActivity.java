@@ -193,6 +193,14 @@ public class MainActivity extends Activity
 			textViewStatus.setText(e.getMessage());
 		}
 
+		if (locationDatabaseRecords == null)
+		{
+			textViewStatus.setText("ERROR: location list is null");
+			Button startStopButton = (Button) findViewById(R.id.buttonStartStopScanning);
+			startStopButton.setEnabled(false);
+			return;
+		}
+		
 		// get strings
 		for (LocationDatabaseRecord record : locationDatabaseRecords)
 		{
