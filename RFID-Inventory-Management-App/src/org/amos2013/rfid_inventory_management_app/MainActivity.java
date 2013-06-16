@@ -40,6 +40,8 @@ import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 
 import android.app.Activity;
@@ -97,6 +99,8 @@ public class MainActivity extends Activity
 	private static final int VID = 4901;
 	
 	private TextView textViewStatus;
+
+	private ArrayList<String> locationList = new ArrayList<String>();
 	
 	/** The usb receiver. */
 	BroadcastReceiver usbReceiver = new BroadcastReceiver() 
@@ -176,8 +180,25 @@ public class MainActivity extends Activity
 		final Spinner spinnerLocation = (Spinner) findViewById(R.id.spinnerLocation);
 		final Spinner spinnerRoom = (Spinner) findViewById(R.id.spinnerRoom);
 		final Spinner spinnerEmployee = (Spinner) findViewById(R.id.spinnerEmployee);
+				
+		//fill location dropdown menu choices
+		locationList.add("Please select");
+		List<LocationDatabaseRecord> locationDatabaseRecords = null;
+		try
+		{
+			locationDatabaseRecords = LocationDatabaseHandler.getRecordsFromDatabase();
+		}
+		catch (Exception e)
+		{
+			textViewStatus.setText(e.getMessage());
+		}
+
+		// get strings
+		for (LocationDatabaseRecord record : locationDatabaseRecords)
+		{
+			locationList.add(record.getLocation());
+		}
 		
-		String[] locationList = new String[] { "Please select", "Tennenlohe (DE)", "Betholl (US)"};
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationList);
 	    spinnerLocation.setAdapter(adapter);
 	    spinnerLocation.setEnabled(false);

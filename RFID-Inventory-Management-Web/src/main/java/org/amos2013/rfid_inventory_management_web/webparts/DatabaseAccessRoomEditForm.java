@@ -33,7 +33,6 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler;
@@ -63,7 +62,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 	private Integer roomID = null;
 	private String roomName;
 
-	private List<String> locationDropDownCoices = new ArrayList<String>();
+	private List<String> locationDropDownChoices = new ArrayList<String>();
 	private String selectedLocation = "Please select";
 
 	private RoomDatabaseRecord roomRecord;
@@ -131,31 +130,32 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 			final TextField<String> nameTextField = new TextField<String>("roomName");
 			add(nameTextField);
 			
-			DropDownChoice<String> locationDropdown = new DropDownChoice<String> ("locationDropdown", new PropertyModel<String>(this, "selectedLocation"), locationDropDownCoices);
-			locationDropdown.setEnabled(true);
-			add(locationDropdown);
+			DropDownChoice<String> locationDropDown = new DropDownChoice<String> ("locationDropdown", new PropertyModel<String>(this, "selectedLocation"), locationDropDownChoices);
+			locationDropDown.setEnabled(true);
+			add(locationDropDown);
 			
 			//fill location dropdown menu choices
-			locationDropDownCoices.clear();
-			List<LocationDatabaseRecord> location = null;
-			List<String> locationDatabaseRecords = new ArrayList<String>();
+			locationDropDownChoices.clear();
+			List<LocationDatabaseRecord> locationDatabaseRecords = null;
+			List<String> locations = new ArrayList<String>();
 			try
 			{
-				location = LocationDatabaseHandler.getRecordsFromDatabase();
-				// add string for record to locationDatabaseRecords
-				for (LocationDatabaseRecord record : location)
-				{
-					locationDatabaseRecords.add(record.getLocation());
-				}
+				locationDatabaseRecords = LocationDatabaseHandler.getRecordsFromDatabase();
 			}
 			catch (Exception e)
 			{
 				statusMessage = e.getMessage();
 			}
+
+			// get strings
+			for (LocationDatabaseRecord record : locationDatabaseRecords)
+			{
+				locations.add(record.getLocation());
+			}
 			
-			locationDropDownCoices.add("please select");
-			locationDropDownCoices.addAll(locationDatabaseRecords);
-			locationDropdown.setChoices(locationDropDownCoices);
+			locationDropDownChoices.add("Please select");
+			locationDropDownChoices.addAll(locations);
+			locationDropDown.setChoices(locationDropDownChoices);
 			
 			final Button submitButton = new Button("roomSubmitButton")
 			{
@@ -164,7 +164,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 				public void onSubmit()
 				{
 					// catch invalid input first
-					if (roomName == null || selectedLocation == null)
+					if (roomName == null || selectedLocation.equals("Please select"))
 					{
 						statusMessage = "Please enter a name and a location.";
 						return;

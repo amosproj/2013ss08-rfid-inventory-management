@@ -33,7 +33,6 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-//import java.util.Arrays;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
@@ -60,14 +59,13 @@ public class DatabaseAppForm extends Form<Object>
 	private Integer rfid_id; // use Integer instead of int, so the default value is null and not 0. so nothing will be displayed
 	private String statusMessage;
 	
-	private List<String> roomDropDownCoices = new ArrayList<String>();
-	private List<String> employeeDropDownCoices = new ArrayList<String>();
-	private List<String> locationDropDownCoices = new ArrayList<String>();
+	private List<String> roomDropDownChoices = new ArrayList<String>();
+	private List<String> employeeDropDownChoices = new ArrayList<String>();
+	private List<String> locationDropDownChoices = new ArrayList<String>();
 	
 	private String selected_location = "Please select";
-	private String selected_room = "please select";
-	private String selected_employee = "please select";
-
+	private String selected_room = "Please select";
+	private String selected_employee = "Please select";
 
 	/**
 	 * Creates a Form Object to submit updates to the database.
@@ -79,45 +77,46 @@ public class DatabaseAppForm extends Form<Object>
 		setDefaultModel(new CompoundPropertyModel<Object>(this));	// sets the model to bind to the wicket ids
 				
 		// add all forms
-		final DropDownChoice<String> locationDropdown = new DropDownChoice<String>("locationDropdown", new PropertyModel<String>(this, "selected_location"), locationDropDownCoices);
-		locationDropdown.setEnabled(true);
-		add(locationDropdown);
+		final DropDownChoice<String> locationDropDown = new DropDownChoice<String>("locationDropdown", new PropertyModel<String>(this, "selected_location"), locationDropDownChoices);
+		locationDropDown.setEnabled(true);
+		add(locationDropDown);
 				
 		//fill location dropdown menu choices
-		locationDropDownCoices.clear();
-		List<LocationDatabaseRecord> location = null;
-		List<String> locationDatabaseRecords = new ArrayList<String>();
+		locationDropDownChoices.clear();
+		List<LocationDatabaseRecord> locationDatabaseRecords = null;
+		List<String> locations = new ArrayList<String>();
 		try
 		{
-			location = LocationDatabaseHandler.getRecordsFromDatabase();
-			// add string for record to locationDatabaseRecords
-			for (LocationDatabaseRecord record : location)
-			{
-				locationDatabaseRecords.add(record.getLocation());
-			}
+			locationDatabaseRecords = LocationDatabaseHandler.getRecordsFromDatabase();
 		}
 		catch (Exception e)
 		{
 			statusMessage = e.getMessage();
 		}
+
+		// get strings
+		for (LocationDatabaseRecord record : locationDatabaseRecords)
+		{
+			locations.add(record.getLocation());
+		}
 		
-		locationDropDownCoices.add("please select");
-		locationDropDownCoices.addAll(locationDatabaseRecords);
-		locationDropdown.setChoices(locationDropDownCoices);
+		locationDropDownChoices.add("Please select");
+		locationDropDownChoices.addAll(locations);
+		locationDropDown.setChoices(locationDropDownChoices);
 		
-		
+		// add input fields
 		add(new Label("statusMessage"));
 		
 		final NumberTextField<Integer> rfidIDTextField = new NumberTextField<Integer>("rfid_id");
 		rfidIDTextField.setEnabled(false);
 		add(rfidIDTextField);
 		
-		final DropDownChoice<String> roomDropdown = new DropDownChoice<String>("roomDropdown", new PropertyModel<String>(this, "selected_room"), roomDropDownCoices);
+		final DropDownChoice<String> roomDropdown = new DropDownChoice<String>("roomDropdown", new PropertyModel<String>(this, "selected_room"), roomDropDownChoices);
 		roomDropdown.setEnabled(false);
 		add(roomDropdown);
 		
 		
-		final DropDownChoice<String> ownerDropdown = new DropDownChoice<String>("employeeDropdown", new PropertyModel<String>(this, "selected_employee"), employeeDropDownCoices);
+		final DropDownChoice<String> ownerDropdown = new DropDownChoice<String>("employeeDropdown", new PropertyModel<String>(this, "selected_employee"), employeeDropDownChoices);
 		ownerDropdown.setEnabled(false);
 		add(ownerDropdown);
 		
@@ -136,7 +135,7 @@ public class DatabaseAppForm extends Form<Object>
 					return;
 				}
 				
-				if (selected_room == null || selected_employee == null || selected_room.isEmpty() || selected_employee.isEmpty() || selected_room == "please select" || selected_employee == "please select")
+				if (selected_room == null || selected_employee == null || selected_room.isEmpty() || selected_employee.isEmpty() || selected_room == "Please select" || selected_employee == "Please select")
 				{
 					statusMessage = "Please enter a room and an employee.";
 					return;
@@ -178,8 +177,8 @@ public class DatabaseAppForm extends Form<Object>
 				rfidIDTextField.setEnabled(true);
 				
 				//clear dropdown menu choices
-				roomDropDownCoices.clear();
-				employeeDropDownCoices.clear();
+				roomDropDownChoices.clear();
+				employeeDropDownChoices.clear();
 				
 				//fill room dropdown menu choices
 				List<String> roomDatabaseRecords = null;
@@ -192,9 +191,9 @@ public class DatabaseAppForm extends Form<Object>
 					statusMessage = e.getMessage();
 				}
 				
-				roomDropDownCoices.add("please select");
-				roomDropDownCoices.addAll(roomDatabaseRecords);
-				roomDropdown.setChoices(roomDropDownCoices);
+				roomDropDownChoices.add("Please select");
+				roomDropDownChoices.addAll(roomDatabaseRecords);
+				roomDropdown.setChoices(roomDropDownChoices);
 				
 				// fill owner drop down choices
 				List<String> employeeDatabaseRecords = null;
@@ -207,12 +206,11 @@ public class DatabaseAppForm extends Form<Object>
 					statusMessage = e.getMessage();
 				}
 				
-				employeeDropDownCoices.add("please select");
-				employeeDropDownCoices.addAll(employeeDatabaseRecords);
-				ownerDropdown.setChoices(employeeDropDownCoices);
+				employeeDropDownChoices.add("Please select");
+				employeeDropDownChoices.addAll(employeeDatabaseRecords);
+				ownerDropdown.setChoices(employeeDropDownChoices);
 			}
 		};
 		add(saveLocationButton);
 	}
 }
-

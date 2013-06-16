@@ -33,7 +33,6 @@ package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
@@ -89,7 +88,6 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 	private List<String> employeeDropDownChoices = new ArrayList<String>();
 	
 	private String selectedLocation = "Please select";
-	// TODO later on we should probably get the contents for the following string from the database
 	
 	private DeviceDatabaseRecord deviceRecord;
 
@@ -185,7 +183,6 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			employeeDropDown.setEnabled(false);
 			add(employeeDropDown);
 			
-			
 			DropDownChoice<String> locationDropDown = new DropDownChoice<String>("locationDropDown", new PropertyModel<String>(this, "selectedLocation"), locationDropDownChoices)
 				{
 					private static final long serialVersionUID = 134567452542543L;
@@ -255,29 +252,30 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			locationDropDown.setEnabled(true);
 			add(locationDropDown);
 			
-			
 			//fill location dropdown menu choices
 			locationDropDownChoices.clear();
-			List<LocationDatabaseRecord> location = null;
-			List<String> locationDatabaseRecords = new ArrayList<String>();
+			List<LocationDatabaseRecord> locationDatabaseRecords = null;
+			List<String> locations = new ArrayList<String>();
 			try
 			{
-				location = LocationDatabaseHandler.getRecordsFromDatabase();
-				// add string for record to locationDatabaseRecords
-				for (LocationDatabaseRecord record : location)
-				{
-					locationDatabaseRecords.add(record.getLocation());
-				}
+				locationDatabaseRecords = LocationDatabaseHandler.getRecordsFromDatabase();
 			}
 			catch (Exception e)
 			{
 				statusMessage = e.getMessage();
 			}
+
+			// get strings
+			for (LocationDatabaseRecord record : locationDatabaseRecords)
+			{
+				locations.add(record.getLocation());
+			}
 			
-			locationDropDownChoices.add("please select");
-			locationDropDownChoices.addAll(locationDatabaseRecords);
+			locationDropDownChoices.add("Please select");
+			locationDropDownChoices.addAll(locations);
 			locationDropDown.setChoices(locationDropDownChoices);
 			
+			// input fields
 			final TextField<String> rfidIDTextField = new TextField<String>("rfidIDInputField");
 			add(rfidIDTextField);
 			
@@ -314,7 +312,6 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			final TextField<String> platformTextField = new TextField<String>("platformInputField");
 			platformTextField.setOutputMarkupId(true); // needed, to add this component to the AjaxRequestTarget, in order to chance the value dynamically
 			add(platformTextField);			
-			
 			
 			final TextField<String> partNumberTextField = new TextField<String>("partNumberInputField");
 			partNumberTextField.add(new OnChangeAjaxBehavior()

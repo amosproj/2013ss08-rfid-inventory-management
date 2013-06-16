@@ -33,8 +33,6 @@ package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.ArrayList;
-//import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,7 +42,6 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * This class is used, to access the database.
  */
@@ -62,7 +59,6 @@ public class LocationDatabaseHandler implements Serializable
 	// Database Access Object, is a handler for reading and writing
 	/** The database handler dao. */
 	private static Dao<LocationDatabaseRecord, Integer> databaseHandlerDao;
-
 
 	/**
 	 * Creates a database if there is no one existing.
@@ -128,7 +124,6 @@ public class LocationDatabaseHandler implements Serializable
 		
 		return databaseRecords.get(0);
 	}
-
 
 	/**
 	 * Gets the record from database by id.
@@ -347,4 +342,3 @@ public class LocationDatabaseHandler implements Serializable
 		}
 	}
 }
-
