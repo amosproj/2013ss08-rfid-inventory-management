@@ -377,17 +377,18 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 					}
 					
 					// write to the database: generate records from input data
-					String employeeToSet = null; 
-					String roomToSet = null; 
+					String employeeToSet = selectedEmployee; 
+					String roomToSet = selectedRoom; 
 					
-					if (!selectedLocation.equals("Please select") && !selectedEmployee.equals("Please select"))
+					// TODO: change behavior
+					if (selectedLocation.equals("Please select") && selectedEmployee.equals("Please select"))
 					{
-						employeeToSet = selectedEmployee;
+						employeeToSet = null;
 					}
 
-					if (!selectedLocation.equals("Please select") && !selectedRoom.equals("Please select"))
+					if (selectedLocation.equals("Please select") && selectedRoom.equals("Please select"))
 					{
-						roomToSet = selectedRoom;
+						roomToSet = null;
 					}
 					
 					try
