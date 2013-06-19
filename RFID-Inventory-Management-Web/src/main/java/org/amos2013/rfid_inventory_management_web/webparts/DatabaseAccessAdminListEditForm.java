@@ -380,13 +380,12 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 					String employeeToSet = selectedEmployee; 
 					String roomToSet = selectedRoom; 
 					
-					// TODO: change behavior
-					if (selectedLocation.equals("Please select") && selectedEmployee.equals("Please select"))
+					if (selectedEmployee.equals("Please select"))
 					{
 						employeeToSet = null;
 					}
 
-					if (selectedLocation.equals("Please select") && selectedRoom.equals("Please select"))
+					if (selectedRoom.equals("Please select"))
 					{
 						roomToSet = null;
 					}
