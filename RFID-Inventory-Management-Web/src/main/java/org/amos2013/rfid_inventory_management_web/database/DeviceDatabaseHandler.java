@@ -156,21 +156,24 @@ public class DeviceDatabaseHandler implements Serializable
 	}
 	
 	/**
-	 * Writes the given strings to the database
+	 * Writes the given strings to the database.
+	 *
 	 * @param rfid_id int to set
 	 * @param room string to set
 	 * @param employee string to set
+	 * @return true, if successful (record with rfid  id existing) 
 	 * @throws SQLException when database connection close() fails
 	 * @throws IllegalArgumentException when room or owner is null
 	 * @throws Exception when database setup fails
 	 */
-	public void updateRecordFromAppInDatabase(String rfid_id, String room, String employee) throws SQLException, IllegalArgumentException, Exception
+	public boolean updateRecordFromAppInDatabase(String rfid_id, String room, String employee) throws SQLException, IllegalArgumentException, Exception
 	{
-		if (room == null || employee == null || rfid_id == null)
+		if (room == null || rfid_id == null)
 		{
 			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is invalid");
 		}
-				
+		
+		int result;
 		ConnectionSource connectionSource = null;
 		try
 		{
@@ -179,11 +182,21 @@ public class DeviceDatabaseHandler implements Serializable
 			// create a database, if non existing
 			setupDatabase(connectionSource);
 
-			// write the given Strings
-			DeviceDatabaseRecord record = new DeviceDatabaseRecord(rfid_id, room, employee);
+			String employeeToSet = employee;
+			
+			// keep employee -> get from database
+			if (employee == null)
+			{
+				// read out existing employee
+				DeviceDatabaseRecord recordInDatabase = getRecordFromDatabaseById(rfid_id);
+				employeeToSet = recordInDatabase.getEmployee();
+			}
 
+			// write the given Strings
+			DeviceDatabaseRecord record = new DeviceDatabaseRecord(rfid_id, room, employeeToSet);
+			
 			// writes to the database: create if new id, or update if existing
-			databaseHandlerDao.createOrUpdate(record);
+			result = databaseHandlerDao.update(record);
 		} 
 		finally
 		{
@@ -193,8 +206,16 @@ public class DeviceDatabaseHandler implements Serializable
 				connectionSource.close();
 			}
 		}
+		
+		if (result != 1)
+		{
+			return false;
+		}
+		else 
+		{
+			return true;
+		}
 	}
-
 	
 	/**
 	 * Searches and returns all records that match the search string in the specified column.

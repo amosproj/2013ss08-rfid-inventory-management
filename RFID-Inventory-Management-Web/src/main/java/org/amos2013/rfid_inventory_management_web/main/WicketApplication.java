@@ -35,7 +35,6 @@ import org.amos2013.rfid_inventory_management_web.webparts.AdminListEditPage;
 import org.amos2013.rfid_inventory_management_web.webparts.AdminRoomEditPage;
 import org.amos2013.rfid_inventory_management_web.webparts.AdminEmployeeEditPage;
 import org.amos2013.rfid_inventory_management_web.webparts.AdminLocationEditPage;
-import org.amos2013.rfid_inventory_management_web.webparts.AppPage;
 import org.amos2013.rfid_inventory_management_web.webparts.ListPage;
 import org.amos2013.rfid_inventory_management_web.webparts.AdminListPage;
 import org.amos2013.rfid_inventory_management_web.webparts.AdminRoomPage;
@@ -79,7 +78,6 @@ public class WicketApplication extends WebApplication
 	{
 		super.init();
 		// mount homepage and pages without the PageComponentInfo being displayed
-		mount(new HidePageComponentInfoMounter("/app", AppPage.class));
 		mount(new HidePageComponentInfoMounter("/admin", AdminListPage.class));
 		mount(new HidePageComponentInfoMounter("/admin/edit", AdminListEditPage.class));
 		mount(new HidePageComponentInfoMounter("/admin/room", AdminRoomPage.class));

@@ -76,10 +76,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mti.rfid.minime.CMD_AntPortOp;
-import com.mti.rfid.minime.CMD_FwAccess;
 import com.mti.rfid.minime.CMD_Iso18k6cTagAccess;
 import com.mti.rfid.minime.CMD_PwrMgt;
-import com.mti.rfid.minime.CMD_PwrMgt.PowerState;
 import com.mti.rfid.minime.MtiCmd;
 import com.mti.rfid.minime.UsbCommunication;
 
@@ -125,7 +123,7 @@ public class MainActivity extends Activity
 				UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 				mUsbCommunication.setUsbInterface(mManager, device);
 				setUsbState(true);
-			} 
+			}
 			else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) 
 			{
 //				Toast.makeText(context, "USB Detached", Toast.LENGTH_SHORT).show();
@@ -145,8 +143,6 @@ public class MainActivity extends Activity
 						mUsbCommunication.setUsbInterface(mManager, device);
 						setUsbState(true);
 						sleep(400);
-//						if(bSavedInst)
-//							getReaderSn(true);
 						setPowerLevel();
 						setPowerState();
 					} 	
@@ -338,7 +334,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id)
 			{
-				if (spinnerEmployee.getSelectedItemId() != 0 && spinnerRoom.getSelectedItemId() != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
+				if (spinnerRoom.getSelectedItemId() != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
 				{
 					saveButton.setEnabled(true);
 				}
@@ -373,7 +369,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
 			{
-				if (position != 0 && spinnerEmployee.getSelectedItemId() != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
+				if (position != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
 				{
 					saveButton.setEnabled(true);
 				}
@@ -383,28 +379,6 @@ public class MainActivity extends Activity
 				}
 			}
 			
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0)
-			{
-				
-			}
-		});
-		
-		spinnerEmployee.setOnItemSelectedListener(new OnItemSelectedListener()
-		{
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
-			{
-				if (position != 0 && spinnerRoom.getSelectedItemId() != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
-				{
-					saveButton.setEnabled(true);
-				}
-				else
-				{
-					saveButton.setEnabled(false);
-				}
-			}
-
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0)
 			{
@@ -549,8 +523,21 @@ public class MainActivity extends Activity
 			if (checked.get(i) == true)
 			{
 				String rfidId =  (String) listViewScannedTags.getItemAtPosition(i);
+				
+				// remove ending " " which the reader adds
+				if (rfidId.endsWith(" "))
+				{
+					rfidId = rfidId.substring(0, rfidId.length() - 1);
+				}
+				
 				String selectedRoom = (String) spinnerRoom.getSelectedItem();
 				String selectedEmployee = (String) spinnerEmployee.getSelectedItem();
+				
+				// if nothing is selected, keep the employee
+				if (selectedEmployee.equals("Please select"))
+				{
+					selectedEmployee = null;
+				}
 				
 				try
 				{
@@ -696,33 +683,6 @@ public class MainActivity extends Activity
 		CMD_AntPortOp.RFID_AntennaPortSetPowerLevel finalCmd = (CMD_AntPortOp.RFID_AntennaPortSetPowerLevel) mMtiCmd;
 		
 		finalCmd.setCmd((byte)18);
-	}
-
-	/**
-	 * Gets the reader sn.
-	 *
-	 * @param bState the b state
-	 * @return the reader sn
-	 */
-	// TODO: do we need this?
-	private void getReaderSn(boolean bState) 
-	{
-		MtiCmd mMtiCmd;
-
-		if(bState) 
-		{
-			byte[] bSN = new byte[16];
-	
-		    for (int i = 0; i < 16; i++) 
-		    {
-				mMtiCmd = new CMD_FwAccess.RFID_MacReadOemData(mUsbCommunication);
-				CMD_FwAccess.RFID_MacReadOemData finalCmd = (CMD_FwAccess.RFID_MacReadOemData) mMtiCmd;
-				if(finalCmd.setCmd(i + 0x50))
-				{
-					bSN[i] = finalCmd.getData();
-				}
-			}
-		} 
 	}
 	
 	/**
