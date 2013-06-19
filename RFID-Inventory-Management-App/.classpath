@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="libs/rfid-inventory-management-web-database.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/mti-rfid.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/postgresql-9.2-1002.jdbc4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ormlite-core-4.45.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ormlite-jdbc-4.45.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/postgresql-9.1-901.jdbc4.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/rfid-inventory-management-web-database.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/android.jar"/>

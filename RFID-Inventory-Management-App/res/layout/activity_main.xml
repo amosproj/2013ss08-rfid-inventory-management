@@ -26,6 +26,15 @@
         android:text=""
         android:textColor="#fb3d09"
         android:textStyle="bold"
+        android:id="@+id/textViewConnectedStatus"
+        />
+    
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#fb3d09"
+        android:textStyle="bold"
         android:id="@+id/textViewStatus"
         />
     
@@ -48,7 +57,7 @@
     <ListView
         android:id="@+id/listViewScannedTags"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="450dp"
         android:choiceMode="multipleChoice" 
         android:visibility="invisible"
         android:background="@drawable/border_ui" 

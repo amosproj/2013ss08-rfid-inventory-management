@@ -50,14 +50,19 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -74,6 +79,7 @@ import com.mti.rfid.minime.CMD_AntPortOp;
 import com.mti.rfid.minime.CMD_FwAccess;
 import com.mti.rfid.minime.CMD_Iso18k6cTagAccess;
 import com.mti.rfid.minime.CMD_PwrMgt;
+import com.mti.rfid.minime.CMD_PwrMgt.PowerState;
 import com.mti.rfid.minime.MtiCmd;
 import com.mti.rfid.minime.UsbCommunication;
 
@@ -99,6 +105,7 @@ public class MainActivity extends Activity
 	private static final int VID = 4901;
 	
 	private TextView textViewStatus;
+	private TextView textViewConnectedStatus;
 
 	private ArrayList<String> locationList = new ArrayList<String>();
 	
@@ -109,19 +116,19 @@ public class MainActivity extends Activity
 		public void onReceive(Context context, Intent intent)
 		{
 			String action = intent.getAction();
-			Toast.makeText(context, "Broadcast Receiver", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(context, "Broadcast Receiver", Toast.LENGTH_SHORT).show();
 			
 			if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) 
 			{					
 				// will intercept by system
-				Toast.makeText(context, "USB Attached", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(context, "USB Attached", Toast.LENGTH_SHORT).show();
 				UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 				mUsbCommunication.setUsbInterface(mManager, device);
 				setUsbState(true);
 			} 
 			else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) 
 			{
-				Toast.makeText(context, "USB Detached", Toast.LENGTH_SHORT).show();
+//				Toast.makeText(context, "USB Detached", Toast.LENGTH_SHORT).show();
 				mUsbCommunication.setUsbInterface(null, null);
 				setUsbState(false);
 			} 
@@ -131,11 +138,10 @@ public class MainActivity extends Activity
 				{
 					UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
 					
-					Toast.makeText(context, "USB Permission", Toast.LENGTH_SHORT).show();
+					Toast.makeText(context, "Reader connected and ready", Toast.LENGTH_SHORT).show();
 					if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) 
 					{
-						Toast.makeText(context, "USB Permission", Toast.LENGTH_SHORT).show();
-							
+//						Toast.makeText(context, "USB Permission", Toast.LENGTH_SHORT).show();						
 						mUsbCommunication.setUsbInterface(mManager, device);
 						setUsbState(true);
 						sleep(400);
@@ -159,10 +165,21 @@ public class MainActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		// this is needed with android sdk > 9, to allow the app to access the internet
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitNetwork().build();
+		StrictMode.setThreadPolicy(policy);
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-        mManager = (UsbManager)getSystemService(Context.USB_SERVICE);
+	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		
+	    textViewStatus = (TextView) findViewById(R.id.textViewStatus);
+	    textViewConnectedStatus = (TextView) findViewById(R.id.textViewConnectedStatus);
+		textViewConnectedStatus.setText("Disconnected");
+		textViewConnectedStatus.setTextColor(android.graphics.Color.RED);
+	    
+	    mManager = (UsbManager)getSystemService(Context.USB_SERVICE);
         mPermissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
         
         // register usb receiver
@@ -171,10 +188,8 @@ public class MainActivity extends Activity
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         filter.addAction(ACTION_USB_PERMISSION);
         registerReceiver(usbReceiver, filter);
-		
-		final Button saveButton = (Button) findViewById(R.id.buttonSave);
-		
-		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
+
+        final Button saveButton = (Button) findViewById(R.id.buttonSave);
 		
 		// set up spinners
 		final Spinner spinnerLocation = (Spinner) findViewById(R.id.spinnerLocation);
@@ -195,7 +210,7 @@ public class MainActivity extends Activity
 
 		if (locationDatabaseRecords == null)
 		{
-			textViewStatus.setText("ERROR: location list is null");
+			textViewStatus.setText("ERROR: Could not load the location list (it is null). Check your internet connection!");
 			Button startStopButton = (Button) findViewById(R.id.buttonStartStopScanning);
 			startStopButton.setEnabled(false);
 			return;
@@ -207,7 +222,24 @@ public class MainActivity extends Activity
 			locationList.add(record.getLocation());
 		}
 		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationList);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, locationList) 
+			{
+				// increase text size of the items only in the drop down view
+				@Override
+				public View getDropDownView(int position, View convertView, ViewGroup parent)
+				{
+					if (convertView == null) 
+					{
+			            LayoutInflater inflater = LayoutInflater.from(getContext());
+			            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
+			        }
+					
+					View v = super.getDropDownView(position, convertView, parent);
+					TextView text = (TextView)v.findViewById(android.R.id.text1);
+					text.setTextSize(30);
+					return v;
+				}
+			};
 	    spinnerLocation.setAdapter(adapter);
 	    spinnerLocation.setEnabled(false);
 		spinnerLocation.setOnItemSelectedListener(new OnItemSelectedListener() 
@@ -240,7 +272,24 @@ public class MainActivity extends Activity
 					}
 					
 					roomChoicesList.add(0, "Please select");
-					spinnerRoom.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, roomChoicesList));
+					spinnerRoom.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, roomChoicesList) 
+						{
+							// increase text size of the items only in the drop down view
+							@Override
+							public View getDropDownView(int position, View convertView, ViewGroup parent)
+							{
+								if (convertView == null) 
+								{
+						            LayoutInflater inflater = LayoutInflater.from(getContext());
+						            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
+						        }
+								
+								View v = super.getDropDownView(position, convertView, parent);
+								TextView text = (TextView)v.findViewById(android.R.id.text1);
+								text.setTextSize(30);
+								return v;
+							}
+					});
 					
 					// fill employee drop down choices
 					List<String> employeeChoicesList = null;
@@ -254,7 +303,24 @@ public class MainActivity extends Activity
 					}
 					
 					employeeChoicesList.add(0, "Please select");
-					spinnerEmployee.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, employeeChoicesList));
+					spinnerEmployee.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, employeeChoicesList) 
+						{
+							// increase text size of the items only in the drop down view
+							@Override
+							public View getDropDownView(int position, View convertView, ViewGroup parent)
+							{
+								if (convertView == null) 
+								{
+						            LayoutInflater inflater = LayoutInflater.from(getContext());
+						            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
+						        }
+								
+								View v = super.getDropDownView(position, convertView, parent);
+								TextView text = (TextView)v.findViewById(android.R.id.text1);
+								text.setTextSize(30);
+								return v;
+							}
+						});
 				}
 			}
 
@@ -265,43 +331,6 @@ public class MainActivity extends Activity
 			}
 		});	
 		
-		// if room and employee spinners have a selected item, enable the save button
-		spinnerRoom.setOnItemSelectedListener(new OnItemSelectedListener()
-		{
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
-			{
-				if (position != 0 && spinnerEmployee.getSelectedItemId() != 0)
-				{
-					saveButton.setEnabled(true);
-				}
-			}
-			
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0)
-			{
-				
-			}
-		});
-		
-		spinnerEmployee.setOnItemSelectedListener(new OnItemSelectedListener()
-		{
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
-			{
-				if (position != 0 && spinnerRoom.getSelectedItemId() != 0)
-				{
-					saveButton.setEnabled(true);
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0)
-			{
-				
-			}
-		});
-		
 		// set up listview, where the scanned items are listed
 		final ListView listViewScannedTags = (ListView) findViewById(R.id.listViewScannedTags);
 		listViewScannedTags.setOnItemClickListener(new OnItemClickListener()
@@ -309,11 +338,14 @@ public class MainActivity extends Activity
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id)
 			{
-				LinearLayout inputLayout = (LinearLayout) findViewById(R.id.linearLayoutInput);
-				inputLayout.setVisibility(LinearLayout.VISIBLE);
-				
-				Spinner locationSpinner = (Spinner) findViewById(R.id.spinnerLocation);
-				locationSpinner.setEnabled(true);
+				if (spinnerEmployee.getSelectedItemId() != 0 && spinnerRoom.getSelectedItemId() != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
+				{
+					saveButton.setEnabled(true);
+				}
+				else
+				{
+					saveButton.setEnabled(false); // TODO removing the selection from the same item doesn't disable the button
+				}
 			}
 		});
 		
@@ -334,6 +366,51 @@ public class MainActivity extends Activity
 				return false;
 			}
 		});
+		
+		// if room and employee spinners have a selected item, enable the save button
+		spinnerRoom.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
+			{
+				if (position != 0 && spinnerEmployee.getSelectedItemId() != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
+				{
+					saveButton.setEnabled(true);
+				}
+				else
+				{
+					saveButton.setEnabled(false);
+				}
+			}
+			
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0)
+			{
+				
+			}
+		});
+		
+		spinnerEmployee.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
+			{
+				if (position != 0 && spinnerRoom.getSelectedItemId() != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
+				{
+					saveButton.setEnabled(true);
+				}
+				else
+				{
+					saveButton.setEnabled(false);
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0)
+			{
+				
+			}
+		});
 	}
 	
 	/**
@@ -347,42 +424,25 @@ public class MainActivity extends Activity
 	{
 		final Handler handler = new Handler();
 		
-	    final int scantimes = 25;
-		
 	    // if reader is connected -> scan
 		if(getUsbState()) 
 		{
 			Button startStopButton = (Button) findViewById(R.id.buttonStartStopScanning);
 			
-			ListView listViewScannedTags = (ListView) findViewById(R.id.listViewScannedTags);
+			final ListView listViewScannedTags = (ListView) findViewById(R.id.listViewScannedTags);
 			TextView textViewScannedTags = (TextView) findViewById(R.id.textViewScannedTags);
-
-			// change text on click and show scan results
-			if (startStopButton.getText().equals("Start scanning"))
-			{
-				startStopButton.setText("Stop scanning");
-				
-				textViewScannedTags.setVisibility(TextView.VISIBLE);
-				listViewScannedTags.setVisibility(ListView.VISIBLE);
-				listViewScannedTags.setEnabled(false);
-			}
-			else 
-			{	
-				startStopButton.setText("Start scanning");
-				
-				listViewScannedTags.setEnabled(true);
-			}
 			
-			// start the scanning
-			new Thread() 
+			//scanning thread
+			Thread scanningThread = new Thread() 
 			{
 				int numTags;
 				String tagId;
 
-	    		public void run() 
+	    		public void run()
 	    		{
 			    	scannedTagsList.clear();
-			    	for (int i = 0; i < scantimes; i++) 
+			    	listViewScannedTags.requestLayout();
+			    	while(!isInterrupted())
 			    	{
 			    		mMtiCmd = new CMD_Iso18k6cTagAccess.RFID_18K6CTagInventory(mUsbCommunication);
 						CMD_Iso18k6cTagAccess.RFID_18K6CTagInventory finalCmd = (CMD_Iso18k6cTagAccess.RFID_18K6CTagInventory) mMtiCmd;
@@ -420,6 +480,9 @@ public class MainActivity extends Activity
 						}
 			    	}
 			    	
+			    	//TODO never reached!! scanning continues
+			    	handler.post(updateResult);
+			    	textViewStatus.setText("Scanning done");
 	    			setPowerState();
 	    		}
 	    		
@@ -432,7 +495,34 @@ public class MainActivity extends Activity
 						scannedTagsAdapter.notifyDataSetChanged();
 					}
 	    		};
-			}.start();
+			};
+			
+			
+			// change text on click and show scan results
+			if (startStopButton.getText().equals("Start scanning"))
+			{
+				startStopButton.setText("Stop scanning");
+				
+				textViewScannedTags.setVisibility(TextView.VISIBLE);
+				listViewScannedTags.setVisibility(ListView.VISIBLE);
+				listViewScannedTags.setEnabled(true);
+			}
+			else 
+			{
+				// TODO after stopping, there is a new ordering and an empty rfid id is added to the list
+				scanningThread.interrupt();	// TODO not working
+				
+				LinearLayout inputLayout = (LinearLayout) findViewById(R.id.linearLayoutInput);
+				inputLayout.setVisibility(LinearLayout.VISIBLE);
+				
+				Spinner locationSpinner = (Spinner) findViewById(R.id.spinnerLocation);
+				locationSpinner.setEnabled(true);
+				
+				startStopButton.setText("Start scanning");
+			}
+			
+			// start the scanning
+			scanningThread.start();
 		} 
 		else
 		{
@@ -465,8 +555,8 @@ public class MainActivity extends Activity
 				try
 				{
 					DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
-					deviceDatabaseHandler.updateRecordFromAppInDatabase(Integer.parseInt(rfidId), selectedRoom, selectedEmployee);
-					textViewStatus.setText("- data saved -");
+					deviceDatabaseHandler.updateRecordFromAppInDatabase(rfidId, selectedRoom, selectedEmployee);
+					textViewStatus.setText("- data saved -"); // TODO display the changed ids
 				}
 				catch (IllegalArgumentException e)
 				{
@@ -492,6 +582,17 @@ public class MainActivity extends Activity
 	}
 	
 	/**
+	 * prevents the screen rotation from changing
+	 * @see android.app.Activity#onConfigurationChanged(android.content.res.Configuration)
+	 */
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) 
+	{
+	    super.onConfigurationChanged(newConfig);
+	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	}
+	
+	/**
 	 * @see android.app.Activity#onResume()
 	 */
 	@Override
@@ -501,12 +602,16 @@ public class MainActivity extends Activity
 		
 		HashMap<String, UsbDevice> deviceList = mManager.getDeviceList();
 		Iterator<UsbDevice> deviceIterator = deviceList.values().iterator();
-		while(deviceIterator.hasNext()) {
+		while(deviceIterator.hasNext()) 
+		{
 			UsbDevice device = deviceIterator.next();
 			if (device.getProductId() == PID && device.getVendorId() == VID) 
 			{
 				if(mManager.hasPermission(device))
+				{
 					mManager.requestPermission(device, mPermissionIntent);
+				}
+				
 				break;
 			}
 		}
@@ -520,8 +625,10 @@ public class MainActivity extends Activity
 	{
 		super.onPause();
 
-		if(textViewStatus.getText().equals("Connected"))
+		if(textViewConnectedStatus.getText().equals("Connected"))
+		{
 			mUsbCommunication.setUsbInterface(null, null);
+		}
 	}
 
 	/**
@@ -542,7 +649,7 @@ public class MainActivity extends Activity
 	 */
 	private boolean getUsbState() 
 	{
-        return textViewStatus.getText().equals("Connected");
+        return textViewConnectedStatus.getText().equals("Connected");
 	}
 	
 	/**
@@ -554,13 +661,13 @@ public class MainActivity extends Activity
 	{
         if (state) 
 		{
-        	textViewStatus.setText("Connected");
-        	textViewStatus.setTextColor(android.graphics.Color.GREEN);
+        	textViewConnectedStatus.setText("Connected");
+        	textViewConnectedStatus.setTextColor(android.graphics.Color.GREEN);
 		}
 		else 
 		{
-			textViewStatus.setText("Disconnected");
-			textViewStatus.setTextColor(android.graphics.Color.RED);
+			textViewConnectedStatus.setText("Disconnected");
+			textViewConnectedStatus.setTextColor(android.graphics.Color.RED);
 		}
 	}
 	
@@ -571,6 +678,13 @@ public class MainActivity extends Activity
 	{
 		MtiCmd mMtiCmd = new CMD_PwrMgt.RFID_PowerEnterPowerState(mUsbCommunication);
 		CMD_PwrMgt.RFID_PowerEnterPowerState finalCmd = (CMD_PwrMgt.RFID_PowerEnterPowerState) mMtiCmd;
+		
+		// TODO doing nothing??
+	 /*   if(mSharedpref.getBoolean("cfg_sleep_mode", false)) 
+	    {
+	    	finalCmd.setCmd(PowerState.Sleep);
+	    	sleep(200);
+	    }*/
 	}
 	
 	/**
@@ -590,6 +704,7 @@ public class MainActivity extends Activity
 	 * @param bState the b state
 	 * @return the reader sn
 	 */
+	// TODO: do we need this?
 	private void getReaderSn(boolean bState) 
 	{
 		MtiCmd mMtiCmd;
@@ -608,10 +723,7 @@ public class MainActivity extends Activity
 				}
 			}
 		} 
-
-//		showFragment(Fragments.About, 0, null);
 	}
-	
 	
 	/**
 	 * Sleep.
