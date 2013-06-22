@@ -37,10 +37,11 @@
 	</head>
 	<body>
 	<wicket:extend>
+		<div style="padding-left: 15px;">
 		<form id="databaseAccessRoomEditForm" method="get" wicket:id="databaseAccessRoomEditForm">
 			<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
 			<fieldset>
-				<legend style="color: #fb3d09; font-weight: bold;">Room to update:</legend>
+				<legend style="color: #fb3d09; font-weight: bold;">Add/update a room:</legend>
 				<br/>
 				<label>Name</label><input wicket:id="roomName" type="text" id="roomName" style="width:184px"/><br/>
 				<label>Location</label><select wicket:id="locationDropdown" style="width:190px"></select><br/>
@@ -50,6 +51,7 @@
 				</p>
 			</fieldset>
 		</form>
+		</div>
 		<br/>
 	</wicket:extend>
 	</body>

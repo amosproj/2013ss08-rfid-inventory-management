@@ -37,55 +37,96 @@
 	</head>
 	<body>
 	<wicket:extend>
-	    <h3>RFID-Inventory Management</h3>
-	    <p>Search function is case-sensitive and supports partial matching:</p>
 		<form id="databaseAccessListForm" method="get" wicket:id="databaseAccessListForm">
+		<div id="bd_inner">
+		<div id="sticky" style="width: 2600px; position: fixed; top: 75px; height: 122px; background-color: #fff; left: 15px;">
+        	<br/>
+        	<h3>RFID-Inventory Management</h3>
 			<p>
-				<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
+				<span wicket:id="statusMessage" style="color: white; font-weight: bold; background-color: red;" />
 				<input wicket:id="search_button" style="margin-left:10px;" type="submit" value="Search for"/>	
 				<input style="margin-left:10px;" wicket:id="searchField" type="text" id="searchField" />
 				&nbsp;&nbsp;in&nbsp;&nbsp;
 				<select wicket:id="search_dropdown"></select>
+				&nbsp;&nbsp;<span style="color: gray;">(search function is case-sensitive and supports partial matching)</span>
 			</p>
-			<fieldset>
-				<legend style="color: #fb3d09; font-weight: bold;">Hardware List</legend>
-				<table>
-					<tbody>
+			<table>
+				 <colgroup>
+					<col width="330px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+				</colgroup>
+				<tbody>
+					<tr>
+						<th>RFID-Id</th>
+						<th>Room</th>
+						<th>Employee</th>
+						<th>Part Number</th>
+						<th>Type</th>
+						<th>Category</th>
+						<th>Manufacturer</th>
+						<th>Platform</th>
+						<th>Serial Number</th>
+						<th>Inventory Number</th>
+						<th>Owner</th>
+						<th>Comment</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div style="width: 2600px; padding-left: 15px;">
+			<table>
+				<colgroup>
+					<col width="330px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+				</colgroup>
+				<tbody>
+					<span wicket:id="recordsReadListView">  								
 						<tr>
-							<th>RFID-Id</th>
-							<th>Room</th>
-							<th>Employee</th>
-							<th>Part Number</th>
-							<th>Type</th>
-							<th>Category</th>
-							<th>Manufacturer</th>
-							<th>Platform</th>
-							<th>Serial Number</th>
-							<th>Inventory Number</th>
-							<th>Owner</th>
-							<th>Comment</th>
+				 			<td><span wicket:id="recordRFIDIdLabel" /></td>	
+					 		<td><span wicket:id="recordRoomLabel" /></td>
+							<td><span wicket:id="recordEmployeeLabel" /></td>
+							<td><span wicket:id="recordPartNumberLabel" /></td>
+				 				
+							<td><span wicket:id="recordTypeLabel" /></td>
+							<td><span wicket:id="recordCategoryLabel" /></td>
+							<td><span wicket:id="recordManufacturerLabel" /></td>
+							<td><span wicket:id="recordPlatformLabel" /></td>
+				 				
+							<td><span wicket:id="recordSerialNumberLabel" /></td>
+							<td><span wicket:id="recordInventoryNumberLabel" /></td>
+							<td><span wicket:id="recordOwnerLabel" /></td>
+							<td><span wicket:id="recordCommentLabel" /></td>
 						</tr>
-						<span wicket:id="recordsReadListView">  								
-					 		<tr>
-					 			<td><span wicket:id="recordRFIDIdLabel" /></td>	
-						 		<td><span wicket:id="recordRoomLabel" /></td>
-				 				<td><span wicket:id="recordEmployeeLabel" /></td>
-				 				<td><span wicket:id="recordPartNumberLabel" /></td>
-				 				
-				 				<td><span wicket:id="recordTypeLabel" /></td>
-				 				<td><span wicket:id="recordCategoryLabel" /></td>
-				 				<td><span wicket:id="recordManufacturerLabel" /></td>
-				 				<td><span wicket:id="recordPlatformLabel" /></td>
-				 				
-				 				<td><span wicket:id="recordSerialNumberLabel" /></td>
-				 				<td><span wicket:id="recordInventoryNumberLabel" /></td>
-				 				<td><span wicket:id="recordOwnerLabel" /></td>
-				 				<td><span wicket:id="recordCommentLabel" /></td>
-							</tr>
-						</span>
-					</tbody>
-				</table>
-			</fieldset>
+					</span>
+				</tbody>
+			</table>
+		</div>
+		</div>
+		<script type="text/javascript">
+		$(bd_inner).scroll(function(){
+			$("#sticky").css('left',-$(bd_inner).scrollLeft()+15);
+		});
+		</script>
 		</form>
 		<br/>
 		<p>&nbsp;</p>

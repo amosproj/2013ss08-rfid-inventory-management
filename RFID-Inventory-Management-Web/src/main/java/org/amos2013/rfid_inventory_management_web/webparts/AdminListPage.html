@@ -33,78 +33,110 @@
 <html xmlns:wicket="http://wicket.apache.org">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
 	</head>
 	<body>
 	<wicket:extend>
-	    <h3>Hardware List Administration</h3>
-	    <p>
-	    	<table>
-	    		<tr>
-	    			<td><form action="/admin"><input type="submit" value="Hardware List"></form></td>
-	    			<td><form action="/admin/employee"><input type="submit" value="Employee List"></form></td>
-	   				<td><form action="/admin/room"><input type="submit" value="Room List"></form></td>
-	   				<td><form action="/admin/location"><input type="submit" value="Location List"></form></td>
-	   			 </tr>
-	   		 </table>
-	   		 <hr />
-	    </p>
-	    
-	    
 		<form id="databaseAccessAdminListForm" method="get" wicket:id="databaseAccessAdminListForm">
+		<div id="bd_inner">
+		<div id="sticky" style="width: 2800px; position: fixed; top: 75px; height: 122px; background-color: #fff; left: 15px;">
+        	<br/>
+        	<span style="font-size: 16pt;color: #092E67;font-weight: bold;">Administration: </span>&nbsp;
+        	Hardware List&nbsp;|&nbsp;
+        	<a href="/admin/employee">Employee List</a>&nbsp;|&nbsp;
+        	<a href="/admin/room">Room List</a>&nbsp;|&nbsp;
+        	<a href="/admin/location">Location List</a>&nbsp;|&nbsp;
+        	<br/>
 			<p>
-				<p wicket:id="statusMessage" style="color: #fb3d09;" />
-				<p>Search function is case-sensitive and supports partial matching:</p>
+				<input wicket:id="deviceAddButton" type="submit" value="Add new entry"/>
+				<span wicket:id="statusMessage" style="color: white; font-weight: bold; background-color: red;" />
 				<input wicket:id="search_button" style="margin-left:10px;" type="submit" value="Search for"/>	
 				<input style="margin-left:10px;" wicket:id="searchField" type="text" id="searchField" />
 				&nbsp;&nbsp;in&nbsp;&nbsp;
 				<select wicket:id="search_dropdown"></select>
+				&nbsp;&nbsp;<span style="color: gray;">(search function is case-sensitive and supports partial matching)</span>
 			</p>
-			<fieldset>
-				<legend style="color: #fb3d09; font-weight: bold;">Hardware List</legend>
-				<input wicket:id="deviceAddButton" type="submit" value="Add"/>
-				<table>
-					<tbody>
+			<table>
+				 <colgroup>
+					<col width="330px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+				</colgroup>
+				<tbody>
+					<tr>
+						<th>RFID-Id</th>
+						<th>Room</th>
+						<th>Employee</th>
+						<th>Part Number</th>
+						<th>Type</th>
+						<th>Category</th>
+						<th>Manufacturer</th>
+						<th>Platform</th>
+						<th>Serial Number</th>
+						<th>Inventory Number</th>
+						<th>Owner</th>
+						<th>Comment</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div style="width: 2800px; padding-left: 15px;">
+			<table>
+				<colgroup>
+					<col width="330px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="200px"/>
+					<col width="100px"/>
+					<col width="100px"/>
+				</colgroup>
+				<tbody>
+					<span wicket:id="recordsReadListView">  								
 						<tr>
-							<th>RFID-Id</th>
-							<th>Room</th>
-							<th>Employee</th>
-							<th>Part Number</th>
-							<th>Type</th>
-							<th>Category</th>
-							<th>Manufacturer</th>
-							<th>Platform</th>
-							<th>Serial Number</th>
-							<th>Inventory Number</th>
-							<th>Owner</th>
-							<th>Comment</th>
-							<th></th>
-							<th></th>
+				 			<td><span wicket:id="recordRFIDIdLabel" /></td>	
+					 		<td><span wicket:id="recordRoomLabel" /></td>
+							<td><span wicket:id="recordEmployeeLabel" /></td>
+							<td><span wicket:id="recordPartNumberLabel" /></td>
+				 				
+							<td><span wicket:id="recordTypeLabel" /></td>
+							<td><span wicket:id="recordCategoryLabel" /></td>
+							<td><span wicket:id="recordManufacturerLabel" /></td>
+							<td><span wicket:id="recordPlatformLabel" /></td>
+				 				
+							<td><span wicket:id="recordSerialNumberLabel" /></td>
+							<td><span wicket:id="recordInventoryNumberLabel" /></td>
+							<td><span wicket:id="recordOwnerLabel" /></td>
+							<td><span wicket:id="recordCommentLabel" /></td>
+				 				
+							<td><a href="#" wicket:id="editRecordLink">edit</a></td>
+							<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>
 						</tr>
-						<span wicket:id="recordsReadListView">  								
-					 		<tr>
-					 			<td><span wicket:id="recordRFIDIdLabel" /></td>	
-						 		<td><span wicket:id="recordRoomLabel" /></td>
-				 				<td><span wicket:id="recordEmployeeLabel" /></td>
-				 				<td><span wicket:id="recordPartNumberLabel" /></td>
-				 				
-				 				<td><span wicket:id="recordTypeLabel" /></td>
-				 				<td><span wicket:id="recordCategoryLabel" /></td>
-				 				<td><span wicket:id="recordManufacturerLabel" /></td>
-				 				<td><span wicket:id="recordPlatformLabel" /></td>
-				 				
-				 				<td><span wicket:id="recordSerialNumberLabel" /></td>
-				 				<td><span wicket:id="recordInventoryNumberLabel" /></td>
-				 				<td><span wicket:id="recordOwnerLabel" /></td>
-				 				<td><span wicket:id="recordCommentLabel" /></td>
-				 				
-				 				<td><a href="#" wicket:id="editRecordLink">edit</a></td>
-				 				<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>
-							</tr>
-						</span>
-					</tbody>
-				</table>
-			</fieldset>
+					</span>
+				</tbody>
+			</table>
+		</div>
+		</div>
+		<script type="text/javascript">
+		$(bd_inner).scroll(function(){
+			$("#sticky").css('left',-$(bd_inner).scrollLeft()+15);
+		});
+		</script>
 		</form>
 		<br/>
 		<p>&nbsp;</p>

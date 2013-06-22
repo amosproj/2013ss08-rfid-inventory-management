@@ -33,30 +33,28 @@
 <html xmlns:wicket="http://wicket.apache.org">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
 	</head>
 	<body>
 	<wicket:extend>
-	    <h3>Location List Administration</h3>
-	    <p>
-	    	<table>
-	    		<tr>
-	    			<td><form action="/admin"><input type="submit" value="Hardware List"></form></td>
-	    			<td><form action="/admin/employee"><input type="submit" value="Employee List"></form></td>
-	   				<td><form action="/admin/room"><input type="submit" value="Room List"></form></td>
-	   				<td><form action="/admin/location"><input type="submit" value="Location List"></form></td>
-	   			 </tr>
-	   		 </table>
-	   		 <hr />
-	    </p>
+		<div style="padding-left: 15px;">
 		<form id="databaseAccessLocationForm" method="get" wicket:id="databaseAccessLocationForm">
-			<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
-			<p><b>Tip:</b> You could search by using the browser's search function <b>[Ctrl]+[F]</b></p>
-			
-			<fieldset>
-				<legend style="color: #fb3d09; font-weight: bold;">Location List</legend>
-				<input wicket:id="locationAddButton" type="submit" value="Add"/>
+	    <span style="font-size: 16pt;color: #092E67;font-weight: bold;">Administration: </span>&nbsp;
+        	<a href="/admin">Hardware List</a>&nbsp;|&nbsp;
+        	<a href="/admin/employee">Employee List</a>&nbsp;|&nbsp;
+        	<a href="/admin/room">Room List</a>&nbsp;|&nbsp;
+        	Location List&nbsp;|&nbsp;
+        	<br/>
+			<p>
+				<input wicket:id="locationAddButton" type="submit" value="Add new entry"/>
+				<span wicket:id="statusMessage" style="color: white; font-weight: bold; background-color: red;" />
+				&nbsp;&nbsp;<span style="color: gray;"><b>Tip:</b> You could search by using the browser's search function <b>[Ctrl]+[F]</b></span>
+			</p>
 				<table>
+					<colgroup>
+					<col width="300px"/>
+					<col width="100px"/>
+					<col width="100px"/>
+					</colgroup>
 					<tbody>
 						<tr>
 							<th>Location</th>
@@ -72,10 +70,10 @@
 						</span>
 					</tbody>
 				</table>
-			</fieldset>
 		</form>
 		<br/>
 	    <p>&nbsp;</p>
+	    </div>
 	</wicket:extend>
 	</body>
 </html>

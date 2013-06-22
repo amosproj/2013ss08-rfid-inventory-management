@@ -37,10 +37,11 @@
 	</head>
 	<body>
 	<wicket:extend>
+		<div style="padding-left: 15px;">
 		<form id="databaseAccessLocationEditForm" method="get" wicket:id="databaseAccessLocationEditForm">
 			<p wicket:id="statusMessage" style="margin-left:25px; color: #fb3d09;" />
 			<fieldset>
-				<legend style="color: #fb3d09; font-weight: bold;">Location to update:</legend>
+				<legend style="color: #fb3d09; font-weight: bold;">Add/update a location:</legend>
 				<br/>
 				<label>Location</label><input wicket:id="location" type="text" id="location" style="width:184px"/><br/>
 				<p>
@@ -49,6 +50,7 @@
 				</p>
 			</fieldset>
 		</form>
+		</div>
 		<br/>
 	</wicket:extend>
 	</body>
