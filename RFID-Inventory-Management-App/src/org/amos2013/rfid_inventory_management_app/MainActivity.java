@@ -39,6 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler;
+import org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord;
 import org.amos2013.rfid_inventory_management_web.database.EmployeeDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler;
 import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseRecord;
@@ -78,6 +79,7 @@ import android.widget.Toast;
 import com.mti.rfid.minime.CMD_AntPortOp;
 import com.mti.rfid.minime.CMD_Iso18k6cTagAccess;
 import com.mti.rfid.minime.CMD_PwrMgt;
+import com.mti.rfid.minime.CMD_PwrMgt.PowerState;
 import com.mti.rfid.minime.MtiCmd;
 import com.mti.rfid.minime.UsbCommunication;
 
@@ -106,6 +108,8 @@ public class MainActivity extends Activity
 	private TextView textViewConnectedStatus;
 
 	private ArrayList<String> locationList = new ArrayList<String>();
+	
+	private ArrayList<DeviceDatabaseRecord> scannedRecordsList = new ArrayList<DeviceDatabaseRecord>();
 	
 	/** The usb receiver. */
 	BroadcastReceiver usbReceiver = new BroadcastReceiver() 
@@ -162,9 +166,12 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		// this is needed with android sdk > 9, to allow the app to access the internet
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitNetwork().build();
-		StrictMode.setThreadPolicy(policy);
-
+		if (android.os.Build.VERSION.SDK_INT >= 9) 
+		{		
+			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitNetwork().build();
+			StrictMode.setThreadPolicy(policy);
+		}
+			
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
@@ -219,23 +226,23 @@ public class MainActivity extends Activity
 		}
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, locationList) 
+		{
+			// increase text size of the items only in the drop down view
+			@Override
+			public View getDropDownView(int position, View convertView, ViewGroup parent)
 			{
-				// increase text size of the items only in the drop down view
-				@Override
-				public View getDropDownView(int position, View convertView, ViewGroup parent)
+				if (convertView == null) 
 				{
-					if (convertView == null) 
-					{
-			            LayoutInflater inflater = LayoutInflater.from(getContext());
-			            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
-			        }
-					
-					View v = super.getDropDownView(position, convertView, parent);
-					TextView text = (TextView)v.findViewById(android.R.id.text1);
-					text.setTextSize(30);
-					return v;
-				}
-			};
+		            LayoutInflater inflater = LayoutInflater.from(getContext());
+		            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
+		        }
+				
+				View v = super.getDropDownView(position, convertView, parent);
+				TextView text = (TextView)v.findViewById(android.R.id.text1);
+				text.setTextSize(30);
+				return v;
+			}
+		};
 	    spinnerLocation.setAdapter(adapter);
 	    spinnerLocation.setEnabled(false);
 		spinnerLocation.setOnItemSelectedListener(new OnItemSelectedListener() 
@@ -248,6 +255,10 @@ public class MainActivity extends Activity
 				{
 					spinnerRoom.setEnabled(false);
 					spinnerEmployee.setEnabled(false);
+					
+					// set selected item back to "Please select"
+					spinnerRoom.setSelection(0);
+					spinnerEmployee.setSelection(0);
 				}
 				else
 				{
@@ -269,22 +280,22 @@ public class MainActivity extends Activity
 					
 					roomChoicesList.add(0, "Please select");
 					spinnerRoom.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, roomChoicesList) 
+					{
+						// increase text size of the items only in the drop down view
+						@Override
+						public View getDropDownView(int position, View convertView, ViewGroup parent)
 						{
-							// increase text size of the items only in the drop down view
-							@Override
-							public View getDropDownView(int position, View convertView, ViewGroup parent)
+							if (convertView == null) 
 							{
-								if (convertView == null) 
-								{
-						            LayoutInflater inflater = LayoutInflater.from(getContext());
-						            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
-						        }
-								
-								View v = super.getDropDownView(position, convertView, parent);
-								TextView text = (TextView)v.findViewById(android.R.id.text1);
-								text.setTextSize(30);
-								return v;
-							}
+					            LayoutInflater inflater = LayoutInflater.from(getContext());
+					            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
+					        }
+							
+							View v = super.getDropDownView(position, convertView, parent);
+							TextView text = (TextView)v.findViewById(android.R.id.text1);
+							text.setTextSize(30);
+							return v;
+						}
 					});
 					
 					// fill employee drop down choices
@@ -334,13 +345,13 @@ public class MainActivity extends Activity
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long id)
 			{
-				if (spinnerRoom.getSelectedItemId() != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
+				if (spinnerRoom.isEnabled() && spinnerRoom.getSelectedItemId() != 0 && listViewScannedTags.getCheckedItemCount() > 0)
 				{
 					saveButton.setEnabled(true);
 				}
 				else
 				{
-					saveButton.setEnabled(false); // TODO removing the selection from the same item doesn't disable the button
+					saveButton.setEnabled(false);
 				}
 			}
 		});
@@ -353,13 +364,25 @@ public class MainActivity extends Activity
 		{
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id)
-			{	
-				Toast infoToast = Toast.makeText(getApplicationContext(), "This is record no. " + position, Toast.LENGTH_SHORT);
+			{
+				Toast infoToast;
+				
+				if (scannedRecordsList.size() > position) // TODO exception!
+				{
+					infoToast = Toast.makeText(getApplicationContext(), "Id: " + scannedTagsList.get(position) + "\n Type: " + 
+							scannedRecordsList.get(position).getType() + "\n Category: " + scannedRecordsList.get(position).getCategory() + 
+							"\n Room: " + scannedRecordsList.get(position).getRoom() + "\n Employee: " + 
+							scannedRecordsList.get(position).getEmployee(), Toast.LENGTH_SHORT);
+				}
+				else
+				{
+					infoToast = Toast.makeText(getApplicationContext(), "Error IndexOutOfBounds!", Toast.LENGTH_SHORT);
+				}
+				
 				infoToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 				infoToast.show();
 				
-				// TODO read out infos to these ids
-				return false;
+				return false; // TODO don't select 
 			}
 		});
 		
@@ -369,7 +392,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
 			{
-				if (position != 0 && listViewScannedTags.getCheckedItemPositions().size() > 0)
+				if (position != 0 && listViewScannedTags.getCheckedItemCount() > 0)
 				{
 					saveButton.setEnabled(true);
 				}
@@ -396,107 +419,164 @@ public class MainActivity extends Activity
 	 */
 	public void startStopButtonClick(View view)
 	{
+		// updates the list adapter (from the ui thread, as the scanning thread should not do it)
 		final Handler handler = new Handler();
 		
-	    // if reader is connected -> scan
+	    // if reader is connected -> scan / stop
 		if(getUsbState()) 
 		{
-			Button startStopButton = (Button) findViewById(R.id.buttonStartStopScanning);
+			final Button startStopButton = (Button) findViewById(R.id.buttonStartStopScanning);
 			
 			final ListView listViewScannedTags = (ListView) findViewById(R.id.listViewScannedTags);
 			TextView textViewScannedTags = (TextView) findViewById(R.id.textViewScannedTags);
 			
-			//scanning thread
-			Thread scanningThread = new Thread() 
+			// if start button is pressed -> start scanning
+			if (startStopButton.getText().equals("Start scanning"))
 			{
-				int numTags;
-				String tagId;
-
-	    		public void run()
-	    		{
-			    	scannedTagsList.clear();
-			    	listViewScannedTags.requestLayout();
-			    	while(!isInterrupted())
-			    	{
-			    		mMtiCmd = new CMD_Iso18k6cTagAccess.RFID_18K6CTagInventory(mUsbCommunication);
-						CMD_Iso18k6cTagAccess.RFID_18K6CTagInventory finalCmd = (CMD_Iso18k6cTagAccess.RFID_18K6CTagInventory) mMtiCmd;
+				//scanning thread
+				Thread scanningThread = new Thread() 
+				{
+					int numTags;
+					String tagId;
+					
+					public void run()
+					{
+						scannedTagsList.clear();
+				    	runOnUiThread(new Runnable() 
+	                    {
+	                        @Override
+	                        public void run() 
+	                        {
+	                            listViewScannedTags.requestLayout();
+	                        }
+	                    });
 						
-						if(finalCmd.setCmd(CMD_Iso18k6cTagAccess.Action.StartInventory)) 
+						while(!startStopButton.isPressed())
 						{
-							tagId = finalCmd.getTagId();
-							if(finalCmd.getTagNumber() > 0) 
-							{
-								if(!scannedTagsList.contains(tagId))
-								{
-									scannedTagsList.add(tagId);
-								}
-							}
+				    		mMtiCmd = new CMD_Iso18k6cTagAccess.RFID_18K6CTagInventory(mUsbCommunication);
+							CMD_Iso18k6cTagAccess.RFID_18K6CTagInventory finalCmd = (CMD_Iso18k6cTagAccess.RFID_18K6CTagInventory) mMtiCmd;
 							
-							for(numTags = finalCmd.getTagNumber(); numTags > 1; --numTags) 
+							if(finalCmd.setCmd(CMD_Iso18k6cTagAccess.Action.StartInventory)) 
 							{
-								if(finalCmd.setCmd(CMD_Iso18k6cTagAccess.Action.NextTag)) 
+								tagId = finalCmd.getTagId();
+								if(finalCmd.getTagNumber() > 0) 
 								{
-									tagId = finalCmd.getTagId();
-									if(!scannedTagsList.contains(tagId))
+									if(!scannedTagsList.contains(tagId) && tagId != "")
 									{
 										scannedTagsList.add(tagId);
 									}
 								}
+								
+								for(numTags = finalCmd.getTagNumber(); numTags > 1; --numTags) 
+								{
+									if(finalCmd.setCmd(CMD_Iso18k6cTagAccess.Action.NextTag)) 
+									{
+										tagId = finalCmd.getTagId();
+										if(!scannedTagsList.contains(tagId) && tagId != "")
+										{
+											scannedTagsList.add(tagId);
+										}
+									}
+								}
+	
+								Collections.sort(scannedTagsList);
+								handler.post(updateResult);
+							} 
+							else 
+							{
+								// error
 							}
-
-							Collections.sort(scannedTagsList);
-							handler.post(updateResult);
-						} 
-						else 
-						{
-							// error
-							textViewStatus.setText("Errors");
 						}
-			    	}
-			    	
-			    	//TODO never reached!! scanning continues
-			    	handler.post(updateResult);
-			    	textViewStatus.setText("Scanning done");
-	    			setPowerState();
-	    		}
-	    		
-	    		// refresh the list of the scanned tags -> show result
-	    		final Runnable updateResult = new Runnable() 
-	    		{
-					@Override
-					public void run() 
-					{
-						scannedTagsAdapter.notifyDataSetChanged();
+						
+						// end of scanning: 
+						// update status message. important to do it in this way! other wise can't access other threads views
+						runOnUiThread(new Runnable() 
+						{
+							@Override
+							public void run() 
+							{
+								textViewStatus.setText("Scanning done");
+							}
+						});
+						
+						handler.post(updateResult);
+//	  		  			setPowerState();
 					}
-	    		};
-			};
-			
-			
-			// change text on click and show scan results
-			if (startStopButton.getText().equals("Start scanning"))
-			{
+					
+					// refresh the list of the scanned tags -> show result
+					final Runnable updateResult = new Runnable() 
+					{
+						@Override
+						public void run() 
+						{
+							scannedTagsAdapter.notifyDataSetChanged();
+						}
+					};
+				};
+				
+				// start the scanning
+				scanningThread.start();
+				
+				// change ui: button text, visibility of input fields
 				startStopButton.setText("Stop scanning");
 				
 				textViewScannedTags.setVisibility(TextView.VISIBLE);
 				listViewScannedTags.setVisibility(ListView.VISIBLE);
 				listViewScannedTags.setEnabled(true);
-			}
-			else 
-			{
-				// TODO after stopping, there is a new ordering and an empty rfid id is added to the list
-				scanningThread.interrupt();	// TODO not working
+				listViewScannedTags.setLongClickable(false);
+				listViewScannedTags.clearChoices();	// delete selections
+				
+				Button saveButton = (Button) findViewById(R.id.buttonSave);
+				saveButton.setEnabled(false);
+				
+				textViewStatus.setText("");
 				
 				LinearLayout inputLayout = (LinearLayout) findViewById(R.id.linearLayoutInput);
+				inputLayout.setVisibility(LinearLayout.INVISIBLE);
+			}
+			// else stop button is pressed
+			else 
+			{	
+				scannedTagsAdapter.notifyDataSetChanged();
+				listViewScannedTags.requestLayout();		
+				
+				String statusMessage = (String) textViewStatus.getText();
+				
+				// get record objects which ids were scanned.
+				for (int i = 0 ; i < scannedTagsList.size(); ++i)
+				{
+					String rfidId = scannedTagsList.get(i);
+					
+					if (rfidId != null)
+					{
+						String rfidIdNoSpace = (rfidId.endsWith(" ")) ? rfidId.substring(0, rfidId.length() - 1) : rfidId;
+						try
+						{
+							scannedRecordsList.add(i, DeviceDatabaseHandler.getInstance().getRecordFromDatabaseById(rfidIdNoSpace));
+						}
+						catch (SQLException e)
+						{
+							textViewStatus.setText(e.getMessage());
+						}
+					}
+					else
+					{
+						statusMessage.concat(", Error: id is null");
+					}
+				}
+				
+				textViewStatus.setText(statusMessage);
+
+				LinearLayout inputLayout = (LinearLayout) findViewById(R.id.linearLayoutInput);
 				inputLayout.setVisibility(LinearLayout.VISIBLE);
+				
+				listViewScannedTags.setLongClickable(true);				
 				
 				Spinner locationSpinner = (Spinner) findViewById(R.id.spinnerLocation);
 				locationSpinner.setEnabled(true);
 				
 				startStopButton.setText("Start scanning");
 			}
-			
-			// start the scanning
-			scanningThread.start();
 		} 
 		else
 		{
@@ -518,13 +598,15 @@ public class MainActivity extends Activity
 		
 		SparseBooleanArray checked = listViewScannedTags.getCheckedItemPositions();
 		
+		String resultStatusMessage = "";
+		
 		for (int i = 0; i < checked.size(); ++i)
 		{
 			if (checked.get(i) == true)
 			{
 				String rfidId =  (String) listViewScannedTags.getItemAtPosition(i);
 				
-				// remove ending " " which the reader adds
+				// remove ending " " which the reader adds	// TODO check
 				if (rfidId.endsWith(" "))
 				{
 					rfidId = rfidId.substring(0, rfidId.length() - 1);
@@ -542,19 +624,29 @@ public class MainActivity extends Activity
 				try
 				{
 					DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
-					deviceDatabaseHandler.updateRecordFromAppInDatabase(rfidId, selectedRoom, selectedEmployee);
-					textViewStatus.setText("- data saved -"); // TODO display the changed ids
+					boolean result = deviceDatabaseHandler.updateRecordFromAppInDatabase(rfidId, selectedRoom, selectedEmployee);
+					
+					if (result)
+					{
+						resultStatusMessage.concat("\n Item with Id: " + rfidId + " saved");						
+					}
+					else 
+					{
+						resultStatusMessage.concat("\n " + rfidId + " is not in the database. Insert manually!");						
+					}
 				}
 				catch (IllegalArgumentException e)
 				{
-					textViewStatus.setText(e.getMessage());
+					resultStatusMessage.concat("\n " + e.getMessage());
 				}
 				catch (Exception e)
 				{
-					textViewStatus.setText(e.getMessage());
+					resultStatusMessage.concat("\n " + e.getMessage());
 				}
 			}
 		}
+		
+		textViewStatus.setText(resultStatusMessage);	// TODO check
 	}
 	
 	/**
@@ -665,13 +757,10 @@ public class MainActivity extends Activity
 	{
 		MtiCmd mMtiCmd = new CMD_PwrMgt.RFID_PowerEnterPowerState(mUsbCommunication);
 		CMD_PwrMgt.RFID_PowerEnterPowerState finalCmd = (CMD_PwrMgt.RFID_PowerEnterPowerState) mMtiCmd;
-		
+
+//		finalCmd.setCmd(PowerState.Sleep);
+//		sleep(200);
 		// TODO doing nothing??
-	 /*   if(mSharedpref.getBoolean("cfg_sleep_mode", false)) 
-	    {
-	    	finalCmd.setCmd(PowerState.Sleep);
-	    	sleep(200);
-	    }*/
 	}
 	
 	/**
