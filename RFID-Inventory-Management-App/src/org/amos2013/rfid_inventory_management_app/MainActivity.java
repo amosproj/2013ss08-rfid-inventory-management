@@ -46,9 +46,11 @@ import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseRecor
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -61,7 +63,6 @@ import android.os.StrictMode;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -79,7 +80,6 @@ import android.widget.Toast;
 import com.mti.rfid.minime.CMD_AntPortOp;
 import com.mti.rfid.minime.CMD_Iso18k6cTagAccess;
 import com.mti.rfid.minime.CMD_PwrMgt;
-import com.mti.rfid.minime.CMD_PwrMgt.PowerState;
 import com.mti.rfid.minime.MtiCmd;
 import com.mti.rfid.minime.UsbCommunication;
 
@@ -225,8 +225,24 @@ public class MainActivity extends Activity
 			locationList.add(record.getLocation());
 		}
 		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, locationList) 
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, locationList) 
 		{
+			// increase text size of item selected
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent)
+			{
+				if (convertView == null) 
+				{
+		            LayoutInflater inflater = LayoutInflater.from(getContext());
+		            convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+		        }
+				
+				View v = super.getView(position, convertView, parent);
+				TextView text = (TextView)v.findViewById(android.R.id.text1);
+				text.setTextSize(18);
+				return v;
+			}
+			
 			// increase text size of the items only in the drop down view
 			@Override
 			public View getDropDownView(int position, View convertView, ViewGroup parent)
@@ -234,7 +250,7 @@ public class MainActivity extends Activity
 				if (convertView == null) 
 				{
 		            LayoutInflater inflater = LayoutInflater.from(getContext());
-		            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
+		            convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
 		        }
 				
 				View v = super.getDropDownView(position, convertView, parent);
@@ -249,7 +265,103 @@ public class MainActivity extends Activity
 		{
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View parent, int position, long id)
-			{
+			{		
+				//fill room dropdown menu choices
+				String selectedLocation = (String) spinnerLocation.getItemAtPosition(position);
+				
+				List<String> roomChoicesList = null;
+				try
+				{
+					roomChoicesList = RoomDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
+				} 
+				catch (Exception e)
+				{
+					textViewStatus.setText(e.getMessage());
+				}
+				
+				roomChoicesList.add(0, "Please select");
+				spinnerRoom.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, roomChoicesList) 
+				{
+					// increase text size of item selected
+					@Override
+					public View getView(int position, View convertView, ViewGroup parent)
+					{
+						if (convertView == null) 
+						{
+				            LayoutInflater inflater = LayoutInflater.from(getContext());
+				            convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+				        }
+						
+						View v = super.getView(position, convertView, parent);
+						TextView text = (TextView)v.findViewById(android.R.id.text1);
+						text.setTextSize(18);
+						return v;
+					}
+					
+					// increase text size of the items only in the drop down view
+					@Override
+					public View getDropDownView(int position, View convertView, ViewGroup parent)
+					{
+						if (convertView == null) 
+						{
+				            LayoutInflater inflater = LayoutInflater.from(getContext());
+				            convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+				        }
+						
+						View v = super.getDropDownView(position, convertView, parent);
+						TextView text = (TextView)v.findViewById(android.R.id.text1);
+						text.setTextSize(30);
+						return v;
+					}
+				});
+				
+				// fill employee drop down choices
+				List<String> employeeChoicesList = null;
+				try
+				{
+					employeeChoicesList = EmployeeDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
+				} 
+				catch (SQLException e)
+				{
+					textViewStatus.setText(e.getMessage());
+				}
+				
+				employeeChoicesList.add(0, "Please select");
+				spinnerEmployee.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, employeeChoicesList) 
+				{
+					// increase text size of item selected
+					@Override
+					public View getView(int position, View convertView, ViewGroup parent)
+					{
+						if (convertView == null) 
+						{
+				            LayoutInflater inflater = LayoutInflater.from(getContext());
+				            convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+				        }
+						
+						View v = super.getView(position, convertView, parent);
+						TextView text = (TextView)v.findViewById(android.R.id.text1);
+						text.setTextSize(18);
+						return v;
+					}
+					
+					// increase text size of the items only in the drop down view
+					@Override
+					public View getDropDownView(int position, View convertView, ViewGroup parent)
+					{
+						if (convertView == null) 
+						{
+				            LayoutInflater inflater = LayoutInflater.from(getContext());
+				            convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
+				        }
+						
+						View v = super.getDropDownView(position, convertView, parent);
+						TextView text = (TextView)v.findViewById(android.R.id.text1);
+						text.setTextSize(30);
+						return v;
+					}
+				});
+				
 				// if "Please select" is selected, don't enable the others
 				if (position == 0)
 				{
@@ -264,71 +376,7 @@ public class MainActivity extends Activity
 				{
 					spinnerRoom.setEnabled(true);
 					spinnerEmployee.setEnabled(true);
-					
-					//fill room dropdown menu choices
-					String selectedLocation = (String) spinnerLocation.getItemAtPosition(position);
-					
-					List<String> roomChoicesList = null;
-					try
-					{
-						roomChoicesList = RoomDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
-					} 
-					catch (Exception e)
-					{
-						textViewStatus.setText(e.getMessage());
-					}
-					
-					roomChoicesList.add(0, "Please select");
-					spinnerRoom.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, roomChoicesList) 
-					{
-						// increase text size of the items only in the drop down view
-						@Override
-						public View getDropDownView(int position, View convertView, ViewGroup parent)
-						{
-							if (convertView == null) 
-							{
-					            LayoutInflater inflater = LayoutInflater.from(getContext());
-					            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
-					        }
-							
-							View v = super.getDropDownView(position, convertView, parent);
-							TextView text = (TextView)v.findViewById(android.R.id.text1);
-							text.setTextSize(30);
-							return v;
-						}
-					});
-					
-					// fill employee drop down choices
-					List<String> employeeChoicesList = null;
-					try
-					{
-						employeeChoicesList = EmployeeDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
-					} 
-					catch (SQLException e)
-					{
-						textViewStatus.setText(e.getMessage());
-					}
-					
-					employeeChoicesList.add(0, "Please select");
-					spinnerEmployee.setAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, employeeChoicesList) 
-						{
-							// increase text size of the items only in the drop down view
-							@Override
-							public View getDropDownView(int position, View convertView, ViewGroup parent)
-							{
-								if (convertView == null) 
-								{
-						            LayoutInflater inflater = LayoutInflater.from(getContext());
-						            convertView = inflater.inflate(R.layout.spinner_item, parent, false);
-						        }
-								
-								View v = super.getDropDownView(position, convertView, parent);
-								TextView text = (TextView)v.findViewById(android.R.id.text1);
-								text.setTextSize(30);
-								return v;
-							}
-						});
-				}
+				}					
 			}
 
 			@Override
@@ -366,27 +414,36 @@ public class MainActivity extends Activity
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long id)
 			{
 				Toast infoToast;
+				DeviceDatabaseRecord record = scannedRecordsList.get(position);
 				
-				if (scannedRecordsList.size() > position) // TODO exception!
+				// if record is not in the database
+				if (record == null)
 				{
-					infoToast = Toast.makeText(getApplicationContext(), "Id: " + scannedTagsList.get(position) + "\n Type: " + 
-							scannedRecordsList.get(position).getType() + "\n Category: " + scannedRecordsList.get(position).getCategory() + 
-							"\n Room: " + scannedRecordsList.get(position).getRoom() + "\n Employee: " + 
-							scannedRecordsList.get(position).getEmployee(), Toast.LENGTH_SHORT);
+					infoToast = Toast.makeText(getApplicationContext(), "Id " + scannedTagsList.get(position) 
+							+ " is not in the database yet.\nPlease insert it manually.", Toast.LENGTH_LONG);
+				}
+				else if (scannedRecordsList.size() > position)
+				{
+					infoToast = Toast.makeText(getApplicationContext(), 
+								"Id: " 	 	 + scannedTagsList.get(position) 
+							+ "\nType: " 	 + record.getType() 
+							+ "\nCategory: " + record.getCategory() 
+							+ "\nRoom: "	 + record.getRoom() 
+							+ "\nEmployee: " + record.getEmployee(), Toast.LENGTH_LONG);
 				}
 				else
 				{
-					infoToast = Toast.makeText(getApplicationContext(), "Error IndexOutOfBounds!", Toast.LENGTH_SHORT);
+					infoToast = Toast.makeText(getApplicationContext(), "Error IndexOutOfBounds!", Toast.LENGTH_LONG);
 				}
 				
 				infoToast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
 				infoToast.show();
 				
-				return false; // TODO don't select 
+				return true; // return true = event handled -> don't call onItemClick() = don't check the checkbox
 			}
 		});
 		
-		// if room and employee spinners have a selected item, enable the save button
+		// if room spinner has a selected item, enable the save button
 		spinnerRoom.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
 			@Override
@@ -440,8 +497,18 @@ public class MainActivity extends Activity
 					String tagId;
 					
 					public void run()
-					{
+					{				
+						try
+						{
+							sleep(100);	// if this is not done, the startbutton isPressed state is not reset sometimes
+						}
+						catch (InterruptedException e)
+						{
+							
+						}
+						
 						scannedTagsList.clear();
+						handler.post(updateResult);
 				    	runOnUiThread(new Runnable() 
 	                    {
 	                        @Override
@@ -538,7 +605,7 @@ public class MainActivity extends Activity
 			else 
 			{	
 				scannedTagsAdapter.notifyDataSetChanged();
-				listViewScannedTags.requestLayout();		
+				listViewScannedTags.requestLayout();
 				
 				String statusMessage = (String) textViewStatus.getText();
 				
@@ -596,17 +663,18 @@ public class MainActivity extends Activity
 		Spinner spinnerRoom = (Spinner) findViewById(R.id.spinnerRoom);
 		Spinner spinnerEmployee = (Spinner) findViewById(R.id.spinnerEmployee);
 		
+		// get checked items and save them
 		SparseBooleanArray checked = listViewScannedTags.getCheckedItemPositions();
 		
 		String resultStatusMessage = "";
-		
+
 		for (int i = 0; i < checked.size(); ++i)
 		{
-			if (checked.get(i) == true)
+			if (checked.valueAt(i) == true) // checked.get(i) is not working!
 			{
-				String rfidId =  (String) listViewScannedTags.getItemAtPosition(i);
+				String rfidId =  listViewScannedTags.getAdapter().getItem(checked.keyAt(i)).toString();
 				
-				// remove ending " " which the reader adds	// TODO check
+				// remove ending " " which the reader adds
 				if (rfidId.endsWith(" "))
 				{
 					rfidId = rfidId.substring(0, rfidId.length() - 1);
@@ -628,36 +696,46 @@ public class MainActivity extends Activity
 					
 					if (result)
 					{
-						resultStatusMessage.concat("\n Item with Id: " + rfidId + " saved");						
+						resultStatusMessage += rfidId + " saved.\n";
 					}
 					else 
 					{
-						resultStatusMessage.concat("\n " + rfidId + " is not in the database. Insert manually!");						
+						resultStatusMessage += rfidId + " is not in the database. Insert manually!\n";					
 					}
 				}
 				catch (IllegalArgumentException e)
 				{
-					resultStatusMessage.concat("\n " + e.getMessage());
+					resultStatusMessage += e.toString() + "\n";
 				}
 				catch (Exception e)
 				{
-					resultStatusMessage.concat("\n " + e.getMessage());
+					resultStatusMessage += e.toString() + "\n";
 				}
 			}
 		}
 		
-		textViewStatus.setText(resultStatusMessage);	// TODO check
-	}
-	
-	/**
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		if (resultStatusMessage.equals(""))
+		{
+			resultStatusMessage = "error: layout not updated";
+		}
+		
+		// show result message in a pop up
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+		alertDialogBuilder
+			.setTitle("Saving done!")
+			.setMessage(resultStatusMessage)
+			.setCancelable(false)
+			.setPositiveButton("Ok", new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog,int id) 
+				{
+					// close dialog
+					dialog.cancel();
+				}
+			 });
+	 
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
 	}
 	
 	/**

@@ -44,8 +44,8 @@ import org.apache.wicket.util.file.File;
 /**
  * This class defines the main page of desktop website
  */
-public abstract class MainPage extends WebPage {
-	
+public abstract class MainPage extends WebPage 
+{
 	private static final long serialVersionUID = 6545187642710272786L;
 
 	/**
@@ -61,7 +61,10 @@ public abstract class MainPage extends WebPage {
 		// adds a label for downloading a particular resource
 		URL url = getClass().getResource("/RFID-Inventory-Management-App.apk");
 		if (url == null)
+		{
 			throw new FileNotFoundException("Resource 'RFID-Inventory-Management-App.apk' not found.");
+		}
+		
 		File file = new File(URLDecoder.decode(url.getFile(), "UTF8"));
 		DownloadLink dl = new DownloadLink("download", file);
 		add(dl);

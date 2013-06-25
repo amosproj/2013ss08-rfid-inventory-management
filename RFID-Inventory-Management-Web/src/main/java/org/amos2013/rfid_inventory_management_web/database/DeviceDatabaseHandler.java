@@ -189,6 +189,11 @@ public class DeviceDatabaseHandler implements Serializable
 			{
 				// read out existing employee
 				DeviceDatabaseRecord recordInDatabase = getRecordFromDatabaseById(rfid_id);
+				if (recordInDatabase == null)	// if not in the database, don't continue with updating, as it would return false 
+				{
+					return false;
+				}
+				
 				employeeToSet = recordInDatabase.getEmployee();
 			}
 
