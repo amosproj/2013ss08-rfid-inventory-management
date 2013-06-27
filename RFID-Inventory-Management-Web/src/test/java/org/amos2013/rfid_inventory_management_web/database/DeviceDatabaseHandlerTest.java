@@ -113,7 +113,7 @@ public class DeviceDatabaseHandlerTest
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#getRecordsByPartialStringAndColumn(String, String)}.
 	 * @throws IllegalStateException is expected
 	 */
-/*	@Test
+	@Test
 	public final void testGetRecordsByPartialStringAndColumn() throws IllegalStateException
 	{	
 		List<DeviceDatabaseRecord> resultList = null;
@@ -132,7 +132,7 @@ public class DeviceDatabaseHandlerTest
 	    
 		assertNotNull(resultList);
 	}
-*/	
+	
 	/**
 	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseHandler#updateCompleteRecordInDatabase(DeviceDatabaseRecord)}.
 	 * @throws Exception not testing for this one
