@@ -38,7 +38,10 @@
 	<wicket:extend>
 		<div style="padding-left: 15px;">
 		<form id="databaseAccessEmployeeForm" method="get" wicket:id="databaseAccessEmployeeForm">
-	    <span style="font-size: 16pt;color: #092E67;font-weight: bold;">Administration: </span>&nbsp;
+		<div id="bd_inner">
+		<div id="sticky" style="width: 2800px; position: fixed; top: 75px; height: 122px; background-color: #fff; padding-left: 15px;">
+	        <br/>
+        	<span style="font-size: 16pt;color: #092E67;font-weight: bold;">Administration: </span>&nbsp;
         	<a href="/admin">Hardware List</a>&nbsp;|&nbsp;
         	Employee List&nbsp;|&nbsp;
         	<a href="/admin/room">Room List</a>&nbsp;|&nbsp;
@@ -63,7 +66,19 @@
 							<th></th>
 							<th></th>
 						</tr>
-						<span wicket:id="employeeRecordsReadListView">  								
+					</tbody>
+				</table>
+				</div>
+				<div style="width: 2800px; padding-left: 15px;">
+				<table>
+				<colgroup>
+		            <col width="300px"/>
+					<col width="300px"/>
+					<col width="100px"/>
+					<col width="100px"/>
+				</colgroup>
+				<tbody>
+					   <span wicket:id="employeeRecordsReadListView">  								
 					 		<tr>
 					 			<td><span wicket:id="recordNameLabel" /></td>	
 						 		<td><span wicket:id="recordLocationLabel" /></td>
@@ -73,6 +88,13 @@
 						</span>
 					</tbody>
 				</table>
+				</div>
+			</div>
+			<script type="text/javascript">
+		    $(bd_inner).scroll(function(){
+			   $("#sticky").css('left',-$(bd_inner).scrollLeft()+15);
+		    });
+		</script>
 		</form>
 		<br/>
 	    <p>&nbsp;</p>

@@ -38,10 +38,13 @@
 	<wicket:extend>
 		<div style="padding-left: 15px;">
 		<form id="databaseAccessRoomForm" method="get" wicket:id="databaseAccessRoomForm">
-	    <span style="font-size: 16pt;color: #092E67;font-weight: bold;">Administration: </span>&nbsp;
+		<div id="bd_inner">
+		<div id="sticky" style="width: 2800px; position: fixed; top: 75px; height: 122px; background-color: #fff; padding-left: 15px;">
+        	<br/>
+        	<span style="font-size: 16pt;color: #092E67;font-weight: bold;">Administration: </span>&nbsp;
         	<a href="/admin">Hardware List</a>&nbsp;|&nbsp;
         	<a href="/admin/employee">Employee List</a>&nbsp;|&nbsp;
-        	Room List&nbsp;|&nbsp;        	
+        	Room List&nbsp;|&nbsp;
         	<a href="/admin/location">Location List</a>&nbsp;|&nbsp;
         	<br/>
 			<p>
@@ -63,6 +66,18 @@
 							<th></th>
 							<th></th>
 						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div style="width: 2800px; padding-left: 15px;">
+			<table>
+				<colgroup>
+		            <col width="200px"/>
+					<col width="300px"/>
+					<col width="100px"/>
+					<col width="100px"/>
+				</colgroup>
+				<tbody>
 						<span wicket:id="roomRecordsReadListView">  								
 					 		<tr>
 					 			<td><span wicket:id="recordNameLabel" /></td>	
@@ -71,8 +86,15 @@
 				 				<td><a href="#" wicket:id="deleteRecordLink">remove</a></td>
 							</tr>
 						</span>
-					</tbody>
-				</table>
+				</tbody>
+			</table>
+			</div>
+			</div>
+			<script type="text/javascript">
+		    $(bd_inner).scroll(function(){
+			   $("#sticky").css('left',-$(bd_inner).scrollLeft()+15);
+		    });
+		</script>
 		</form>
 		<br/>
 	    <p>&nbsp;</p>
