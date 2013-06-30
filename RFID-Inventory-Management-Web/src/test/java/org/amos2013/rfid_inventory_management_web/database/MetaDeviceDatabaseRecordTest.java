@@ -51,8 +51,9 @@ public class MetaDeviceDatabaseRecordTest
 		String part_number = "test";
 		String manufacturer = "test";
 		String platform = "test";
+		String comment = "test";
 
-		MetaDeviceDatabaseRecord testRecord = new MetaDeviceDatabaseRecord(category, type, part_number, manufacturer, platform);
+		MetaDeviceDatabaseRecord testRecord = new MetaDeviceDatabaseRecord(category, type, part_number, manufacturer, platform,comment);
 
 		assertEquals(category, testRecord.getCategory());
 		assertEquals(type, testRecord.getType());

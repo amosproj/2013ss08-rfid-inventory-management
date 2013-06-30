@@ -62,6 +62,9 @@ public class MetaDeviceDatabaseRecord implements Serializable
 
 	/** The Constant PLATFORM_COLUMN. */
 	public static final String PLATFORM_COLUMN = "platform";
+	
+	/** The Constant COMMENT_COLUMN. */
+	public static final String COMMENT_COLUMN = "comment";
 
 	// Columns definition:
 	@DatabaseField(columnName = ID_COLUMN, canBeNull = false, id = true)	// primary key
@@ -81,6 +84,9 @@ public class MetaDeviceDatabaseRecord implements Serializable
 
 	@DatabaseField(columnName = PLATFORM_COLUMN)
 	private String platform;
+	
+	@DatabaseField(columnName = COMMENT_COLUMN)
+	private String comment;
 
 	/**
 	 * Default constructor (empty)
@@ -99,10 +105,11 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 * @param part_number 	the part_number
 	 * @param manufacturer the manufacturer
 	 * @param platform 	the platform
+	 * @param comment 	the comment
 	 * @throws IllegalArgumentException if the part number is null
 	 * @throws IllegalStateException if the next free id is -1
 	 */
-	public MetaDeviceDatabaseRecord(String category, String type, String part_number, String manufacturer, String platform) throws IllegalArgumentException, IllegalStateException
+	public MetaDeviceDatabaseRecord(String category, String type, String part_number, String manufacturer, String platform, String comment) throws IllegalArgumentException, IllegalStateException
 	{
 		if (part_number == null)
 		{
@@ -131,6 +138,7 @@ public class MetaDeviceDatabaseRecord implements Serializable
 		this.part_number = part_number;
 		this.manufacturer = manufacturer;
 		this.platform = platform;
+		this.comment = comment;
 	}
 
 	/**
@@ -212,6 +220,20 @@ public class MetaDeviceDatabaseRecord implements Serializable
 		return this.platform;
 	}
 
+	/**
+	 * Gets the comment.
+	 * @return the comment
+	 */
+	public String getComment()
+	{
+		if (this.comment == null)
+		{
+			return "";
+		}
+		
+		return this.comment;
+	}
+	
 	/**
 	 * Compares two Objects
 	 * @return true if equal, false else

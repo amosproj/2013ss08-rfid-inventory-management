@@ -192,11 +192,18 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 				item.add(new Label("recordCategoryLabel", record.getCategory()));
 				item.add(new Label("recordManufacturerLabel", record.getManufacturer()));
 				item.add(new Label("recordPlatformLabel", record.getPlatform()));
+				item.add(new Label("recordCommentLabel", record.getComment()));
 				
 				item.add(new Label("recordSerialNumberLabel", record.getSerialNumber()));
 				item.add(new Label("recordInventoryNumberLabel", record.getInventoryNumber()));
 				item.add(new Label("recordOwnerLabel", record.getOwner()));
-				item.add(new Label("recordCommentLabel", record.getComment()));			
+				item.add(new Label("recordStatusLabel", record.getStatus()));
+				item.add(new Label("recordAnnotationLabel", record.getAnnotation()));
+				item.add(new Label("recordIdLabel", record.getId()));
+				item.add(new Label("recordReceivedFromLabel", record.getReceivedFrom()));
+				item.add(new Label("recordReturnedToLabel", record.getReturnedTo()));
+				item.add(new Label("recordEsnLabel", record.getEsn()));
+				
 				
 				// adds a link to delete the current record item
 				

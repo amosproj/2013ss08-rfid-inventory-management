@@ -74,7 +74,12 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 	private String serialNumberInputField;
 	private String inventoryNumberInputField;
 	private String ownerInputField;
-	private String commentInputField;
+	private String statusInputField;
+	private String annotationInputField;
+	private String idInputField;
+	private String receivedFromInputField;
+	private String returnedToInputField;
+	private String esnInputField;
 	
 	// MetaDeviceDatabaseRecord fields;
 	private String metaPartNumberInputField;
@@ -82,6 +87,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 	private String categoryInputField;
 	private String manufacturerInputField;
 	private String platformInputField;
+	private String commentInputField;
 	
 	private List<String> locationDropDownChoices = new ArrayList<String>();
 	private List<String> roomDropDownChoices = new ArrayList<String>();
@@ -163,13 +169,19 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 				serialNumberInputField = deviceRecord.getSerialNumber();
 				inventoryNumberInputField = deviceRecord.getInventoryNumber();
 				ownerInputField = deviceRecord.getOwner();
-				commentInputField = deviceRecord.getComment();
+				statusInputField = deviceRecord.getStatus();
+				annotationInputField = deviceRecord.getAnnotation();
+				idInputField = deviceRecord.getId();
+				receivedFromInputField = deviceRecord.getReceivedFrom();
+				returnedToInputField = deviceRecord.getReturnedTo();
+				esnInputField = deviceRecord.getEsn();
 				
 				metaPartNumberInputField = partNumberInputField;
 				typeInputField = deviceRecord.getType();
 				categoryInputField = deviceRecord.getCategory();
 				manufacturerInputField = deviceRecord.getManufacturer();
 				platformInputField = deviceRecord.getPlatform();
+				commentInputField = deviceRecord.getComment();
 			}
 			
 			// add components
@@ -293,9 +305,24 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			
 			final TextField<String> ownerTextField = new TextField<String>("ownerInputField");
 			add(ownerTextField);
+
+			final TextField<String> statusTextField = new TextField<String>("statusInputField");
+			add(statusTextField);
 			
-			final TextField<String> commentTextField = new TextField<String>("commentInputField");
-			add(commentTextField);
+			final TextField<String> annotationTextField = new TextField<String>("annotationInputField");
+			add(annotationTextField);
+			
+			final TextField<String> idTextField = new TextField<String>("idInputField");
+			add(idTextField);
+			
+			final TextField<String> receivedFromTextField = new TextField<String>("receivedFromInputField");
+			add(receivedFromTextField);
+			
+			final TextField<String> returnedToTextField = new TextField<String>("returnedToInputField");
+			add(returnedToTextField);
+			
+			final TextField<String> esnTextField = new TextField<String>("esnInputField");
+			add(esnTextField);
 
 			// meta data components
 			final TextField<String> metaPartNumberTextField = new TextField<String>("metaPartNumberInputField");
@@ -317,7 +344,11 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			
 			final TextField<String> platformTextField = new TextField<String>("platformInputField");
 			platformTextField.setOutputMarkupId(true); // needed, to add this component to the AjaxRequestTarget, in order to chance the value dynamically
-			add(platformTextField);			
+			add(platformTextField);
+			
+			final TextField<String> commentTextField = new TextField<String>("commentInputField");
+			commentTextField.setOutputMarkupId(true); // needed, to add this component to the AjaxRequestTarget, in order to chance the value dynamically
+			add(commentTextField);
 			
 			final TextField<String> partNumberTextField = new TextField<String>("partNumberInputField");
 			partNumberTextField.add(new OnChangeAjaxBehavior()
@@ -339,6 +370,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 					arg0.add(categoryTextField);
 					arg0.add(manufacturerTextField);
 					arg0.add(platformTextField);
+					arg0.add(commentTextField);
 					arg0.add(metaPartNumberTextField);
 					
 					// if a valid part number was entered
@@ -349,6 +381,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 						categoryInputField = record.getCategory();
 						manufacturerInputField = record.getManufacturer();
 						platformInputField = record.getPlatform();
+						commentInputField = record.getComment();
 					}
 					else 
 					{
@@ -356,6 +389,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 						categoryInputField = null;
 						manufacturerInputField = null;
 						platformInputField = null;
+						commentInputField = null;
 					}
 					
 					metaPartNumberInputField = partNumberInputField;
@@ -393,18 +427,19 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 					try
 					{
 						DeviceDatabaseRecord record = new DeviceDatabaseRecord(rfidIDInputField, roomToSet, employeeToSet, partNumberInputField, 
-								serialNumberInputField, inventoryNumberInputField, ownerInputField, commentInputField);
+								serialNumberInputField, inventoryNumberInputField, ownerInputField, 
+								statusInputField, annotationInputField, idInputField, receivedFromInputField, returnedToInputField, esnInputField);
 						// only set a new meta record, if there were changes (this will keep the unique id)
 						if (!record.getCategory().equals(categoryInputField) || !record.getType().equals(typeInputField) 
 								|| !record.getPartNumber().equals(metaPartNumberInputField) || !record.getManufacturer().equals(manufacturerInputField)
-								|| !record.getPlatform().equals(platformInputField))
+								|| !record.getPlatform().equals(platformInputField) || !record.getComment().equals(commentInputField))
 						{
 							MetaDeviceDatabaseRecord metaRecord = null;
 							
 							try
 							{
 								metaRecord = new MetaDeviceDatabaseRecord(categoryInputField, typeInputField, partNumberInputField, 
-										manufacturerInputField, platformInputField);								
+										manufacturerInputField, platformInputField, commentInputField);								
 							}
 							catch (IllegalArgumentException e)
 							{

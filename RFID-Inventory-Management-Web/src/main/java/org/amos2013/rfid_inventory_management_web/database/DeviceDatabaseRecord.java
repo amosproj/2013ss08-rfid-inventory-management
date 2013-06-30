@@ -71,8 +71,23 @@ public class DeviceDatabaseRecord implements Serializable
 	/** The Constant OWNER_COLUMN. */
 	public static final String OWNER_COLUMN = "owner";
 	
-	/** The Constant COMMENT_COLUMN. */
-	public static final String COMMENT_COLUMN = "comment";
+	/** The Constant STATUS_COLUMN. */
+	public static final String STATUS_COLUMN = "status";
+	
+	/** The Constant ANNOTATION_COLUMN. */
+	public static final String ANNOTATION_COLUMN = "annotation";
+	
+	/** The Constant ID_COLUMN. */
+	public static final String ID_COLUMN = "id";
+	
+	/** The Constant RECEIVED_FROM_COLUMN. */
+	public static final String RECEIVED_FROM_COLUMN = "received_from";
+	
+	/** The Constant RETURNED_TO_COLUMN. */
+	public static final String RETURNED_TO_COLUMN = "returned_to";
+	
+	/** The Constant ESN_COLUMN. */
+	public static final String ESN_COLUMN = "esn";
 
 	
 	// Columns definition:
@@ -104,10 +119,30 @@ public class DeviceDatabaseRecord implements Serializable
 	@DatabaseField(columnName = OWNER_COLUMN)
 	private String owner;
 	
-	/** The comment. */
-	@DatabaseField(columnName = COMMENT_COLUMN)
-	private String comment;
+	/** The status. */
+	@DatabaseField(columnName = STATUS_COLUMN)
+	private String status;
 	
+	/** The annotation. */
+	@DatabaseField(columnName = ANNOTATION_COLUMN)
+	private String annotation;
+	
+	/** The id. */
+	@DatabaseField(columnName = ID_COLUMN)
+	private String id;
+	
+	/** The received_from. */
+	@DatabaseField(columnName = RECEIVED_FROM_COLUMN)
+	private String received_from;
+	
+	/** The returned_to. */
+	@DatabaseField(columnName = RETURNED_TO_COLUMN)
+	private String returned_to;
+	
+	/** The esn. */
+	@DatabaseField(columnName = ESN_COLUMN)
+	private String esn;
+		
 	/**
 	 * Default constructor (empty).
 	 */
@@ -134,7 +169,12 @@ public class DeviceDatabaseRecord implements Serializable
 		this.serial_number = "";
 		this.inventory_number = "";
 		this.owner = "";
-		this.comment = "";
+		this.status = "";
+		this.annotation = "";
+		this.id = "";
+		this.received_from = "";
+		this.returned_to = "";
+		this.esn = "";
 		
 		// gets the corresponding meta data record from the other table in order to be able to access them 
 		// in this class via the getters and setters
@@ -153,7 +193,7 @@ public class DeviceDatabaseRecord implements Serializable
 	 * @param owner the owner
 	 * @param comment the comment
 	 */
-	public DeviceDatabaseRecord(String rfid_id, String room, String employee, String part_number, String serial_number, String inventory_number, String owner, String comment)
+	public DeviceDatabaseRecord(String rfid_id, String room, String employee, String part_number, String serial_number, String inventory_number, String owner, String status, String annotation, String id, String received_from, String returned_to, String esn)
 	{
 		this.rfid_id = rfid_id;
 		this.room = room;
@@ -162,7 +202,12 @@ public class DeviceDatabaseRecord implements Serializable
 		this.serial_number = serial_number;
 		this.inventory_number = inventory_number;
 		this.owner = owner;
-		this.comment = comment;
+		this.status = status;
+		this.annotation = annotation;
+		this.id = id;
+		this.received_from = received_from;
+		this.returned_to = returned_to;
+		this.esn = esn;
 		
 		// gets the corresponding meta data record from the other table in order to be able to access them 
 		// in this class via the getters and setters
@@ -258,6 +303,20 @@ public class DeviceDatabaseRecord implements Serializable
 	}
 	
 	/**
+	 * Gets the comment.
+	 * @return the comment
+	 */
+	public String getComment()
+	{
+		if (this.metaDeviceDatabaseRecord == null)
+		{
+			return "";
+		} 
+		
+		return this.metaDeviceDatabaseRecord.getComment();
+	}
+	
+	/**
 	 * Gets the part number.
 	 * @return the part number
 	 */
@@ -312,21 +371,91 @@ public class DeviceDatabaseRecord implements Serializable
 		
 		return this.owner;
 	}
-
+	
 	/**
-	 * Gets the comment.
-	 * @return the comment
+	 * Gets the status.
+	 * @return the status
 	 */
-	public String getComment()
+	public String getStatus()
 	{
-		if (this.comment == null)
+		if (this.status == null)
 		{
 			return "";
 		}
 		
-		return this.comment;
+		return this.status;
+	}
+	
+	/**
+	 * Gets the annotation.
+	 * @return the annotation
+	 */
+	public String getAnnotation()
+	{
+		if (this.annotation == null)
+		{
+			return "";
+		}
+		
+		return this.annotation;
+	}
+	
+	/**
+	 * Gets the id.
+	 * @return the id
+	 */
+	public String getId()
+	{
+		if (this.id == null)
+		{
+			return "";
+		}
+		
+		return this.id;
 	}
 
+	/**
+	 * Gets the received_from.
+	 * @return the received_from
+	 */
+	public String getReceivedFrom()
+	{
+		if (this.received_from == null)
+		{
+			return "";
+		}
+		
+		return this.received_from;
+	}
+	
+	/**
+	 * Gets the returned_to.
+	 * @return the returned_to
+	 */
+	public String getReturnedTo()
+	{
+		if (this.returned_to == null)
+		{
+			return "";
+		}
+		
+		return this.returned_to;
+	}
+	
+	/**
+	 * Gets the esn.
+	 * @return the esn
+	 */
+	public String getEsn()
+	{
+		if (this.esn == null)
+		{
+			return "";
+		}
+		
+		return this.esn;
+	}
+	
 	/**
 	 * Gets the RFID Id.
 	 * @return the rFID id
@@ -349,7 +478,7 @@ public class DeviceDatabaseRecord implements Serializable
 		
 		return this.room;
 	}
-
+	
 	/**
 	 * Gets the current employee of the device.
 	 * @return the employee
