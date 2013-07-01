@@ -245,6 +245,57 @@ public class DeviceDatabaseRecord implements Serializable
 	{
 		return this.metaDeviceDatabaseRecord;
 	}
+
+	/**
+	 * Gets the RFID Id.
+	 * @return the rFID id
+	 */
+	public String getRFIDId()
+	{
+		return this.rfid_id;
+	}
+
+	/**
+	 * Gets the room.
+	 * @return the room
+	 */
+	public String getRoom()
+	{
+		if (this.room == null)
+		{
+			return "";
+		}
+		
+		return this.room;
+	}
+	
+	/**
+	 * Gets the current employee of the device.
+	 * @return the employee
+	 */
+	public String getEmployee()
+	{
+		if (this.employee == null)
+		{
+			return "";
+		}
+		
+		return this.employee;
+	}
+	
+	/**
+	 * Gets the part number.
+	 * @return the part number
+	 */
+	public String getPartNumber()
+	{
+		if (this.part_number == null)
+		{
+			return "";
+		}
+		
+		return this.part_number;
+	}
 	
 	/**
 	 * Gets the type.
@@ -316,20 +367,6 @@ public class DeviceDatabaseRecord implements Serializable
 		return this.metaDeviceDatabaseRecord.getComment();
 	}
 	
-	/**
-	 * Gets the part number.
-	 * @return the part number
-	 */
-	public String getPartNumber()
-	{
-		if (this.part_number == null)
-		{
-			return "";
-		}
-		
-		return this.part_number;
-	}
-
 	/**
 	 * Gets the serial number.
 	 * @return the serial number
@@ -456,43 +493,6 @@ public class DeviceDatabaseRecord implements Serializable
 		return this.esn;
 	}
 	
-	/**
-	 * Gets the RFID Id.
-	 * @return the rFID id
-	 */
-	public String getRFIDId()
-	{
-		return this.rfid_id;
-	}
-
-	/**
-	 * Gets the room.
-	 * @return the room
-	 */
-	public String getRoom()
-	{
-		if (this.room == null)
-		{
-			return "";
-		}
-		
-		return this.room;
-	}
-	
-	/**
-	 * Gets the current employee of the device.
-	 * @return the employee
-	 */
-	public String getEmployee()
-	{
-		if (this.employee == null)
-		{
-			return "";
-		}
-		
-		return this.employee;
-	}
-
 	/**
 	 * Compares two Objects.
 	 *

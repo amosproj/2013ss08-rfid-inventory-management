@@ -243,9 +243,44 @@ public class DeviceDatabaseHandler implements Serializable
 		
 		for (DeviceDatabaseRecord record : databaseRecordList)
 		{
-			if (search_option.equals("type"))
+			if (search_option.equals("rfid_id"))
+			{
+				if (record.getRFIDId().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("room"))
+			{
+				if (record.getRoom().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("employee"))
+			{
+				if (record.getEmployee().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("part_number"))
+			{
+				if (record.getPartNumber().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("type"))
 			{
 				if (record.getType().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("category"))
+			{
+				if (record.getCategory().contains(search_input) == true)
 				{
 					resultDatabaseRecords.add(record);
 				}
@@ -264,9 +299,16 @@ public class DeviceDatabaseHandler implements Serializable
 					resultDatabaseRecords.add(record);
 				}
 			}
-			else if (search_option.equals("room"))
+			else if (search_option.equals("comment"))
 			{
-				if (record.getRoom().contains(search_input) == true)
+				if (record.getComment().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("serial_number"))
+			{
+				if (record.getSerialNumber().contains(search_input) == true)
 				{
 					resultDatabaseRecords.add(record);
 				}
@@ -278,9 +320,51 @@ public class DeviceDatabaseHandler implements Serializable
 					resultDatabaseRecords.add(record);
 				}
 			}
-			else if (search_option.equals("employee"))
+			else if (search_option.equals("owner"))
 			{
-				if (record.getEmployee().contains(search_input) == true)
+				if (record.getOwner().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("status"))
+			{
+				if (record.getStatus().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("annotation"))
+			{
+				if (record.getAnnotation().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("id"))
+			{
+				if (record.getId().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("received_from"))
+			{
+				if (record.getReceivedFrom().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("returned_to"))
+			{
+				if (record.getReturnedTo().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("esn"))
+			{
+				if (record.getEsn().contains(search_input) == true)
 				{
 					resultDatabaseRecords.add(record);
 				}
