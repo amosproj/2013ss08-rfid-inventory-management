@@ -41,25 +41,75 @@ import org.junit.Test;
 public class DeviceDatabaseRecordTest
 {
 	/**
-	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord#DeviceDatabaseRecord(String, String, String)}.
+	 * Test method for {@link org.amos2013.rfid_inventory_management_web.database.DeviceDatabaseRecord#DeviceDatabaseRecord(String, 
+	 * 	String, String, String, String, String, String, String, String, String, String, String, String)}.
 	 */
 	@Test
 	public final void testDeviceDatabaseRecordConstructor()
 	{
 		String room = "42.42";
 		String employee = "Musterfrau";
-		String id = "01234567890";
-
-		DeviceDatabaseRecord testRecord = new DeviceDatabaseRecord(id, room, employee);
+		String rfid = "01234567890";
+		String partNumber = "1234";
+		String serialNumber = "04a";
+		String inventoryNumber = "56565";
+		String owner = "sebl";
+		String status = "online";
+		String annotation = "no comment";
+		String id = "1";
+		String receivedFrom = "john";
+		String returnedTo = "me";
+		String esn = "1-5-3-6-3-3";
+		
+		DeviceDatabaseRecord testRecord = new DeviceDatabaseRecord(rfid, room, employee, partNumber, serialNumber, inventoryNumber, 
+				owner, status, annotation, id, receivedFrom, returnedTo, esn);
 		
 		assertEquals(room, testRecord.getRoom());
 		assertEquals(employee, testRecord.getEmployee());
-		assertEquals(id, testRecord.getRFIDId());	
+		assertEquals(rfid, testRecord.getRFIDId());
+		assertEquals(partNumber, testRecord.getPartNumber());
+		assertEquals(serialNumber, testRecord.getSerialNumber());
+		assertEquals(owner, testRecord.getOwner());
+		assertEquals(status, testRecord.getStatus());
+		assertEquals(annotation, testRecord.getAnnotation());
+		assertEquals(id, testRecord.getId());
+		assertEquals(receivedFrom, testRecord.getReceivedFrom());
+		assertEquals(returnedTo, testRecord.getReturnedTo());
+		assertEquals(esn, testRecord.getEsn());
 		
 		assertEquals("", testRecord.getType());
 		assertEquals("", testRecord.getCategory());
 		assertEquals("", testRecord.getManufacturer());
 		assertEquals("", testRecord.getPlatform());
 	}
-
+	
+	@Test
+	public final void testSetters()
+	{
+		String room = "42.42";
+		String employee = "Musterfrau";
+		String rfid = "01234567890";
+		String partNumber = "1234";
+		String serialNumber = "04a";
+		String inventoryNumber = "56565";
+		String owner = "sebl";
+		String status = "online";
+		String annotation = "no comment";
+		String id = "1";
+		String receivedFrom = "john";
+		String returnedTo = "me";
+		String esn = "1-5-3-6-3-3";
+		
+		DeviceDatabaseRecord testRecord = new DeviceDatabaseRecord(rfid, room, employee, partNumber, serialNumber, inventoryNumber, 
+				owner, status, annotation, id, receivedFrom, returnedTo, esn);
+		
+		String newEmployee = "Hans";
+		String newRoom = "Halle 1";
+		
+		testRecord.setEmployee(newEmployee);
+		testRecord.setRoom(newRoom);
+		
+		assertEquals(newEmployee, testRecord.getEmployee());
+		assertEquals(newRoom, testRecord.getRoom());
+	}
 }

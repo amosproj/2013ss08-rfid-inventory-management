@@ -155,22 +155,21 @@ public class DeviceDatabaseHandler implements Serializable
 		}
 	}
 	
+
 	/**
-	 * Writes the given strings to the database.
+	 * Updates the record in the database if it is existing.
 	 *
-	 * @param rfid_id int to set
-	 * @param room string to set
-	 * @param employee string to set
-	 * @return true, if successful (record with rfid  id existing) 
-	 * @throws SQLException when database connection close() fails
-	 * @throws IllegalArgumentException when room or owner is null
-	 * @throws Exception when database setup fails
+	 * @param record the record
+	 * @return true, if successful, false if not existing
+	 * @throws SQLException the sQL exception
+	 * @throws IllegalArgumentException the illegal argument exception
+	 * @throws Exception the exception
 	 */
-	public boolean updateRecordFromAppInDatabase(String rfid_id, String room, String employee) throws SQLException, IllegalArgumentException, Exception
+	public boolean updateRecordFromAppInDatabase(DeviceDatabaseRecord record) throws SQLException, IllegalArgumentException, Exception
 	{
-		if (room == null || rfid_id == null)
+		if (record == null)
 		{
-			throw new IllegalArgumentException("At least one of the arguments for creating a DatabaseRecord is invalid");
+			throw new IllegalArgumentException("The DeviceDatabaseRecord is null");
 		}
 		
 		int result;
@@ -182,26 +181,20 @@ public class DeviceDatabaseHandler implements Serializable
 			// create a database, if non existing
 			setupDatabase(connectionSource);
 
-			String employeeToSet = employee;
-			
-			// keep employee -> get from database
-			if (employee == null)
+			// check if in the database
+			DeviceDatabaseRecord recordInDatabase = getRecordFromDatabaseById(record.getRFIDId());
+			if (recordInDatabase == null)	// if not in the database, don't continue with updating, as it would return false 
 			{
-				// read out existing employee
-				DeviceDatabaseRecord recordInDatabase = getRecordFromDatabaseById(rfid_id);
-				if (recordInDatabase == null)	// if not in the database, don't continue with updating, as it would return false 
-				{
-					return false;
-				}
-				
-				employeeToSet = recordInDatabase.getEmployee();
+				return false;
 			}
-
-			// write the given Strings
-			DeviceDatabaseRecord record = new DeviceDatabaseRecord(rfid_id, room, employeeToSet);
-			
-			// writes to the database: create if new id, or update if existing
+						
+			// writes to the database: update if existing
 			result = databaseHandlerDao.update(record);
+			
+			// also update meta data (MetaDeviceDatabaseRecord)
+			metaDeviceDatabaseHandler.updateRecordInDatabase(record.getMetaDeviceDatabaseRecord());
+			// and update the local list
+			metaDeviceDatabaseHandler.getDatabaseRecordList();
 		} 
 		finally
 		{

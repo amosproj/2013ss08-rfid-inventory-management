@@ -37,6 +37,7 @@ import java.util.Comparator;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class defines the structure (the columns) of the database.
  */
@@ -152,34 +153,7 @@ public class DeviceDatabaseRecord implements Serializable
 		// in this class via the getters and setters
 		setMetaDeviceDatabaseRecordViaPartNumber();
 	}
-	
-	/**
-	 * Constructor for creating a new database record.
-	 *
-	 * @param rfid_id the rfid_id
-	 * @param room the room
-	 * @param employee the holder
-	 */
-	public DeviceDatabaseRecord(String rfid_id, String room, String employee)
-	{
-		this.rfid_id = rfid_id;
-		this.room = room;
-		this.employee = employee;
-		this.part_number = "";
-		this.serial_number = "";
-		this.inventory_number = "";
-		this.owner = "";
-		this.status = "";
-		this.annotation = "";
-		this.id = "";
-		this.received_from = "";
-		this.returned_to = "";
-		this.esn = "";
-		
-		// gets the corresponding meta data record from the other table in order to be able to access them 
-		// in this class via the getters and setters
-		setMetaDeviceDatabaseRecordViaPartNumber();
-	}
+
 
 	/**
 	 * Instantiates a new device database record.
@@ -191,7 +165,12 @@ public class DeviceDatabaseRecord implements Serializable
 	 * @param serial_number the serial_number
 	 * @param inventory_number the inventory_number
 	 * @param owner the owner
-	 * @param comment the comment
+	 * @param status the status
+	 * @param annotation the annotation
+	 * @param id the id
+	 * @param received_from the received_from
+	 * @param returned_to the returned_to
+	 * @param esn the esn
 	 */
 	public DeviceDatabaseRecord(String rfid_id, String room, String employee, String part_number, String serial_number, String inventory_number, String owner, String status, String annotation, String id, String received_from, String returned_to, String esn)
 	{
@@ -491,6 +470,26 @@ public class DeviceDatabaseRecord implements Serializable
 		}
 		
 		return this.esn;
+	}
+	
+	/**
+	 * Sets the employee.
+	 *
+	 * @param employee the new employee
+	 */
+	public void setEmployee(String employee)
+	{
+		this.employee = employee;
+	}
+	
+	/**
+	 * Sets the room.
+	 *
+	 * @param room the new room
+	 */
+	public void setRoom(String room)
+	{
+		this.room = room;
 	}
 	
 	/**
