@@ -630,11 +630,9 @@ public class MainActivity extends Activity
 					}
 					else
 					{
-						statusMessage.concat(", Error: id is null");
+						scannedRecordsList.add(i, null);
 					}
 				}
-				
-				textViewStatus.setText(statusMessage);
 
 				LinearLayout inputLayout = (LinearLayout) findViewById(R.id.linearLayoutInput);
 				inputLayout.setVisibility(LinearLayout.VISIBLE);
@@ -666,15 +664,14 @@ public class MainActivity extends Activity
 		Spinner spinnerEmployee = (Spinner) findViewById(R.id.spinnerEmployee);
 		
 		// get checked items and save them
-		SparseBooleanArray checked = listViewScannedTags.getCheckedItemPositions();
-		
 		String resultStatusMessage = "";
 
-		for (int i = 0; i < checked.size(); ++i)
+		for (int i = 0; i < listViewScannedTags.getCount(); ++i)
 		{
-			if (checked.valueAt(i) == true) // checked.get(i) is not working!
+			if (listViewScannedTags.isItemChecked(i) == true) // checked.get(i) is not working!
 			{
-				String rfidId =  listViewScannedTags.getAdapter().getItem(checked.keyAt(i)).toString();
+				DeviceDatabaseRecord recordToUpdate = scannedRecordsList.get(i);
+				String rfidId =  listViewScannedTags.getItemAtPosition(i).toString();
 				
 				// remove ending " " which the reader adds
 				if (rfidId.endsWith(" "))
@@ -685,16 +682,21 @@ public class MainActivity extends Activity
 				String selectedRoom = (String) spinnerRoom.getSelectedItem();
 				String selectedEmployee = (String) spinnerEmployee.getSelectedItem();
 				
-				// if nothing is selected, keep the employee
-				if (selectedEmployee.equals("Please select"))
+				if (recordToUpdate != null)				
 				{
-					selectedEmployee = null;
+					// if nothing is selected, keep the employee
+					if (!selectedEmployee.equals("Please select"))
+					{
+						recordToUpdate.setEmployee(selectedEmployee);
+					}
+
+					recordToUpdate.setRoom(selectedRoom);
 				}
 				
 				try
 				{
 					DeviceDatabaseHandler deviceDatabaseHandler = DeviceDatabaseHandler.getInstance();
-					boolean result = deviceDatabaseHandler.updateRecordFromAppInDatabase(rfidId, selectedRoom, selectedEmployee);
+					boolean result = deviceDatabaseHandler.updateRecordFromAppInDatabase(recordToUpdate);
 					
 					if (result)
 					{

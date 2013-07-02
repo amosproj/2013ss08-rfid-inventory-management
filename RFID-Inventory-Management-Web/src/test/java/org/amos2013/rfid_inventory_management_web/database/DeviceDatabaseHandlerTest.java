@@ -151,7 +151,7 @@ public class DeviceDatabaseHandlerTest
 	@Test
 	public final void testUpdateRecordFromAppInDatabase() throws Exception
 	{
-		exception.expect(IllegalArgumentException.class);	// asserts that a IllegalArgumentException is thrown
-		deviceDatabaseHandler.updateRecordFromAppInDatabase(null);
+		boolean updated = deviceDatabaseHandler.updateRecordFromAppInDatabase(null);
+		assertEquals(false, updated);
 	}
 }

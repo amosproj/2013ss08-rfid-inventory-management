@@ -169,7 +169,7 @@ public class DeviceDatabaseHandler implements Serializable
 	{
 		if (record == null)
 		{
-			throw new IllegalArgumentException("The DeviceDatabaseRecord is null");
+			return false;
 		}
 		
 		int result;
