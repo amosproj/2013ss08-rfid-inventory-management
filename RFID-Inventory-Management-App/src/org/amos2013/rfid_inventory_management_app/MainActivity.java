@@ -419,17 +419,19 @@ public class MainActivity extends Activity
 				// if record is not in the database
 				if (record == null)
 				{
-					infoToast = Toast.makeText(getApplicationContext(), "Id " + scannedTagsList.get(position) 
+					infoToast = Toast.makeText(getApplicationContext(), "RFID ID " + scannedTagsList.get(position) 
 							+ " is not in the database yet.\nPlease insert it manually.", Toast.LENGTH_LONG);
 				}
 				else if (scannedRecordsList.size() > position)
 				{
 					infoToast = Toast.makeText(getApplicationContext(), 
-								"Id: " 	 	 + scannedTagsList.get(position) 
-							+ "\nType: " 	 + record.getType() 
-							+ "\nCategory: " + record.getCategory() 
-							+ "\nRoom: "	 + record.getRoom() 
-							+ "\nEmployee: " + record.getEmployee(), Toast.LENGTH_LONG);
+								"RFID ID: "  		+ scannedTagsList.get(position) 
+							+ "\nType: " 	 		+ record.getType() 
+							+ "\nCategory: " 		+ record.getCategory() 
+							+ "\nManufacturer: "	+ record.getManufacturer() 
+							+ "\nID: "	 			+ record.getId() 
+							+ "\nRoom: "	 		+ record.getRoom() 
+							+ "\nEmployee: " 		+ record.getEmployee(), Toast.LENGTH_LONG);
 				}
 				else
 				{
