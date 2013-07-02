@@ -236,7 +236,82 @@ public class DeviceDatabaseHandler implements Serializable
 		
 		for (DeviceDatabaseRecord record : databaseRecordList)
 		{
-			if (search_option.equals("rfid_id"))
+			if (search_option.equals("all_columns"))
+			{
+				if (record.getRFIDId().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getRoom().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getEmployee().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getPartNumber().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getType().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getCategory().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getManufacturer().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getPlatform().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getComment().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getSerialNumber().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getInventoryNumber().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getOwner().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getStatus().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getAnnotation().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getId().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getReceivedFrom().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getReturnedTo().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+				else if (record.getEsn().contains(search_input) == true)
+				{
+					resultDatabaseRecords.add(record);
+				}
+			}
+			else if (search_option.equals("rfid_id"))
 			{
 				if (record.getRFIDId().contains(search_input) == true)
 				{

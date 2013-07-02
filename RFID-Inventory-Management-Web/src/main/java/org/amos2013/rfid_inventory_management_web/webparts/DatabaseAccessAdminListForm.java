@@ -61,8 +61,10 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 	private String searchField;
 	private String statusMessage;
 	
-	private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"Employee", "Inventory Number", "Manufacturer", "Platform", "Room", "Type" });
-	private String selectedSearchOption = "Employee";
+	private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"All Columns", "Employee", "RFID-Id", "Room",
+			"Part Number", "Type", "Category", "Manufacturer", "Platform", "Comment",
+			"Serial Number", "Inventory Number", "Owner", "Status", "Annotation", "ID", "Received From", "Returned To", "ESN"});
+	private String selectedSearchOption = "All Columns";
 	
 	/**
 	 * Creates a Form Object.
@@ -121,25 +123,81 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 			
 			// keep the dropdown menu choice selected
 			// get search type
-			if (search_option.equals("inventory_number"))
+			if (search_option.equals("all_columns"))
 			{
-				selectedSearchOption = "Inventory Number";
+				selectedSearchOption = "All Columns";
 			}
-			else if (search_option.equals("manufacturer"))
+			else if (search_option.equals("rfid_id"))
 			{
-				selectedSearchOption = "Manufacturer";
+				selectedSearchOption = "RFID-Id";
+			}
+			else if (search_option.equals("room"))
+			{
+				selectedSearchOption = "Room";
+			}
+			else if (search_option.equals("employee"))
+			{
+				selectedSearchOption = "Employee";
+			}
+			else if (search_option.equals("part_number"))
+			{
+				selectedSearchOption = "Part Number";
 			}
 			else if (search_option.equals("type"))
 			{
 				selectedSearchOption = "Type";
 			}
+			else if (search_option.equals("category"))
+			{
+				selectedSearchOption = "Category";
+			}
+			else if (search_option.equals("manufacturer"))
+			{
+				selectedSearchOption = "Manufacturer";
+			}
 			else if (search_option.equals("platform"))
 			{
 				selectedSearchOption = "Platform";
 			}
-			else if (search_option.equals("room"))
+			else if (search_option.equals("comment"))
 			{
-				selectedSearchOption = "Room";
+				selectedSearchOption = "Comment";
+			}
+			else if (search_option.equals("serial_number"))
+			{
+				selectedSearchOption = "Serial Number";
+			}
+			else if (search_option.equals("inventory_number"))
+			{
+				selectedSearchOption = "Inventory Number";
+			}
+			else if (search_option.equals("owner"))
+			{
+				selectedSearchOption = "Owner";
+			}
+			else if (search_option.equals("status"))
+			{
+				selectedSearchOption = "Status";
+			}
+			else if (search_option.equals("annotation"))
+			{
+				selectedSearchOption = "Annotation";
+			}
+			else if (search_option.equals("id"))
+			{
+				selectedSearchOption = "ID";
+			}
+			else if (search_option.equals("received_from"))
+			{
+				selectedSearchOption = "Received From";
+			}
+			else if (search_option.equals("returned_to"))
+			{
+				selectedSearchOption = "Returned To";
+			}
+			else if (search_option.equals("esn"))
+			{
+				selectedSearchOption = "ESN";
 			}
 			
 			// search for the string in the specified column
@@ -270,21 +328,13 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 				
 				// get search type
 				String searchType;
-				if (selectedSearchOption.equals("Inventory Number"))
+				if (selectedSearchOption.equals("All Columns"))
 				{
-					searchType = "inventory_number";
+					searchType = "all_columns";
 				}
-				else if (selectedSearchOption.equals("Manufacturer"))
+				else if (selectedSearchOption.equals("RFID-Id"))
 				{
-					searchType = "manufacturer";
-				}
-				else if (selectedSearchOption.equals("Type"))
-				{
-					searchType = "type";
-				}
-				else if (selectedSearchOption.equals("Platform"))
-				{
-					searchType = "platform";
+					searchType = "rfid_id";
 				}
 				else if (selectedSearchOption.equals("Room"))
 				{
@@ -294,6 +344,66 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 				{
 					searchType = "employee";
 				}
+				else if (selectedSearchOption.equals("Part Number"))
+				{
+					searchType = "part_number";
+				}
+				else if (selectedSearchOption.equals("Type"))
+				{
+					searchType = "type";
+				}
+				else if (selectedSearchOption.equals("Category"))
+				{
+					searchType = "category";
+				}
+				else if (selectedSearchOption.equals("Manufacturer"))
+				{
+					searchType = "manufacturer";
+				}
+				else if (selectedSearchOption.equals("Platform"))
+				{
+					searchType = "platform";
+				}
+				else if (selectedSearchOption.equals("Comment"))
+				{
+					searchType = "comment";
+				}
+				else if (selectedSearchOption.equals("Serial Number"))
+				{
+					searchType = "serial_number";
+				}
+				else if (selectedSearchOption.equals("Inventory Number"))
+				{
+					searchType = "inventory_number";
+				}
+				else if (selectedSearchOption.equals("Owner"))
+				{
+					searchType = "owner";
+				}
+				else if (selectedSearchOption.equals("Status"))
+				{
+					searchType = "status";
+				}
+				else if (selectedSearchOption.equals("Annotation"))
+				{
+					searchType = "annotation";
+				}
+				else if (selectedSearchOption.equals("ID"))
+				{
+					searchType = "id";
+				}
+				else if (selectedSearchOption.equals("Received From"))
+				{
+					searchType = "received_from";
+				}
+				else if (selectedSearchOption.equals("Returned To"))
+				{
+					searchType = "returned_to";
+				}
+				else if (selectedSearchOption.equals("ESN"))
+				{
+					searchType = "esn";
+				}				
 				else
 				{
 					statusMessage = "Unknown search type";

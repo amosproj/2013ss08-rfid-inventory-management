@@ -58,10 +58,10 @@ public class DatabaseAccessListForm extends Form<Object>
 	private String searchField;
 	private String statusMessage;
 	
-	private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"Employee", "RFID-Id", "Room",
+	private static final List<String> SEARCH_OPTIONS = Arrays.asList(new String[] {"All Columns", "Employee", "RFID-Id", "Room",
 			"Part Number", "Type", "Category", "Manufacturer", "Platform", "Comment",
 			"Serial Number", "Inventory Number", "Owner", "Status", "Annotation", "ID", "Received From", "Returned To", "ESN"});
-	private String selectedSearchOption = "Employee";
+	private String selectedSearchOption = "All Columns";
 	
 	/**
 	 * Creates a Form Object.
@@ -95,7 +95,11 @@ public class DatabaseAccessListForm extends Form<Object>
 		
 			// keep the dropdown menu choice selected
 			// get search type
-			if (search_option.equals("rfid_id"))
+			if (search_option.equals("all_columns"))
+			{
+				selectedSearchOption = "All Columns";
+			}
+			else if (search_option.equals("rfid_id"))
 			{
 				selectedSearchOption = "RFID-Id";
 			}
@@ -159,7 +163,7 @@ public class DatabaseAccessListForm extends Form<Object>
 			{
 				selectedSearchOption = "Received From";
 			}
-			else if (search_option.equals("returned to"))
+			else if (search_option.equals("returned_to"))
 			{
 				selectedSearchOption = "Returned To";
 			}
@@ -249,7 +253,11 @@ public class DatabaseAccessListForm extends Form<Object>
 				
 				// get search type
 				String searchType;
-				if (selectedSearchOption.equals("RFID-Id"))
+				if (selectedSearchOption.equals("All Columns"))
+				{
+					searchType = "all_columns";
+				}
+				else if (selectedSearchOption.equals("RFID-Id"))
 				{
 					searchType = "rfid_id";
 				}
