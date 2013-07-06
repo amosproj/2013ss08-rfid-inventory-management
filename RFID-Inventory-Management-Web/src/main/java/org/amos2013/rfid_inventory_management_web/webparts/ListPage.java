@@ -37,8 +37,8 @@ import java.io.IOException;
  * This class defines a sub-website from MainPage, which contains a From listing all 
  * data from the database
  */
-public class ListPage extends MainPage {
-	
+public class ListPage extends MainPage 
+{	
 	private static final long serialVersionUID = 7449232746846404264L;
 
 	/**

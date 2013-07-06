@@ -39,8 +39,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * This class defines a sub-website from MainPage, which contains a From listing all
  * data from the database
  */
-public class SearchPageList extends MainPage {
-
+public class SearchPageList extends MainPage 
+{
 	private static final long serialVersionUID = 7449232746846404264L;
 
 	/**

@@ -185,10 +185,10 @@ public class LocationDatabaseHandler implements Serializable
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForAll();
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 			e.printStackTrace();
-			return null;
+			throw e;
 		} 
 		finally
 		{

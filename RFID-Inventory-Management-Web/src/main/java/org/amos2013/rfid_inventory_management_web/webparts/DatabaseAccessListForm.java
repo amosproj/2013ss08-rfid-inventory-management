@@ -31,6 +31,8 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -195,9 +197,10 @@ public class DatabaseAccessListForm extends Form<Object>
 			{
 				databaseRecords = deviceDatabaseHandler.getDatabaseRecordList();
 			} 
-			catch (Exception e)
+			catch (SQLException e)
 			{
-				statusMessage = e.getMessage();
+				statusMessage = "Error with the database connection. Please check your internet connection.";
+				databaseRecords = new ArrayList<DeviceDatabaseRecord>();
 			}
 		}
 		

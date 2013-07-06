@@ -32,6 +32,7 @@
 package org.amos2013.rfid_inventory_management_web.webparts;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.LocationDatabaseHandler;
@@ -94,10 +95,10 @@ public class DatabaseAccessLocationForm extends Form<Object>
 		{
 			databaseRecords = LocationDatabaseHandler.getRecordsFromDatabase();
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
-			e.printStackTrace();
-			statusMessage = e.getMessage();
+			statusMessage = "Error with the database connection. Please check your internet connection.";
+			databaseRecords = new ArrayList<LocationDatabaseRecord>();
 		}
 		
 		add(new ListView<LocationDatabaseRecord>("locationRecordsReadListView", databaseRecords)

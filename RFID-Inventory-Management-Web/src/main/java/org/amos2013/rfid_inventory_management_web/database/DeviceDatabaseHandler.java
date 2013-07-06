@@ -70,7 +70,14 @@ public class DeviceDatabaseHandler implements Serializable
 	 */
 	private DeviceDatabaseHandler() 
 	{ 
-		databaseRecordList = getDatabaseRecordList();
+		try
+		{
+			databaseRecordList = getDatabaseRecordList();
+		}
+		catch (SQLException e)
+		{
+			databaseRecordList = new ArrayList<DeviceDatabaseRecord>();
+		}
 	}
 	
 	
@@ -195,7 +202,7 @@ public class DeviceDatabaseHandler implements Serializable
 			metaDeviceDatabaseHandler.updateRecordInDatabase(record.getMetaDeviceDatabaseRecord());
 			// and update the local list
 			metaDeviceDatabaseHandler.getDatabaseRecordList();
-		} 
+		}
 		finally
 		{
 			// destroy the data source which should close underlying connections
@@ -466,10 +473,10 @@ public class DeviceDatabaseHandler implements Serializable
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForEq("rfid_id", rfidID);
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 			e.printStackTrace();
-			return null;
+			throw e;
 		} 
 		finally
 		{
@@ -513,10 +520,10 @@ public class DeviceDatabaseHandler implements Serializable
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForAll();
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 			e.printStackTrace();
-			return resultList;
+			throw e;
 		} 
 		finally
 		{
@@ -588,17 +595,11 @@ public class DeviceDatabaseHandler implements Serializable
 	 * Pulls and returns the database record list.
 	 *
 	 * @return the database record list
+	 * @throws SQLException when there is no connection
 	 */
-	public List<DeviceDatabaseRecord> getDatabaseRecordList()
+	public List<DeviceDatabaseRecord> getDatabaseRecordList() throws SQLException
 	{
-		try
-		{
-			databaseRecordList = getRecordsFromDatabase();
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
+		databaseRecordList = getRecordsFromDatabase();
 		
 		Collections.sort(databaseRecordList, DeviceDatabaseRecord.getDeviceRecordComparator());
 		

@@ -177,7 +177,7 @@ public class RoomDatabaseHandler implements Serializable
 	 * Loops through one table of the database and reads the content.
 	 *
 	 * @return a string containing all records of roomTable
-	 * @throws SQLException when database connection close fails
+	 * @throws SQLException when database connection fails
 	 */
 	public static List<RoomDatabaseRecord> getRecordsFromDatabase() throws SQLException
 	{
@@ -194,10 +194,10 @@ public class RoomDatabaseHandler implements Serializable
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForAll();
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 			e.printStackTrace();
-			return null;
+			throw e;
 		} 
 		finally
 		{

@@ -170,7 +170,7 @@ public class EmployeeDatabaseHandler implements Serializable
 	 * Loops through one table of the database and reads the content.
 	 *
 	 * @return a string containing all records of employeeTable
-	 * @throws SQLException when database connection close fails
+	 * @throws SQLException when database connection fails
 	 */
 	public static List<EmployeeDatabaseRecord> getRecordsFromDatabase() throws SQLException
 	{
@@ -187,10 +187,10 @@ public class EmployeeDatabaseHandler implements Serializable
 			// read database records
 			databaseRecords = databaseHandlerDao.queryForAll();
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 			e.printStackTrace();
-			return null;
+			throw e;
 		} 
 		finally
 		{
