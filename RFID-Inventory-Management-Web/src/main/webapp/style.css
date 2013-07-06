@@ -76,8 +76,8 @@ body { margin:0; padding:0; background-color: #000;}
 { 
 	display: inline;
 	vertical-align: bottom;
-	margin-left : 50px;
-	margin-right : 5px;
+	margin-left : 1px;
+	margin-right : 1px;
 }
 
 body { margin-top: 0; padding-top: 0; }
