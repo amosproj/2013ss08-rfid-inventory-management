@@ -110,7 +110,7 @@ public class DatabaseAccessLocationEditForm extends Form<Object>
 				{
 					e.printStackTrace();
 					PageParameters statusPageParameter = new PageParameters();
-					statusPageParameter.add("message", "Error with the database connection"); 
+					statusPageParameter.add("message", "Error with the database. Please check your internet connection."); 
 					throw new RestartResponseAtInterceptPageException(AdminLocationPage.class, statusPageParameter);								
 				}
 	
@@ -149,19 +149,6 @@ public class DatabaseAccessLocationEditForm extends Form<Object>
 					{
 						LocationDatabaseRecord record = new LocationDatabaseRecord(locationID, location);
 						LocationDatabaseHandler.updateRecordInDatabase(record);
-						
-						PageParameters statusPageParameter = new PageParameters();
-						
-						if (function.equals("update"))
-						{
-							statusPageParameter.add("message", "The location was updated.");
-						}
-						else
-						{
-							statusPageParameter.add("message", "The new location was added.");
-						} 
-						
-						setResponsePage(AdminLocationPage.class, statusPageParameter);
 					}
 					catch (IllegalArgumentException e)
 					{
@@ -176,7 +163,7 @@ public class DatabaseAccessLocationEditForm extends Form<Object>
 					}
 					catch (SQLException e)
 					{
-						statusMessage = "An error with the database occured.";
+						statusMessage = "An error with the database occured. Please check your internet connection.";
 						e.printStackTrace();
 						return;
 					}
@@ -186,6 +173,19 @@ public class DatabaseAccessLocationEditForm extends Form<Object>
 						e.printStackTrace();
 						return;
 					}
+					
+					PageParameters statusPageParameter = new PageParameters();
+					
+					if (function.equals("update"))
+					{
+						statusPageParameter.add("message", "The location was updated.");
+					}
+					else
+					{
+						statusPageParameter.add("message", "The new location was added.");
+					} 
+					
+					setResponsePage(AdminLocationPage.class, statusPageParameter);
 				}
 			};
 			add(submitButton);

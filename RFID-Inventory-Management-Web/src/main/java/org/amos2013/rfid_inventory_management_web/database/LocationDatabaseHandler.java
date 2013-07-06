@@ -231,9 +231,10 @@ public class LocationDatabaseHandler implements Serializable
 			// delete given database record
 			databaseHandlerDao.delete(record);
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 			e.printStackTrace();
+			throw new SQLException("Error with the database. Please check your internet connection.");
 		} 
 		finally
 		{

@@ -32,6 +32,7 @@
 package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
+import java.rmi.ConnectException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -232,9 +233,10 @@ public class EmployeeDatabaseHandler implements Serializable
 			// delete given database record
 			databaseHandlerDao.delete(record);
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 			e.printStackTrace();
+			throw new SQLException("Error with the database. Please check your internet connection.");
 		} 
 		finally
 		{

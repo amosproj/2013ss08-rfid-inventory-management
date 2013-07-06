@@ -31,6 +31,7 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -272,6 +273,7 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 					@Override
 					public void onClick(AjaxRequestTarget arg0)
 					{
+						String resultMessage = "The device record was deleted.";
 						// call to delete the product
 						try
 						{
@@ -279,14 +281,20 @@ public class DatabaseAccessAdminListForm extends Form<Object>
 							// getInstance() has to be called here again, to avoid NotSerializableExceptions 
 							deviceDatabaseHandler.deleteRecordFromDatabase(record);
 						} 
-						catch (Exception e)
+						catch (IllegalArgumentException e)
 						{
 							e.printStackTrace();
+							resultMessage = "An error occured. The record is null";
 						}
+						catch (SQLException e)
+						{
+							resultMessage = "Error with the database. Please check your internet connection.";
+						}
+						
 						
 						// refreshes the page
 						PageParameters pageParameters = new PageParameters();
-						pageParameters.add("message", "The device record was deleted.");
+						pageParameters.add("message", resultMessage);
 						setResponsePage(AdminListPage.class, pageParameters);						
 					}
 				});

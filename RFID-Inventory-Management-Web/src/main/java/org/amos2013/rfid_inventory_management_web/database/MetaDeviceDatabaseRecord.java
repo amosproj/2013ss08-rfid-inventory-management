@@ -32,6 +32,7 @@
 package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -108,8 +109,9 @@ public class MetaDeviceDatabaseRecord implements Serializable
 	 * @param comment 	the comment
 	 * @throws IllegalArgumentException if the part number is null
 	 * @throws IllegalStateException if the next free id is -1
+	 * @throws SQLException when there's no internet connection
 	 */
-	public MetaDeviceDatabaseRecord(String category, String type, String part_number, String manufacturer, String platform, String comment) throws IllegalArgumentException, IllegalStateException
+	public MetaDeviceDatabaseRecord(String category, String type, String part_number, String manufacturer, String platform, String comment) throws IllegalArgumentException, IllegalStateException, SQLException
 	{
 		if (part_number == null)
 		{
@@ -126,7 +128,14 @@ public class MetaDeviceDatabaseRecord implements Serializable
 		}
 		else 
 		{
-			this.id = metaDeviceDatabaseHandler.getNextFreeId();
+			try
+			{
+				this.id = metaDeviceDatabaseHandler.getNextFreeId();
+			}
+			catch (SQLException e)
+			{
+				throw e;
+			}
 			if (this.id == -1)
 			{
 				throw new IllegalStateException("MetaDeviceDatabaseHandler(): next free id is -1");

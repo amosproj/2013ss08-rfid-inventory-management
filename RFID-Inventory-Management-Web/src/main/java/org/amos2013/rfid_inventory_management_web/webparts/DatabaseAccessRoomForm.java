@@ -31,6 +31,7 @@
 
 package org.amos2013.rfid_inventory_management_web.webparts;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.amos2013.rfid_inventory_management_web.database.RoomDatabaseHandler;
@@ -117,21 +118,27 @@ public class DatabaseAccessRoomForm extends Form<Object>
 					@Override
 					public void onClick(AjaxRequestTarget arg0)
 					{
+						String resultMessage = "The room was deleted.";
+						
 						// call to delete the product
 						try
 						{
 							RoomDatabaseHandler.deleteRecordFromDatabase(record);
 						} 
-						catch (Exception e)
+						catch (IllegalArgumentException e)
 						{
 							e.printStackTrace();
-							statusMessage = "An error occured.";
-							return;
+							resultMessage = "An error occured. The record is null";
 						}
+						catch (SQLException e)
+						{
+							resultMessage = "Error with the database. Please check your internet connection.";
+						}
+						
 						
 						// refreshes the page
 						PageParameters pageParameters = new PageParameters();
-						pageParameters.add("message", "The room was deleted.");
+						pageParameters.add("message", resultMessage);
 						setResponsePage(AdminRoomPage.class, pageParameters);
 					}
 				});

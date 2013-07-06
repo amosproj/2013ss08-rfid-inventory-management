@@ -31,7 +31,8 @@
 
 package org.amos2013.rfid_inventory_management_web.database;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -53,7 +54,16 @@ public class MetaDeviceDatabaseRecordTest
 		String platform = "test";
 		String comment = "test";
 
-		MetaDeviceDatabaseRecord testRecord = new MetaDeviceDatabaseRecord(category, type, part_number, manufacturer, platform,comment);
+		MetaDeviceDatabaseRecord testRecord = null;
+		try
+		{
+			testRecord = new MetaDeviceDatabaseRecord(category, type, part_number, manufacturer, platform,comment);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			Assert.fail();
+		}
 
 		assertEquals(category, testRecord.getCategory());
 		assertEquals(type, testRecord.getType());

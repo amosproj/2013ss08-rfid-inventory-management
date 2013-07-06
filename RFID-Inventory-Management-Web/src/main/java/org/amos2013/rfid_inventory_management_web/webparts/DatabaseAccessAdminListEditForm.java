@@ -142,7 +142,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 				{
 					e.printStackTrace();				
 					PageParameters statusPageParameter = new PageParameters();
-					statusPageParameter.add("message", "Error with the database connection"); 
+					statusPageParameter.add("message", "Error with the database. Please check your internet connection."); 
 					throw new RestartResponseAtInterceptPageException(AdminListPage.class, statusPageParameter);
 				}
 	
@@ -235,10 +235,11 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 							{
 								roomDatabaseRecords = RoomDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
 							} 
-							catch (Exception e)
+							catch (SQLException e)
 							{
-								statusMessage = e.getMessage();
 								e.printStackTrace();									
+								statusMessage = "Error with the database. Please check your internet connection.";
+								return;
 							}
 							
 							roomDropDownChoices.addAll(roomDatabaseRecords);
@@ -279,7 +280,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 			
 			if (locationDatabaseRecords == null)
 			{
-				statusMessage = "ERROR: location list is null";
+				statusMessage = "ERROR: location list could not be filled. Please check your internet connection.";
 				locationDatabaseRecords = new ArrayList<LocationDatabaseRecord>();
 			}
 			
@@ -446,9 +447,14 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 								statusMessage = "Error: part number is null!";
 								return;
 							}
-							catch (IllegalStateException ex)
+							catch (IllegalStateException e)
 							{
 								statusMessage = "Error: next free Id in the meta device database table is -1.";
+								return;
+							}
+							catch (SQLException e)
+							{
+								statusMessage = "Error with the database. Please check your internet connection.";
 								return;
 							}
 							
@@ -472,7 +478,7 @@ public class DatabaseAccessAdminListEditForm extends Form<Object>
 					}
 					catch (SQLException e)
 					{
-						statusMessage = "An error with the database occured.";
+						statusMessage = "An error with the database occured. Please check your internet connection.";
 						e.printStackTrace();
 					}
 					catch (IllegalArgumentException e)

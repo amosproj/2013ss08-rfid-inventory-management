@@ -110,7 +110,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 				{
 					e.printStackTrace();
 					PageParameters statusPageParameter = new PageParameters();
-					statusPageParameter.add("message", "Error with the database connection"); 
+					statusPageParameter.add("message", "Error with the database. Please check your internet connection."); 
 					throw new RestartResponseAtInterceptPageException(AdminRoomPage.class, statusPageParameter);								
 				}
 	
@@ -149,7 +149,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 			
 			if (locationDatabaseRecords == null)
 			{
-				statusMessage = "ERROR: location list is null";
+				statusMessage = "ERROR: location list could not be filled. Please check your internet connection";
 				locationDatabaseRecords = new ArrayList<LocationDatabaseRecord>();
 			}
 			
@@ -208,7 +208,7 @@ public class DatabaseAccessRoomEditForm extends Form<Object>
 					}
 					catch (SQLException e)
 					{
-						statusMessage = "An error with the database occured.";
+						statusMessage = "An error with the database occured. Please check your internet connection";
 						e.printStackTrace();
 						return;
 					}

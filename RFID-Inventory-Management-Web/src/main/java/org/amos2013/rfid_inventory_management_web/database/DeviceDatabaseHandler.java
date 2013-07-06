@@ -569,9 +569,10 @@ public class DeviceDatabaseHandler implements Serializable
 			// delete given database record
 			databaseHandlerDao.delete(record);
 		} 
-		catch (Exception e)
+		catch (SQLException e)
 		{
 			e.printStackTrace();
+			throw e;
 		} 
 		finally
 		{

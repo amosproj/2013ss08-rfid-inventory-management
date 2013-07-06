@@ -112,8 +112,9 @@ public class MetaDeviceDatabaseHandler implements Serializable
 	 * Gets the next free id.
 	 * Runs through the database
 	 * @return the next free id
+	 * @throws SQLException when no internet connection
 	 */
-	public int getNextFreeId()
+	public int getNextFreeId() throws SQLException
 	{
 		int freeId = -1;
 		
@@ -133,6 +134,7 @@ public class MetaDeviceDatabaseHandler implements Serializable
 		catch (SQLException e)
 		{
 			e.printStackTrace();
+			throw new SQLException("Error with the database. Please check your internet connection.");
 		}
 
 		return freeId;
