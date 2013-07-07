@@ -32,10 +32,9 @@
 package org.amos2013.rfid_inventory_management_web.database;
 
 import java.io.Serializable;
-import java.rmi.ConnectException;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.j256.ormlite.dao.Dao;

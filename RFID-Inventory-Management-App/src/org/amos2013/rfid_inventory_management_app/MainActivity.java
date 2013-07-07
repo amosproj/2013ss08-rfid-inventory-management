@@ -60,7 +60,6 @@ import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -206,17 +205,13 @@ public class MainActivity extends Activity
 		{
 			locationDatabaseRecords = LocationDatabaseHandler.getRecordsFromDatabase();
 		}
-		catch (Exception e)
+		catch (SQLException e)
 		{
-			textViewStatus.setText(e.getMessage());
-		}
-
-		if (locationDatabaseRecords == null)
-		{
-			textViewStatus.setText("ERROR: Could not load the location list (it is null). Check your internet connection!");
+			// no database connection
+			textViewStatus.setText("ERROR: Could not load the location list. Check your internet connection!");
 			Button startStopButton = (Button) findViewById(R.id.buttonStartStopScanning);
 			startStopButton.setEnabled(false);
-			return;
+			locationDatabaseRecords = new ArrayList<LocationDatabaseRecord>();
 		}
 		
 		// get strings
@@ -274,9 +269,10 @@ public class MainActivity extends Activity
 				{
 					roomChoicesList = RoomDatabaseHandler.getRecordsFromDatabaseByLocation(selectedLocation);
 				} 
-				catch (Exception e)
+				catch (SQLException e)
 				{
-					textViewStatus.setText(e.getMessage());
+					textViewStatus.setText("Error with the database. Please check your internet connection.");
+					roomChoicesList = new ArrayList<String>();
 				}
 				
 				roomChoicesList.add(0, "Please select");
@@ -323,7 +319,8 @@ public class MainActivity extends Activity
 				} 
 				catch (SQLException e)
 				{
-					textViewStatus.setText(e.getMessage());
+					textViewStatus.setText("Error with the database. Please check your internet connection.");
+					employeeChoicesList = new ArrayList<String>();
 				}
 				
 				employeeChoicesList.add(0, "Please select");
@@ -625,7 +622,8 @@ public class MainActivity extends Activity
 						}
 						catch (SQLException e)
 						{
-							textViewStatus.setText(e.getMessage());
+							textViewStatus.setText("Error with the database. Please check your internet connection.");
+							return;
 						}
 					}
 					else
@@ -706,6 +704,10 @@ public class MainActivity extends Activity
 					{
 						resultStatusMessage += rfidId + " is not in the database. Insert manually!\n";					
 					}
+				}
+				catch (SQLException e)
+				{
+					resultStatusMessage += "Error with the database. Please check your internet conection.\n";
 				}
 				catch (IllegalArgumentException e)
 				{
