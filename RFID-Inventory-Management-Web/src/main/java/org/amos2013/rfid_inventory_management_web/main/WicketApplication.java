@@ -79,14 +79,14 @@ public class WicketApplication extends WebApplication
 		super.init();
 		// mount homepage and pages without the PageComponentInfo being displayed
 		mount(new HidePageComponentInfoMounter("/admin", AdminListPage.class));
-		mount(new HidePageComponentInfoMounter("/admin/edit", AdminListEditPage.class));
-		mount(new HidePageComponentInfoMounter("/admin/room", AdminRoomPage.class));
-		mount(new HidePageComponentInfoMounter("/admin/room/edit", AdminRoomEditPage.class));
-		mount(new HidePageComponentInfoMounter("/admin/employee", AdminEmployeePage.class));
-		mount(new HidePageComponentInfoMounter("/admin/employee/edit", AdminEmployeeEditPage.class));
-		mount(new HidePageComponentInfoMounter("/admin/location", AdminLocationPage.class));
-		mount(new HidePageComponentInfoMounter("/admin/location/edit", AdminLocationEditPage.class));
-		mount(new HidePageComponentInfoMounter("/admin/search", SearchPageAdminList.class));
+		mount(new HidePageComponentInfoMounter("/admin-edit", AdminListEditPage.class));
+		mount(new HidePageComponentInfoMounter("/admin-room", AdminRoomPage.class));
+		mount(new HidePageComponentInfoMounter("/admin-room-edit", AdminRoomEditPage.class));
+		mount(new HidePageComponentInfoMounter("/admin-employee", AdminEmployeePage.class));
+		mount(new HidePageComponentInfoMounter("/admin-employee-edit", AdminEmployeeEditPage.class));
+		mount(new HidePageComponentInfoMounter("/admin-location", AdminLocationPage.class));
+		mount(new HidePageComponentInfoMounter("/admin-location-edit", AdminLocationEditPage.class));
+		mount(new HidePageComponentInfoMounter("/admin-search", SearchPageAdminList.class));
 		mount(new HidePageComponentInfoMounter("/search", SearchPageList.class));
 		mount(new HideHomePageComponentInfoMounter(ListPage.class));
 	}
