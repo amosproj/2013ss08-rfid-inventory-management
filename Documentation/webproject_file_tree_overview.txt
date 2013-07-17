@@ -1,0 +1,51 @@
+ .\RFID-Inventory-Management-Web
+        |   pom.xml
+        |   *license.txt
+        |
+        +---doc        [documentation]
+        +---lib        [libraries]
+        +---target     [maven etc.]
+        \---src
+            +---main
+            |   +---java
+            |   |   \---org
+            |   |       \---amos2013
+            |   |           \---rfid_inventory_management_web
+            |   |               +---database
+            |   |               |       ConfigLoader.java
+            |   |               |       *DatabaseHandler.java
+            |   |               |       *DatabaseDAOs.java
+            |   |               +---main
+            |   |               |       WicketApplication.java
+            |   |               |       ConfirmationClickLink.java
+            |   |               |       Hide*Mounter.java
+            |   |               \---webparts
+            |   |                       *Page.html
+            |   |                       *Page.java
+            |   |                       *Form.java
+            |   |
+            |   +---resources
+            |   |       log4j.properties
+            |   |       RFID-Inventory-Management-App.apk
+            |   |
+            |   \---webapp
+            |       |   jquery-1.10.1.min.js
+            |       |   logo.png
+            |       |   style.css
+            |       \---WEB-INF
+            |               web.xml
+            |
+            \---test
+                \---java
+                    \---org
+                        \---amos2013
+                            \---rfid_inventory_management_web
+                                +---database       
+                                |       *DatabaseHandlerTest.java
+                                |       *DatabaseDAOsTest.java
+                                +---main
+                                |       AllTests.java    [JUnitTestSuite]
+                                |       Start.java       [Testserver-Application]
+                                \---webparts
+                                        *PageTest.java
+                                        *FormTest.java

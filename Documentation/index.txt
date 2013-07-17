@@ -1,0 +1,30 @@
+============FOLDER INDEX================
+
+Documentation: 
+
+1. ..\RFID-Inventory-Management-Web\doc\index.html
+--> javadoc for the webapp
+
+2. webproject_file_tree_overview.txt
+--> overview of the basic file structure of the web-app project
+
+3. AMOS 2013 Product Planning Documents.pdf
+--> latest planning documents (this is basically the version history)
+
+4. documentation_table_column-conversion_v2.pdf
+--> 2 slides showing who the tables of the original excel sheet were converted to the DB structure
+
+5. Overall Concepts and Technologies.pdf
+--> a document listing used technologies including links and licence informations
+
+6. Remaining Features.pdf
+--> a list of possible features for a further development ofd the project
+
+7. use-case_diagram_app.pdf
+--> UML Use Case Diagram of the App
+
+8. use-case_diagram_webapp.pdf
+--> UML Use Case Diagram of the Web-App
+
+9. class_diagram_webapp.png
+--> UML Class Diagram of the whole web-app project
